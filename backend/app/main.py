@@ -1,13 +1,14 @@
 from fastapi import FastAPI, Depends, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 from auth import router as auth_router, get_current_user
+from shops import router as shops_router
 from database import engine
 from typing import Annotated
 
 app = FastAPI(title="Coffee Shop API", version="1.0.0")
 
 app.include_router(auth_router)
-
+app.include_router(shops_router)
 
 app.add_middleware(
     CORSMiddleware,
