@@ -52,3 +52,13 @@ class CoffeeShop(Base):
         nullable=True,
         unique=True,
     )
+
+
+class Product(Base):
+    __tablename__ = "products"
+
+    product_id = Column(Integer, primary_key=True, index=True)
+    name = Column(String(128), nullable=False)
+    description = Column(Text, nullable=True)
+    image_url = Column(Text, nullable=True)
+    price = Column(Integer, nullable=False)
