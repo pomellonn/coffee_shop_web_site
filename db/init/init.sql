@@ -7,6 +7,15 @@ BEGIN
 END
 $$;
 
+-- enum for product categories
+DO $$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'product_type') THEN
+    CREATE TYPE product_type AS ENUM ('coffee', 'non_coffee', 'bakery');
+  END IF;
+END
+$$;
+
 CREATE TABLE IF NOT EXISTS users (
   user_id        INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   email          VARCHAR(255)  NOT NULL UNIQUE,
@@ -30,7 +39,9 @@ CREATE TABLE IF NOT EXISTS products (
   name        VARCHAR(128) NOT NULL, 
   description TEXT,
   image_url   TEXT,
-  price       INTEGER NOT NULL CHECK (price >= 0) 
+  volume      INTEGER NOT NULL CHECK (volume > 0),
+  product_type  product_type NOT NULL DEFAULT 'coffee',
+  price       INTEGER NOT NULL CHECK (price >= 0)
 );
 
 

@@ -35,7 +35,7 @@ async def get_product(product_id: int, db: AsyncSession = Depends(get_session)):
     return product
 
 
-# Обновление продукта по id
+# Обновить данные о продукте по id
 @router.put("/{product_id}", response_model=ProductRead, summary="Update Product info by ID")
 async def update_product(
     product_id: int,
