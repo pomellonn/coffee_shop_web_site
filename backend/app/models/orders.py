@@ -1,27 +1,32 @@
+from __future__ import annotations 
+from typing import List
 from app.db.base import Base
-from sqlalchemy import Column, Integer, TIMESTAMP, func, ForeignKey, CheckConstraint
-from sqlalchemy.orm import relationship, validates
+from sqlalchemy import ForeignKey, CheckConstraint, func, TIMESTAMP
+from sqlalchemy.orm import relationship, validates, Mapped, mapped_column
+from .order_items import OrderItem
+from .users import User
+from .coffee_shops import CoffeeShop
 
 
 class Order(Base):
     __tablename__ = "orders"
 
-    order_id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(
-        Integer, ForeignKey("users.user_id", ondelete="RESTRICT"), nullable=False
+    order_id: Mapped[int] = mapped_column(primary_key=True, index=True)
+    user_id: Mapped[int] = mapped_column(
+        ForeignKey("users.user_id", ondelete="RESTRICT")
     )
-    shop_id = Column(
-        Integer, ForeignKey("coffee_shops.shop_id", ondelete="RESTRICT"), nullable=False
+    shop_id: Mapped[int] = mapped_column(
+        ForeignKey("coffee_shops.shop_id", ondelete="RESTRICT")
     )
-    total_amount = Column(Integer, nullable=False)
-    created_at = Column(
-        TIMESTAMP(timezone=True), server_default=func.now(), nullable=False
+    total_amount: Mapped[int]
+    created_at: Mapped[TIMESTAMP] = mapped_column(
+        TIMESTAMP(timezone=True), server_default=func.now()
     )
 
-    user = relationship("User", back_populates="orders")
-    shop = relationship("CoffeeShop")
-    items = relationship(
-        "OrderItems", back_populates="order", cascade="all, delete-orphan"
+    user: Mapped["User"] = relationship(back_populates="orders")
+    shop: Mapped["CoffeeShop"] = relationship()
+    items: Mapped[List["OrderItem"]] = relationship(
+        back_populates="order", cascade="all, delete-orphan"
     )
 
     __table_args__ = (

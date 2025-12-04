@@ -1,8 +1,11 @@
+from __future__ import annotations 
+from typing import List, Optional
 from app.db.base import Base
-from sqlalchemy import Column, Integer, String, Enum, Text, CheckConstraint
-from sqlalchemy.orm import relationship, validates
-
+from sqlalchemy import String, Text, Enum, CheckConstraint
+from sqlalchemy.orm import relationship, validates, Mapped, mapped_column
 import enum
+from .shop_menu import ShopMenu
+from .order_items import OrderItem
 
 
 class ProductType(str, enum.Enum):
@@ -14,18 +17,18 @@ class ProductType(str, enum.Enum):
 class Product(Base):
     __tablename__ = "products"
 
-    product_id = Column(Integer, primary_key=True, index=True)
-    name = Column(String(128), nullable=False)
-    description = Column(Text, nullable=True)
-    image_url = Column(Text, nullable=True)
-    volume = Column(Integer, nullable=False)
-    product_type = Column(
-        Enum(ProductType, name="product_type"), nullable=False, default=ProductType.coffee
+    product_id: Mapped[int] = mapped_column(primary_key=True, index=True)
+    name: Mapped[str] = mapped_column(String(128))
+    description: Mapped[Optional[str]] = mapped_column(Text)
+    image_url: Mapped[Optional[str]] = mapped_column(Text)
+    volume: Mapped[int]
+    product_type: Mapped[ProductType] = mapped_column(
+        Enum(ProductType, name="product_type"), default=ProductType.coffee
     )
-    price = Column(Integer, nullable=False)
+    price: Mapped[int]
 
-    menu_entries = relationship("ShopMenu", back_populates="product")
-    order_items = relationship("OrderItem", back_populates="product")
+    menu_entries: Mapped[List["ShopMenu"]] = relationship(back_populates="product")
+    order_items: Mapped[List["OrderItem"]] = relationship(back_populates="product")
 
     __table_args__ = (
         CheckConstraint("volume > 0", name="check_volume_positive"),

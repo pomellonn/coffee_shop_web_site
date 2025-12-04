@@ -1,22 +1,25 @@
+from __future__ import annotations 
 from app.db.base import Base
-from sqlalchemy import Column, Integer, String, ForeignKey
-from sqlalchemy.orm import relationship
-
+from typing import Optional, List
+from sqlalchemy import String, ForeignKey
+from sqlalchemy.orm import relationship, Mapped, mapped_column
+from .users import User
+from .shop_menu import ShopMenu
 
 class CoffeeShop(Base):
     __tablename__ = "coffee_shops"
 
-    shop_id = Column(Integer, primary_key=True, index=True)
-    name = Column(String(128), nullable=False)
-    address = Column(String(256), nullable=False)
-    manager_id = Column(
-        Integer,
+    shop_id: Mapped[int] = mapped_column(primary_key=True, index=True) 
+    name: Mapped[str] = mapped_column(String(128)) 
+    address: Mapped[str] = mapped_column(String(256))
+    manager_id: Mapped[Optional[int]] = mapped_column( 
         ForeignKey("users.user_id", ondelete="SET NULL"),
-        nullable=True,
         unique=True,
     )
 
-    manager = relationship("User", back_populates="managed_shop")
-    menu_items = relationship(
-        "ShopMenu", back_populates="shop", cascade="all, delete-orphan"
+    manager: Mapped[Optional["User"]] = relationship(back_populates="managed_shop")
+    menu_items: Mapped[List["ShopMenu"]] = relationship(
+        back_populates="shop", 
+        cascade="all, delete-orphan"
     )
+

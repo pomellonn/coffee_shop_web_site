@@ -1,27 +1,26 @@
+from __future__ import annotations 
+from typing import Optional
 from app.db.base import Base
-from sqlalchemy import Column, Integer, ForeignKey, CheckConstraint
-from sqlalchemy.orm import relationship, validates
+from sqlalchemy import ForeignKey, CheckConstraint
+from sqlalchemy.orm import relationship, validates, Mapped, mapped_column
+from .orders import Order
+from .products import Product
 
-
-class OrderItems(Base):
+class OrderItem(Base):
     __tablename__ = "order_items"
 
-    order_item_id = Column(Integer, primary_key=True, index=True)
-    order_id = Column(
-        Integer,
-        ForeignKey("orders.order_id", ondelete="CASCADE"),
-        nullable=False,
+    order_item_id: Mapped[int] = mapped_column(primary_key=True, index=True)
+    order_id: Mapped[int] = mapped_column(
+        ForeignKey("orders.order_id", ondelete="CASCADE")
     )
-    product_id = Column(
-        Integer,
-        ForeignKey("products.product_id", ondelete="RESTRICT"),
-        nullable=False,
+    product_id: Mapped[int] = mapped_column(
+        ForeignKey("products.product_id", ondelete="RESTRICT")
     )
-    unit_price = Column(Integer, nullable=False)
-    quantity = Column(Integer, nullable=False)
+    unit_price: Mapped[int]
+    quantity: Mapped[int]
 
-    order = relationship("Order", back_populates="items")
-    product = relationship("Product", back_populates="order_items")
+    order: Mapped["Order"] = relationship(back_populates="items")
+    product: Mapped["Product"] = relationship(back_populates="order_items")
 
     __table_args__ = (
         CheckConstraint("unit_price >= 0", name="check_unit_price_positive"),

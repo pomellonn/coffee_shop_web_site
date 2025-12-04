@@ -1,7 +1,11 @@
+from __future__ import annotations 
+from typing import List, Optional
 from app.db.base import Base
-from sqlalchemy import Column, Integer, String, Enum, TIMESTAMP, Text, func
-from sqlalchemy.orm import relationship
+from sqlalchemy import String, Text, Enum, TIMESTAMP, func
+from sqlalchemy.orm import relationship, Mapped, mapped_column
 import enum
+from .orders import Order
+from .coffee_shops import CoffeeShop
 
 
 class UserRole(str, enum.Enum):
@@ -13,16 +17,20 @@ class UserRole(str, enum.Enum):
 class User(Base):
     __tablename__ = "users"
 
-    user_id = Column(Integer, primary_key=True, index=True)
-    email = Column(String(255), unique=True, nullable=False)
-    password_hash = Column(Text, nullable=False)
-    name = Column(String(50), nullable=False)
-    role = Column(
-        Enum(UserRole, name="user_role"), nullable=False, default=UserRole.customer
+    user_id: Mapped[int] = mapped_column(primary_key=True, index=True)
+    email: Mapped[str] = mapped_column(String(255), unique=True)
+    password_hash: Mapped[str] = mapped_column(Text)
+    name: Mapped[str] = mapped_column(String(50))
+    role: Mapped[UserRole] = mapped_column(
+        Enum(UserRole, name="user_role"), default=UserRole.customer
     )
-    created_at = Column(
-        TIMESTAMP(timezone=True), server_default=func.now(), nullable=False
+    created_at: Mapped[TIMESTAMP] = mapped_column(
+        TIMESTAMP(timezone=True), server_default=func.now()
     )
 
-    managed_shop = relationship("CoffeeShop", back_populates="manager")
-    orders = relationship("Order", back_populates="user", cascade="all, delete-orphan")
+    managed_shop: Mapped[Optional["CoffeeShop"]] = relationship(
+        back_populates="manager"
+    )
+    orders: Mapped[List["Order"]] = relationship(
+        back_populates="user", cascade="all, delete-orphan"
+    )
