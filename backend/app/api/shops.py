@@ -3,7 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 
 from database import get_session
-from models import CoffeeShop
+from backend.app.models.models import CoffeeShop
 from schemas import CoffeeShopRead, CoffeeShopCreate, CoffeeShopUpdate
 
 router = APIRouter(prefix="/shops", tags=["shops"])

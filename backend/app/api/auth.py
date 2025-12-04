@@ -9,7 +9,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 
 from database import get_session
-from models import User
+from backend.app.models.models import User
 import os
 from dotenv import load_dotenv
 
