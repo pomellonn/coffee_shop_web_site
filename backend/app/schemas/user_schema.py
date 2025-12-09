@@ -3,6 +3,10 @@ from datetime import datetime
 from typing import Optional
 from models import UserRole
 
+class Token(BaseModel):
+    access_token: str
+    token_type: str = "bearer"
+
 
 class UserBase(BaseModel):
     email: EmailStr = Field(..., description="Email address of the user")
@@ -41,4 +45,10 @@ class UserUpdateAdmin(BaseModel):
     role: Optional[UserRole] = None
     password: Optional[str] = None
 
+    model_config = ConfigDict(from_attributes=True)
+
+
+class UserWithToken(BaseModel):
+    user: UserReadCustomer  # todo: UserReadManagerAdmin 
+    token: Token
     model_config = ConfigDict(from_attributes=True)
