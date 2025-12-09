@@ -1,11 +1,8 @@
 from __future__ import annotations 
 from typing import List
-from app.db.base import Base
+from db.base import Base
 from sqlalchemy import ForeignKey, CheckConstraint, func, TIMESTAMP
 from sqlalchemy.orm import relationship, validates, Mapped, mapped_column
-from .order_items import OrderItem
-from .users import User
-from .coffee_shops import CoffeeShop
 
 
 class Order(Base):

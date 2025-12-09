@@ -1,11 +1,10 @@
 from __future__ import annotations 
 from typing import List, Optional
-from app.db.base import Base
+from db.base import Base
 from sqlalchemy import String, Text, Enum, TIMESTAMP, func
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 import enum
-from .orders import Order
-from .coffee_shops import CoffeeShop
+
 
 
 class UserRole(str, enum.Enum):

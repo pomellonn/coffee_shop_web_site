@@ -1,10 +1,9 @@
 from __future__ import annotations 
-from app.db.base import Base
+from db.base import Base
 from typing import Optional, List
 from sqlalchemy import String, ForeignKey
 from sqlalchemy.orm import relationship, Mapped, mapped_column
-from .users import User
-from .shop_menu import ShopMenu
+
 
 class CoffeeShop(Base):
     __tablename__ = "coffee_shops"
