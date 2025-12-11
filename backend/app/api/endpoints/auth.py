@@ -1,8 +1,8 @@
-# app/api/endpoints/auth.py (пример)
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.future import select
 from sqlalchemy.ext.asyncio import AsyncSession
+
 from db.session import get_session
 from models.users import User
 from core.security import verify_password, create_access_token
@@ -11,7 +11,6 @@ from core.config import settings
 
 ACCESS_TOKEN_EXPIRE_MINUTES = settings.ACCESS_TOKEN_EXPIRE_MINUTES
 router = APIRouter(prefix="/auth", tags=["authentication"])
-
 
 
 @router.post("/token")

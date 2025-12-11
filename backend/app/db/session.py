@@ -1,11 +1,30 @@
-from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
+from typing import AsyncGenerator, Annotated
+from fastapi import Depends
+from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
+from sqlalchemy.orm import sessionmaker
 from core.config import settings
+from db.base import Base
 
-engine = create_async_engine(settings.DATABASE_URL, echo=True)
+DATABASE_URL = settings.DATABASE_URL
 
-SessionLocal = async_sessionmaker(engine, autoflush=False, expire_on_commit=False)
+if not DATABASE_URL:
+    raise ValueError("DATABASE_URL environment variable not set")
 
 
-async def get_session():
-    async with SessionLocal() as session:
+engine = create_async_engine(DATABASE_URL, echo=True)
+
+
+async_session_factory = sessionmaker(
+    engine, class_=AsyncSession, expire_on_commit=False
+)
+
+
+# Use Base from db.base (SQLAlchemy 2.0 DeclarativeBase)
+
+
+async def get_session() -> AsyncGenerator[AsyncSession, None]:
+    async with async_session_factory() as session:
         yield session
+
+
+AsyncDBDependency = Annotated[AsyncSession, Depends(get_session)]

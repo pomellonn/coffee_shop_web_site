@@ -1,12 +1,14 @@
 from fastapi import FastAPI, Depends, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
-from database import engine
+from db.session import engine
 from typing import Annotated
 from api.api_router import api_router
-from dependencies.auth import get_current_user
+from core.security import get_current_user
+from models import User
+
 app = FastAPI(title="Coffee Shop API", version="1.0.0")
 
-app.include_router(api_router, prefix="/api/v1") 
+app.include_router(api_router, prefix="/api/v1")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -16,11 +18,17 @@ app.add_middleware(
 )
 
 
-UserDep = Annotated[dict, Depends(get_current_user)]
+UserDep = Annotated[User, Depends(get_current_user)]
 
 
 @app.get("/", status_code=200)
 async def root(user: UserDep):
-    if not user:
-        raise HTTPException(status_code=401, detail="Authentication failed")
-    return {"user": user}
+    return {
+        "user": {
+            "user_id": user.user_id,
+            "email": user.email,
+            "name": user.name,
+            "role": user.role.value,
+            "created_at": user.created_at,
+        }
+    }
