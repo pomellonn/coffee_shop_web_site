@@ -73,14 +73,32 @@
 ```GET /products/ ```
 Получить список всех продуктов.
 
+Доступ: все пользователи (customer, manager, admin)
+
 ```POST /products/ ```
-Создать новый продукт.
+Создание нового продукта.
+Доступ: manager, admin
+Входные данные: 
+```
+"name": "Матча латте",
+"description": "Напиток на основе зелёного японского чая матча с молоком",
+"image_url": "https://...",
+"volume": 300,
+"product_type": "non-coffee",
+"price": 250
+```
 
 ```GET /products/{product_id}```
-Получить данные о продукте по его id.
+Получение данных о продукте по его id.
+
+Доступ: все пользователи (customer, manager, admin)
 
 ```PUT /products/{product_id}```
-Обновить данные о продукте по id.
+Обновление данных о продукте по id.
+
+Доступ: manager, admin
 
 ```DELETE /products/{product_id}```
-Удалить продукт из базы данных по id.
+Удаление продукта по id.
+
+Доступ: manager, admin

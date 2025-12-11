@@ -1,67 +1,82 @@
-# from fastapi import APIRouter, Depends, HTTPException
-# from sqlalchemy.ext.asyncio import AsyncSession
-# from sqlalchemy import select
+from fastapi import APIRouter, Depends, HTTPException, status
+from typing import List
 
-# from database import get_session
-# from models import Product
-# from schemas import ProductCreate, ProductRead, ProductUpdate
+from core.security import require_manager_or_admin
+from models import User
+from schemas.product_schema import (
+    ProductCreateManagerAdmin,
+    ProductReadCustomer,
+    ProductReadManagerAdmin,
+    ProductUpdateAdmin,
+)
+from services.product_service import ProductService
+from dependencies.services import get_product_service
 
-# router = APIRouter(prefix="/products", tags=["products"])
-
-
-# # Создание нового продукта
-# @router.post("/", response_model=ProductRead, summary="Create a new Product")
-# async def create_product(data: ProductCreate, db: AsyncSession = Depends(get_session)):
-#     product = Product(**data.dict())
-#     db.add(product)
-#     await db.commit()
-#     await db.refresh(product)
-#     return product
+router = APIRouter(prefix="/products", tags=["products"])
 
 
-# # Получить все продукты
-# @router.get("/", response_model=list[ProductRead], summary="Get all Products")
-# async def get_products(db: AsyncSession = Depends(get_session)):
-#     result = await db.execute(select(Product))
-#     return result.scalars().all()
+# -------------------
+# CUSTOMER ENDPOINTS
+# -------------------
+@router.get("/", response_model=List[ProductReadCustomer])
+async def list_products(product_service: ProductService = Depends(get_product_service)):
+    products = await product_service.get_all_products()
+    return products
 
 
-# # Получить продукт по id
-# @router.get("/{product_id}", response_model=ProductRead, summary="Get Product by ID")
-# async def get_product(product_id: int, db: AsyncSession = Depends(get_session)):
-#     product = await db.get(Product, product_id)
-#     if not product:
-#         raise HTTPException(status_code=404, detail="Product not found")
-#     return product
+@router.get("/{product_id}", response_model=ProductReadCustomer)
+async def get_product(
+    product_id: int, product_service: ProductService = Depends(get_product_service)
+):
+    product = await product_service.get_product_by_id(product_id)
+    if not product:
+        raise HTTPException(status_code=404, detail="Product not found")
+    return product
 
 
-# # Обновить данные о продукте по id
-# @router.put("/{product_id}", response_model=ProductRead, summary="Update Product info by ID")
-# async def update_product(
-#     product_id: int,
-#     data: ProductUpdate,
-#     db: AsyncSession = Depends(get_session),
-# ):
-#     product = await db.get(Product, product_id)
-#     if not product:
-#         raise HTTPException(status_code=404, detail="Product not found")
+# -------------------
+# MANAGER / ADMIN ENDPOINTS
+# -------------------
+# Create new product
+@router.post(
+    "/", response_model=ProductReadManagerAdmin, status_code=status.HTTP_201_CREATED
+)
+async def create_product(
+    product_in: ProductCreateManagerAdmin,
+    current_user: User = Depends(require_manager_or_admin),
+    product_service: ProductService = Depends(get_product_service),
+):
 
-#     for field, value in data.dict(exclude_unset=True).items():
-#         setattr(product, field, value)
-
-#     db.add(product)
-#     await db.commit()
-#     await db.refresh(product)
-#     return product
+    product = await product_service.create_product(product_in)
+    return product
 
 
-# # Удаление продукта по id
-# @router.delete("/{product_id}", summary="Delete Product by ID")
-# async def delete_product(product_id: int, db: AsyncSession = Depends(get_session)):
-#     product = await db.get(Product, product_id)
-#     if not product:
-#         raise HTTPException(status_code=404, detail="Product not found")
+# Update product info by id
+@router.put("/{product_id}", response_model=ProductReadManagerAdmin)
+async def update_product(
+    product_id: int,
+    product_in: ProductUpdateAdmin,
+    current_user: User = Depends(require_manager_or_admin),
+    product_service: ProductService = Depends(get_product_service),
+):
 
-#     await db.delete(product)
-#     await db.commit()
-#     return {"detail": "Product deleted"}
+    product = await product_service.get_product_by_id(product_id)
+    if not product:
+        raise HTTPException(status_code=404, detail="Product not found")
+    updated = await product_service.update_product(
+        product, product_in.dict(exclude_unset=True)
+    )
+    return updated
+
+
+# Delete product by id
+@router.delete("/{product_id}", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_product(
+    product_id: int,
+    current_user: User = Depends(require_manager_or_admin),
+    product_service: ProductService = Depends(get_product_service),
+):
+    product = await product_service.get_product_by_id(product_id)
+    if not product:
+        raise HTTPException(status_code=404, detail="Product not found")
+    await product_service.delete_product(product)

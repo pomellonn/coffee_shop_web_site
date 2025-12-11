@@ -16,24 +16,26 @@ class ProductBase(BaseModel):
 
 # Create schema
 class ProductCreateManagerAdmin(ProductBase):
-    pass
+    model_config = ConfigDict(from_attributes=True)
 
 
 # Read schema - Customer View
 class ProductReadCustomer(ProductBase):
-    pass
+    model_config = ConfigDict(from_attributes=True)
 
 # Read schema - Manager/Admin View
 class ProductReadManagerAdmin(ProductBase):
     product_id: int
+    model_config = ConfigDict(from_attributes=True)
 
 
 # Update schema
-class ProductUpdateAdmin(ProductBase):
+class ProductUpdateAdmin(BaseModel):
     name: Optional[str] = None
     description: Optional[str] = None
     image_url: Optional[str] = None
     volume: Optional[int] = None
     product_type: Optional[ProductType] = None
     price: Optional[int] = None
+    model_config = ConfigDict(from_attributes=True)
 
