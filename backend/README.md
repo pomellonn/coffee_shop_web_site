@@ -8,19 +8,20 @@
 Получение JWT токена.
 
 Входные данные: 
-email
-password
+- email
+- password
 
 
 ```POST /users/register```
 Регистрация нового пользователя.
 
-Описание: Создает нового пользователя с ролью customer и возвращает токен доступа.
+Создает нового пользователя с ролью customer и возвращает токен доступа.
 
 Входные данные:
-  ``` "email": "user@example.com",
+  ``` 
+  "email": "user@example.com",
   "name": "Ivan Ivanov",
-  "password": "password" //min: 8 символов
+  "password": "password" (min: 8 символов)
   ```
 
 
