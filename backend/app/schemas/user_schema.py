@@ -17,7 +17,7 @@ class UserBase(BaseModel):
 
 # Create schema - Customer View
 class UserCreate(UserBase):
-    password: str = Field(..., min_length=6, description="Password for the user")
+    password: str = Field(..., min_length=8, description="Password for the user")
     model_config = ConfigDict(from_attributes=True)
 
 
