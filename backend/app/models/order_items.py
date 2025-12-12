@@ -1,10 +1,9 @@
 from __future__ import annotations 
 from typing import Optional
-from app.db.base import Base
+from db.base import Base
 from sqlalchemy import ForeignKey, CheckConstraint
 from sqlalchemy.orm import relationship, validates, Mapped, mapped_column
-from .orders import Order
-from .products import Product
+
 
 class OrderItem(Base):
     __tablename__ = "order_items"

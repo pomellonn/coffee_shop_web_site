@@ -1,9 +1,8 @@
 from __future__ import annotations 
-from app.db.base import Base
+from db.base import Base
 from sqlalchemy import ForeignKey, Boolean, UniqueConstraint
 from sqlalchemy.orm import relationship, Mapped, mapped_column
-from .coffee_shops import CoffeeShop
-from .products import Product
+
 
 
 class ShopMenu(Base):

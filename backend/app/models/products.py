@@ -1,11 +1,9 @@
 from __future__ import annotations 
 from typing import List, Optional
-from app.db.base import Base
+from db.base import Base
 from sqlalchemy import String, Text, Enum, CheckConstraint
 from sqlalchemy.orm import relationship, validates, Mapped, mapped_column
 import enum
-from .shop_menu import ShopMenu
-from .order_items import OrderItem
 
 
 class ProductType(str, enum.Enum):

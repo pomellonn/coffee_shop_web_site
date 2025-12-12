@@ -1,6 +1,6 @@
 from pydantic import BaseModel, ConfigDict, Field
 from typing import Optional
-
+from .user_schema import ManagerName
 
 class CoffeeShopBase(BaseModel):
     name: str = Field(..., max_length=128, example="gotcha - Nevsky")
@@ -14,17 +14,20 @@ class CoffeeShopBase(BaseModel):
 # Create schema - Admin View
 class CoffeeShopCreateAdmin(CoffeeShopBase):
     manager_id: Optional[int] = Field(None, example=1) 
+    model_config = ConfigDict(from_attributes=True)
 
 
 # Read schema - Customer View
 class CoffeeShopReadCustomer(CoffeeShopBase):
-    pass
+    model_config = ConfigDict(from_attributes=True)
 
 
 # Read schema - Manager/Admin View
 class CoffeeShopReadManagerAdmin(CoffeeShopBase):
     shop_id: int
     manager_id: Optional[int] = Field(None, example=1)
+    manager: Optional[ManagerName] = None 
+    model_config = ConfigDict(from_attributes=True)
 
 
 # Update schema - Admin View
