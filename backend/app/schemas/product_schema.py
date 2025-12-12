@@ -39,3 +39,10 @@ class ProductUpdateAdmin(BaseModel):
     price: Optional[int] = None
     model_config = ConfigDict(from_attributes=True)
 
+class ProductName(BaseModel):
+    name: str
+    description: Optional[str] = None
+    image_url: Optional[str] = None
+    product_type: ProductType
+    price: int
+    model_config = ConfigDict(from_attributes=True)
