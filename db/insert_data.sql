@@ -3,27 +3,27 @@ INSERT INTO
     coffee_shops (name, address, manager_id)
 VALUES
     (
-        'gotcha - Peterhof',
+        'FLTR - Peterhof',
         'Санкт-Петербург, ул. Аврова, 36',
         1
     ),
     (
-        'gotcha - Nekrasov',
+        'FLTR - Nekrasov',
         'Санкт-Петербург, ул. Некрасова, 23',
         2
     ),
     (
-        'gotcha - Nevsky',
+        'FLTR - Nevsky',
         'Санкт-Петербург, Невский пр., 25',
         3
     ),
     (
-        'gotcha - Strelna',
+        'FLTR - Strelna',
         'Санкт-Петербург, Ново-Нарвское шоссе, 12',
         4
     ),
     (
-        'gotcha - Kupchino',
+        'FLTR - Kupchino',
         'Санкт-Петербург, ул. Ярослава Гашека, 4',
         3
     );
@@ -58,7 +58,7 @@ VALUES
         'Наталья Ростова',
         'manager'
     ),
-    /* password= manager1 */
+    /* password= manager2 */
     (
         'manager_karenina@coffee.com',
         '$2b$12$/crRPqcwkP/tNK.4NUMM0OpCdW2sYz57aJ2NIYA94QDEYnpdqC5M.',
@@ -156,140 +156,140 @@ VALUES
     ),
     (
         'grinev_bunt@coffeemail.com',
-        'hash_grinev_pugachev',
+        '$2b$12$omJMuGZG4mOr3hbpV7kmQeewxFHZp3QPkOyp/.kG294wz2casHLs.', -- 'grinev_pugachev'
         'Пётр',
         'customer',
         NOW ()
     ),
     (
         'lermontov_poet@coffeemail.com',
-        'hash_lermontov_stih',
+        '$2b$12$OWNjwHIqfYIFNV9dW2O36OOtm3WHSbuJn9A/ArZsO24UpCt2syWKO', -- 'lermontov_stih'
         'Михаил',
         'customer',
         NOW ()
     ),
     (
         'gogol_nos@coffeemail.com',
-        'hash_gogol_strashno',
+        '$2b$12$OZA2QmXOHR/2Ri5.K33/I.UYDLZGWWy3CI8Pn0MXKQXkbfAere.Q.', -- 'gogol_strashno'
         'Николай',
         'customer',
         NOW ()
     ),
     (
         'tolstoy_voyna@coffeemail.com',
-        'hash_tolstoy_mir',
+        '$2b$12$.NBPIDue8qcIKFOE2em6lehJzRLN3eKKo.uruOniJ0x87XBkRN.Fy', -- 'tolstoy_mir'
         'Лев',
         'customer',
         NOW ()
     ),
     (
         'chehov_vishnya@coffeemail.com',
-        'hash_chehov_sad',
+        '$2b$12$nYzx2BMWZHCTUSlt8rcvJO6KaORCBTpTZylDGSdXF0dZz2goB.HW2', -- 'chehov_sad'
         'Антон',
         'customer',
         NOW ()
     ),
     (
         'goncharov_oblom@coffeemail.com',
-        'hash_goncharov_son',
+        '$2b$12$rtVq6NG2SNf6kzp76cYm9.89o6h8r.Rv/DkZh9/ggBx33sKMipdfW', -- 'goncharov_son'
         'Иван',
         'customer',
         NOW ()
     ),
     (
         'dostoevsky_prestup@coffeemail.com',
-        'hash_dostoevsky_nakaz',
+        '$2b$12$i/yqv65nfnvIFVJVi4NkCu9gjnqwIdg4.b98wAgNoMrkmjP/mqX7.', -- 'dostoevsky_nakaz'
         'Фёдор',
         'customer',
         NOW ()
     ),
     (
         'pushkin_evgeny@coffeemail.com',
-        'hash_pushkin_roman',
+        '$2b$12$fLgLEwFfL1D29wdS2k.osubyVafW1R5WjvBLqFV.fXa7FYuyhGh0G', -- 'pushkin_roman'
         'Александр',
         'customer',
         NOW ()
     ),
     (
         'griboedov_gore@coffeemail.com',
-        'hash_griboedov_um',
+        '$2b$12$h9U6I8VJh33htY1gYdCYGOMmntQaP1RP1jVxkDp/zDA.D1qRrCQjq', -- 'griboedov_um'
         'Александр',
         'customer',
         NOW ()
     ),
     (
         'saltykov_shchedrin_guber@coffeemail.com',
-        'hash_saltykov_satira',
+        '$2b$12$srh/il7KW86osCm4Wq7ST.l0xEY2LZKXKWQTe9xJYLsQbQnDGyqHC', -- 'saltykov_satira'
         'Михаил',
         'customer',
         NOW ()
     ),
     (
         'leskov_levsha@coffeemail.com',
-        'hash_leskov_podkovka',
+        '$2b$12$vkWR1OVxbM34gpjnBnMABeN2Jg0uoNmwaZG0sZ6WVSMxfS.OJOh9C', -- 'leskov_podkovka'
         'Николай',
         'customer',
         NOW ()
     ),
     (
         'blok_nochi@coffeemail.com',
-        'hash_blok_stihi',
+        '$2b$12$Qiqd1f5V84HrgnrTLTaNduIZ07jT8wLlVw0dPJAxfQCM9UBGuhQO6', -- 'blok_stihi'
         'Александр',
         'customer',
         NOW ()
     ),
     (
         'esenin_rus@coffeemail.com',
-        'hash_esenin_bereza',
+        '$2b$12$Zv.CvRETvWBAp2VPiuaZv.8kVOaKVxvVYuf1UGlwY0gsiQq7r8AZy', -- 'esenin_bereza'
         'Сергей',
         'customer',
         NOW ()
     ),
     (
         'mayakovsky_lestnica@coffeemail.com',
-        'hash_mayakovsky_krik',
+        '$2b$12$rGp25KZRELaH9ck8ZuDJ5.WYU5FllIhgr8ugfABKlNg4iLKj5Wj2S', -- 'mayakovsky_krik'
         'Владимир',
         'customer',
         NOW ()
     ),
     (
         'bunin_temnie@coffeemail.com',
-        'hash_bunin_alye',
+        '$2b$12$BcFpRUg5xSsDKrN9QUZXoux1alsXgBABNWjmNjlWJeO6AXkkCXMSO', -- 'bunin_alye'
         'Иван',
         'customer',
         NOW ()
     ),
     (
         'sholohov_tihii@coffeemail.com',
-        'hash_sholohov_don',
+        '$2b$12$uXB.y63gl1uFqhOlgeyGa.iCVahnqGQPawJLnsMaubXK1/fTANOQe', -- 'sholohov_don'
         'Михаил',
         'customer',
         NOW ()
     ),
     (
         'paustovsky_telefon@coffeemail.com',
-        'hash_paustovsky_rasskaz',
+        '$2b$12$mJU6iNOS65hTlXfbSFoLzOdVKY0x3xHtD8UQnDOY960P1TZShascO', -- 'paustovsky_rasskaz'
         'Константин',
         'customer',
         NOW ()
     ),
     (
         'turgenev_otci@coffeemail.com',
-        'hash_turgenev_deti',
+        '$2b$12$tUr2Hue5TJJqWGGwOQSdcehS3c69WNxYsN1vYSwi48i.R/iScFHWK', -- 'turgenev_deti'
         'Иван',
         'customer',
         NOW ()
     ),
     (
         'goncharov_oblojka@coffeemail.com',
-        'hash_goncharov_roman',
+        '$2b$12$Qp16iLPIOLSjiAXEMsBh2.IOsIe5IrY1lkQvJyAHardwZMLdPRIQi', -- 'goncharov_roman'
         'Иван',
         'customer',
         NOW ()
     ),
     (
         'korolenko_deti@coffeemail.com',
-        'hash_korolenko_sumrak',
+        '$2b$12$aJXpz7PfW3guH38A9Um61O1mhPZKmg53Y4PoCrk.hEfiiwkTkfOxa', -- 'korolenko_sumrak'
         'Владимир',
         'customer',
         NOW ()
@@ -297,28 +297,27 @@ VALUES
 
 -- Products
 INSERT INTO
-    products (name, description, image_url, price, volume, product_type)
+    products (
+        name,
+        description,
+        image_url,
+        price,
+        volume,
+        product_type
+    )
 VALUES
     (
         'Эспрессо',
         'Насыщенный кофейный напиток',
-        '',
+        '/static/images/products/coffee/espresso.png',
         180,
         40,
         'coffee'
     ),
     (
-        'Двойной капучино',
-        'Кофейный напиток на основе эспрессо с добавлением вспененного молока',
-        '',
-        350,
-        350,
-        'coffee'
-    ),
-    (
         'Капучино',
         'Кофейный напиток на основе эспрессо с добавлением вспененного молока',
-        '',
+        '/static/images/products/coffee/capuchino.png',
         280,
         250,
         'coffee'
@@ -326,7 +325,7 @@ VALUES
     (
         'Латте',
         'Кофе на основе эспрессо с большим количеством молока',
-        '',
+        '/static/images/products/coffee/latte.png',
         290,
         350,
         'coffee'
@@ -334,7 +333,7 @@ VALUES
     (
         'Флэт уайт',
         'Кофе на основе двойного эспрессо и молока',
-        '',
+        '/static/images/products/coffee/capuchino.png',
         310,
         180,
         'coffee'
@@ -342,7 +341,7 @@ VALUES
     (
         'Айс латте',
         'Охлаждённый латте со льдом и молочной пеной',
-        '',
+        '/static/images/products/coffee/ice_latte.png',
         330,
         400,
         'coffee'
@@ -350,7 +349,7 @@ VALUES
     (
         'Фильтр-кофе',
         'Чёрный фильтр-кофе с насыщенным вкусом и ароматом',
-        '',
+        '/static/images/products/coffee/filter.png',
         220,
         300,
         'coffee'
@@ -358,23 +357,23 @@ VALUES
     (
         'Чай Матча латте',
         'Напиток на основе зелёного японского чая матча с молоком',
-        '',
+        '/static/images/products/noncoffee/matcha.png',
         320,
         300,
         'non_coffee'
     ),
     (
-        'Имбирный чай',
-        'Горячий чай с имбирём, лимоном и мёдом',
-        '',
-        270,
+        'Чай Матча латте',
+        'Напиток на основе зелёного японского чая матча с молоком со льдом',
+        '/static/images/products/non_coffee/ice_matcha.png',
+        320,
         300,
         'non_coffee'
     ),
     (
         'Какао',
         'Натуральный какао с молоком',
-        '',
+        '/static/images/products/non_coffee/cacao.png',
         310,
         350,
         'non_coffee'
@@ -382,7 +381,7 @@ VALUES
     (
         'Горячий шоколад',
         'Густой шоколад с молочной пеной',
-        '',
+        '/static/images/products/non_coffee/hotchoc.png',
         330,
         350,
         'non_coffee'
@@ -390,7 +389,7 @@ VALUES
     (
         'Апельсиновый фреш',
         'Свежевыжатый сок из сочных апельсинов',
-        '',
+        '/static/images/products/non_coffee/orangejuice.png',
         250,
         250,
         'non_coffee'
@@ -398,7 +397,7 @@ VALUES
     (
         'Бамбл-кофе',
         'Эспрессо с добавлением апельсинового фреша',
-        '',
+        '/static/images/products/coffee/bumble.png',
         300,
         350,
         'coffee'
@@ -414,8 +413,24 @@ VALUES
     (
         'Тыквенный латте',
         'Пряный латте с тыквенным сиропом и корицей',
-        '',
+        '/static/images/products/coffee/latte.png',
         380,
         350,
         'coffee'
-    );
+    ),
+    (
+        'Клубничный матча-латте',
+        'Чай матча-латте с клубничным пюре',
+        '/static/images/products/non_coffee/strawberry_matcha.png',
+        380,
+        350,
+        'coffee'
+    ),
+    (
+        'Манго матча-латте',
+        'Чай матча-латте с манговым пюре',
+        "/static/images/products/non_coffee/mango_matcha.png",
+        380,
+        350,
+        'non_coffee'
+    ),
