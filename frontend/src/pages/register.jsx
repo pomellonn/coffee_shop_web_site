@@ -1,6 +1,6 @@
 import {useState} from 'react'
 import {useNavigate, Link} from 'react-router-dom' 
-import {register} from '..services/authService'
+import {register} from '../services/authService'
 
 function Register(){
     const [name, setName]=useState('');
@@ -24,11 +24,12 @@ function Register(){
         };
         return(
         <div style={{maxWidth:'400px', margin: '50px auto', padding: '20px' }}>
+            <h2 style={{ textAlign: 'center', marginBottom: '20px' }}>Регистрация</h2>
             <form onSubmit={handleSubmit}>
                 <div style={{ marginBottom: '15px' }}>
                     <label>Имя пользователя:</label>
                     <input 
-                        type="name"
+                        type="text"
                         value={name}
                         onChange={(event)=>setName(event.target.value)}
                         required
@@ -74,9 +75,12 @@ function Register(){
                         border: 'none',
                         borderRadius: '4px'
                     }}
-                > {loading ? 'Вход...' : 'Войти'}
+                > {loading ? 'Регистрация...' : 'Зарегистрироваться'}
                 </button>
             </form>
+            <div style={{ textAlign: 'center', marginTop: '15px' }}>
+                Уже есть аккаунт? <Link to="/login">Войти</Link>
+            </div>
         </div>
     );
 }

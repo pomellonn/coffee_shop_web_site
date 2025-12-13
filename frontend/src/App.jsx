@@ -5,7 +5,7 @@ import Home from "./pages/home"
 import Menu from "./pages/menu"
 import OrdersHistory from "./pages/orders_history"
 import Login from "./pages/login"
-// import Register from './pages/register'
+import Register from "./pages/register"
 
 
 
@@ -30,7 +30,7 @@ function App() {
           <Route path="/orders_history" element={<OrdersHistory/>}/>
           <Route path="/account"element={<Account />}/>
           <Route path="/login" element={<Login />}/>
-          <Route path="/register" element={<></>}/>
+          <Route path="/register" element={<Register />}/>
           <Route path="*" element={<div>Страница не найдена (404)</div>}/>
   
         </Routes>
