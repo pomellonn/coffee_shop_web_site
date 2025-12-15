@@ -14,8 +14,12 @@ function Login(){
         setError('');
         setLoading(true);
         try {
-            await login(email, password);
-            navigate('/account');
+            const data=await login(email, password);
+            const role=data.role
+            if (role==="customer"){
+                navigate('/customerAccount');
+            }
+            // навигация по роли: добавить admin и manager
         } catch {
             setError('Неверный email или пароль');
         } finally {
