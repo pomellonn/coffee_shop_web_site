@@ -3,7 +3,6 @@ from pydantic import BaseModel, ConfigDict, Field
 
 class OrderItemBase(BaseModel):
     quantity: int = Field(..., gt=0, example=2)
-
     model_config = ConfigDict(from_attributes=True)
 
 

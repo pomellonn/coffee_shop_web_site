@@ -4,13 +4,14 @@ from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import selectinload
 from fastapi import HTTPException, status
-
-
-from models import ShopMenu, CoffeeShop, User, UserRole
+from sqlalchemy import asc, desc
+from models import Product
+from models import ShopMenu, CoffeeShop, User, UserRole, OrderItem, Order
 from schemas.shopmenu_schema import (
     ShopMenuCreateAdmin,
     ShopMenuCreateManager,
 )
+from sqlalchemy import func
 
 
 class ShopMenuService:
@@ -51,6 +52,62 @@ class ShopMenuService:
 
         await self.db.refresh(item)
         return item
+
+    # Sort menu items by price or name
+    async def get_shop_menu_sorted(
+        self, shop_id: int, sort_by: str = "price", order: str = "asc"
+    ) -> List[ShopMenu]:
+
+        allowed_sort_fields = {"price", "name"}
+        if sort_by not in allowed_sort_fields:
+            sort_by = "price"
+
+        sort_order = asc if order.lower() == "asc" else desc
+
+        query = (
+            select(ShopMenu)
+            .where(ShopMenu.shop_id == shop_id)
+            .options(selectinload(ShopMenu.product))
+        )
+        query = query.join(Product)
+        if sort_by == "price":
+            query = query.order_by(sort_order(Product.price))
+        elif sort_by == "name":
+            query = query.order_by(sort_order(Product.name))
+
+        result = await self.db.execute(query)
+        return result.scalars().all()
+# Sort menu items by popularity (most sold first)
+    async def get_shop_menu_by_popularity(
+        self, shop_id: int, limit: int = 100
+    ) -> List[ShopMenu]:
+
+        sales_count_cte = (
+            select(
+                OrderItem.product_id, func.sum(OrderItem.quantity).label("total_sold")
+            )
+            .join(Order)
+            .where(Order.shop_id == shop_id)
+            .group_by(OrderItem.product_id)
+            .cte("sales_count")
+        )
+
+        query = select(ShopMenu).where(ShopMenu.shop_id == shop_id)
+
+        query = query.join(
+            sales_count_cte,
+            ShopMenu.product_id == sales_count_cte.c.product_id,
+            isouter=True,
+        )
+
+        query = query.order_by(desc(sales_count_cte.c.total_sold)).order_by(
+            ShopMenu.product_id
+        )
+
+        query = query.options(selectinload(ShopMenu.product)).limit(limit)
+
+        result = await self.db.execute(query)
+        return result.scalars().all()
 
     async def update_menu_item_admin(self, item: ShopMenu, updates: dict) -> ShopMenu:
 
@@ -109,7 +166,6 @@ class ShopMenuService:
             await self.db.rollback()
             raise ValueError("This product is already in the shop menu")
 
-        #  or joinedload при refresh
         await self.db.refresh(item, attribute_names=["product"])
         return item
 

@@ -5,7 +5,7 @@ from services.user_service import UserService
 from services.product_service import ProductService
 from services.coffeeshop_service import CoffeeShopService
 from services.shopmenu_service import ShopMenuService
-
+from services.order_service import OrderService
 async def get_user_service(db: AsyncSession = Depends(get_session)) -> UserService:
     return UserService(db)
 
@@ -26,3 +26,8 @@ async def get_shop_menu_service(
     db: AsyncSession = Depends(get_session),
 ) -> ShopMenuService:
     return ShopMenuService(db)
+
+async def get_order_service(
+    db: AsyncSession = Depends(get_session),
+) -> OrderService:
+    return OrderService(db)
