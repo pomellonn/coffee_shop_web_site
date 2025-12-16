@@ -1,38 +1,41 @@
 import { useEffect, useState } from "react";
 import Menu from "../menu";
 // import Analytics from "./Analytics";
-import { getShopMenu } from "../../services/managerService";
-
+import { getOrdersCount } from "../../services/managerService";
+import { getCurrentUser } from "../../services/authService";
 const Dashboard = () => {
-  const [menuItems, setMenuItems] = useState([]);
-  const [analytics, setAnalytics] = useState(null);
+    const [menuItems, setMenuItems] = useState([]);
+    const [analytics, setAnalytics] = useState(null);
+    const [user, setUser] = useState(null);
+    const [todayOrders, setTodayOrders] = useState(0);
+    useEffect(() => {
+        fetchData();
+    }, []);
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+    const fetchData = async () => {
+        const user = await getCurrentUser();
+        setUser(user);
+        const ordersCount = await getOrdersCount();
+        setTodayOrders(ordersCount);
+    };
 
-  const fetchData = async () => {
-    const menu = await getShopMenu();
-    setMenuItems(menu);
 
-    // const analyticsData = await getManagerAnalytics();
-    // setAnalytics(analyticsData);
-  };
+    return (
+        <div className="container-fluid">
+            <h1>Панель менеджера</h1>
+            <h2>Добрый день, {user?.name}! </h2>
 
-  return (
-    <div className="container-fluid">
-      <h1>Менеджерская панель</h1>
-      
-      <div className="row">
-        <div className="col-md-8">
-          {/* <Menu menuItems={menuItems} refresh={fetchData} /> */}
+            <div className="row">
+                <div className="col-md-8">
+                    {/* <Menu menuItems={menuItems} refresh={fetchData} /> */}
+                </div>
+                <div className="card p-3">
+                    <h5>Заказы за сегодня</h5>
+                    <p style={{ fontSize: "24px", fontWeight: "bold" }}>{todayOrders}</p>
+                </div>
+            </div>
         </div>
-        {/* <div className="col-md-4">
-          {analytics && <Analytics data={analytics} />}
-        </div> */}
-      </div>
-    </div>
-  );
+    );
 };
 
 export default Dashboard;

@@ -1,7 +1,7 @@
 from typing import List, Optional
 from fastapi import HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
+from sqlalchemy import select, func, cast, Date
 from datetime import datetime, date
 from typing import Optional
 from sqlalchemy.orm import selectinload, joinedload
@@ -115,6 +115,26 @@ class OrderService:
             query.options(selectinload(Order.items)).order_by(Order.created_at.desc())
         )
         return result.scalars().all()
+
+ 
+
+    async def get_orders_count_for_manager_shop(
+        self,
+        user_id: int,
+        target_date: Optional[date] = None,
+    ) -> int:
+        query = (
+            select(func.count(Order.order_id))
+            .join(CoffeeShop, Order.shop_id == CoffeeShop.shop_id)
+            .where(CoffeeShop.manager_id == user_id)
+        )
+
+        if target_date:
+            query = query.where(cast(Order.created_at, Date) == target_date)
+
+        result = await self.db.execute(query)
+        count = result.scalar_one()  # возвращает число
+        return count
 
     async def get_all_orders(
         self, start_date: Optional[date] = None, end_date: Optional[date] = None

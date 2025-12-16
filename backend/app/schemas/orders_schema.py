@@ -22,14 +22,16 @@ class OrderCreateCustomer(OrderBase):
 class OrderReadCustomer(OrderBase):
     order_id: int
     created_at: datetime = Field(..., example="2024-10-05T14:48:00.000Z")
-    items: List[OrderItemReadCustomer] = [] 
+    items: List[OrderItemReadCustomer] = []
     total_amount: int = Field(..., ge=0, example=500)
 
 
 # Read schema - Manager/Admin View
 class OrderReadManagerAdmin(OrderReadCustomer):
     user_id: int = Field(..., example=1)
-    items: List[OrderItemReadManagerAdmin] = (
-        []
-    )  
+    items: List[OrderItemReadManagerAdmin] = []
     total_amount: int = Field(..., ge=0, example=500)
+
+
+class OrdersCountResponse(BaseModel):
+    count: int

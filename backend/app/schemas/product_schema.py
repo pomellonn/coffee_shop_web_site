@@ -21,6 +21,7 @@ class ProductCreateManagerAdmin(ProductBase):
 
 # Read schema - Customer View
 class ProductReadCustomer(ProductBase):
+    product_id: int
     model_config = ConfigDict(from_attributes=True)
 
 # Read schema - Manager/Admin View

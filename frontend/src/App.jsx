@@ -11,6 +11,7 @@ import { AuthProvider } from './services/AuthContext.jsx';
 import Dashboard from './pages/manager/Dashboard.jsx';
 import Layout from "./components/admin/Layot";
 import AnalyticsManager from "./pages/manager/AnalyticsManager.jsx";
+import ManagerMenu from './pages/manager/MenuManager.jsx';
 function App() {
   return (
     <>
@@ -42,6 +43,7 @@ function App() {
             <Route element={<Layout><Outlet /></Layout>}>
               <Route element={<ProtectedRoute roles={["manager"]} />}>
                 <Route path="/manager" element={<Dashboard />} />
+                <Route path="/manager/menu" element={<ManagerMenu />} />
                 <Route path="/manager/analytics" element={<AnalyticsManager />} />
                
               </Route>

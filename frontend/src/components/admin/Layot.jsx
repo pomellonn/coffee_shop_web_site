@@ -14,7 +14,7 @@ const Layout = () => {
               </a>
             </li>
             <li>
-              <a href="/tables">
+              <a href="/manager/menu">
 
                 <span>Меню кофейни</span>
               </a>

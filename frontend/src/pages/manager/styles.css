@@ -97,3 +97,15 @@ canvas {
         margin-bottom: 16px;
     }
 }
+
+.add-product select {
+    padding: 8px 10px;
+    border-radius: 6px;
+    border: 1px solid #ced4da;
+}
+
+.add-product button {
+    height: 38px;
+    font-weight: 500;
+    border-radius: 6px;
+}

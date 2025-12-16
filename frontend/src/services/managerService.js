@@ -11,17 +11,17 @@ export const getOneShopAnalytics = async (dateFrom, dateTo) => {
 };
 
 export const getAllProducts = async () => {
-    const { data } = await api.get("/products");
+    const { data } = await api.get("/products/");
     return data;
 };
 
 export const getShopMenu = async () => {
-    const { data } = await api.get("/manager/menu");
+    const { data } = await api.get("/manager/menu/");
     return data;
 };
 
 export const addMenuItem = async (payload) => {
-    const { data } = await api.post("/manager/menu", payload);
+    const { data } = await api.post("/manager/menu/", payload);
     return data;
 };
 
@@ -32,4 +32,12 @@ export const updateMenuItem = async (menuId, payload) => {
 
 export const deleteMenuItem = async (menuId) => {
     await api.delete(`/manager/menu/${menuId}`);
+};
+
+
+export const getOrdersCount = async (date) => {
+    const params = {};
+    if (date) params.target_date = date;
+    const { data } = await api.get('/manager/orders-count', { params });
+    return data.count;
 };

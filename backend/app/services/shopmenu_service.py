@@ -197,3 +197,8 @@ class ShopMenuService:
         await self.db.commit()
         await self.db.refresh(item, attribute_names=["product"])
         return item
+
+
+    async def delete_menu_item(self, item: ShopMenu) -> None:
+        await self.db.delete(item)
+        await self.db.commit()
