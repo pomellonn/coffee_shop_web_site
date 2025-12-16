@@ -19,6 +19,13 @@ class AttributeType(Base):
         nullable=False,
         unique=True
     )
+    
+    options: Mapped[List["ProductAttributeOptions"]] = relationship(
+        "ProductAttributeOptions",
+        back_populates="attribute_type",
+        cascade="all, delete-orphan"
+    )
+    
     @property
     def display_name(self) -> str:
         mapping = {

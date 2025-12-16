@@ -87,7 +87,7 @@ CREATE TABLE IF NOT EXISTS attribute_types (
 
 -- Варианты атрибутов (например, oat, lactose free, large, caramel)
 CREATE TABLE IF NOT EXISTS product_attribute_options (
-    option_id SERIAL PRIMARY KEY,
+    option_id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     attribute_type_id INTEGER NOT NULL REFERENCES attribute_types(attribute_type_id) ON DELETE CASCADE,
     value VARCHAR(128) NOT NULL,
     extra_price INTEGER NOT NULL DEFAULT 0,
