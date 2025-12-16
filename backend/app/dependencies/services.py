@@ -27,6 +27,8 @@ async def get_shop_menu_service(
 ) -> ShopMenuService:
     return ShopMenuService(db)
 
+
+
 async def get_order_service(
     db: AsyncSession = Depends(get_session),
 ) -> OrderService:

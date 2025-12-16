@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from typing import List
 
-from core.security import require_manager_or_admin, require_admin
+from core.security import require_manager_or_admin, require_admin, require_manager
 from models import User
 from schemas.shopmenu_schema import (
     ShopMenuCreateAdmin,
@@ -15,16 +15,15 @@ from services.shopmenu_service import ShopMenuService
 from dependencies.services import get_shop_menu_service
 
 
-router = APIRouter(prefix="/shop-menu", tags=["shop menu"])
-
-
 # -----------------------------
 # CUSTOMER ENDPOINTS
 # -----------------------------
 
+router_public = APIRouter(prefix="/menu", tags=["Shop menu - Public"])
+
 
 # Get shop menu items
-@router.get("/shop/{shop_id}", response_model=List[ShopMenuReadCustomer])
+@router_public.get("/{shop_id}", response_model=List[ShopMenuReadCustomer])
 async def get_shop_menu(
     shop_id: int, service: ShopMenuService = Depends(get_shop_menu_service)
 ):
@@ -34,32 +33,27 @@ async def get_shop_menu(
 # -----------------------------
 # MANAGER ENDPOINTS
 # -----------------------------
-@router.post(
-    "/my-shop-menu",
-    response_model=ShopMenuReadManagerAdmin,
-    status_code=status.HTTP_201_CREATED,
+router_manager = APIRouter(prefix="/manager/menu", tags=["Shop menu - Manager"])
+
+
+@router_manager.post(
+    "/", response_model=ShopMenuReadManagerAdmin, status_code=status.HTTP_201_CREATED
 )
 async def create_menu_item_manager(
     menu_in: ShopMenuCreateManager,
     current_user: User = Depends(require_manager_or_admin),
     service: ShopMenuService = Depends(get_shop_menu_service),
 ):
-
     try:
-
         item = await service.create_menu_item_manager(current_user.user_id, menu_in)
     except ValueError as e:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
-
 
     return item
 
 
 # Update menu item
-@router.put(
-    "/{menu_id}",
-    response_model=ShopMenuReadManagerAdmin,
-)
+@router_manager.put("/{menu_id}", response_model=ShopMenuReadManagerAdmin)
 async def update_menu_item_manager(
     menu_id: int,
     menu_in: ShopMenuUpdateManager,
@@ -76,7 +70,7 @@ async def update_menu_item_manager(
     return updated
 
 
-@router.get("/my-shop-menu", response_model=List[ShopMenuReadManagerAdmin])
+@router_manager.get("/", response_model=List[ShopMenuReadManagerAdmin])
 async def get_my_shop_menu_items(
     current_user: User = Depends(require_manager_or_admin),
     service: ShopMenuService = Depends(get_shop_menu_service),
@@ -85,13 +79,30 @@ async def get_my_shop_menu_items(
     return menu_items
 
 
+@router_manager.delete(
+    "/{menu_id}",
+    status_code=status.HTTP_204_NO_CONTENT,
+)
+async def delete_menu_item(
+    menu_id: int,
+    current_user: User = Depends(require_manager),
+    service: ShopMenuService = Depends(get_shop_menu_service),
+):
+    item = await service.get_menu_item_by_id(menu_id)
+    if not item:
+        raise HTTPException(status_code=404, detail="Menu item not found")
+
+    await service.delete_menu_item(item)
+
+
 # -----------------------------
 # ADMIN ENDPOINTS
 # -----------------------------
+router_admin = APIRouter(prefix="/admin/menu", tags=["Shop menu - Admin"])
 
 
 # List all menu items
-@router.get("/", response_model=List[ShopMenuReadManagerAdmin])
+@router_admin.get("/", response_model=List[ShopMenuReadManagerAdmin])
 async def list_all_menu_items(
     current_user: User = Depends(require_admin),
     service: ShopMenuService = Depends(get_shop_menu_service),
@@ -99,8 +110,8 @@ async def list_all_menu_items(
     return await service.get_all_menu_items()
 
 
-#
-@router.post(
+# Create new item
+@router_admin.post(
     "/",
     response_model=ShopMenuReadManagerAdmin,
     status_code=status.HTTP_201_CREATED,
@@ -115,12 +126,11 @@ async def create_menu_item(
     except ValueError as e:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
 
-
     return item
 
 
-@router.put(
-    "/admin/{menu_id}",
+@router_admin.put(
+    "/{menu_id}",
     response_model=ShopMenuReadManagerAdmin,
 )
 async def update_menu_item_admin(
@@ -140,7 +150,7 @@ async def update_menu_item_admin(
 
 
 # Delete menu item
-@router.delete(
+@router_admin.delete(
     "/{menu_id}",
     status_code=status.HTTP_204_NO_CONTENT,
 )

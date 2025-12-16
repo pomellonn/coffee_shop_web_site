@@ -1,25 +1,31 @@
-import {useState} from 'react';
-import {useNavigate, Link} from 'react-router-dom';
-import {login} from '../services/authService';
+import { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import { login } from '../services/authService';
 
-function Login(){
-    const [email, setEmail]=useState('');
-    const [password, setPassword]=useState('');
-    const [error, setError]=useState('');
-    const [loading, setLoading]=useState(false);
-    const navigate=useNavigate();
+function Login() {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
 
     const handleSubmit = async (event) => {
         event.preventDefault();
         setError('');
         setLoading(true);
         try {
-            const data=await login(email, password);
-            const role=data.role
-            if (role==="customer"){
+            const data = await login(email, password);
+            const role = data.role
+            if (role === "customer") {
                 navigate('/customerAccount');
             }
-            // навигация по роли: добавить admin и manager
+            if (role === "manager") {
+                navigate('/manager');
+            }
+            if (role === "admin") {
+               navigate('/admin');
+            }
+
         } catch {
             setError('Неверный email или пароль');
         } finally {
@@ -27,15 +33,15 @@ function Login(){
         }
     };
 
-    return(
-        <div style={{maxWidth:'400px', margin: '50px auto', padding: '20px' }}>
+    return (
+        <div style={{ maxWidth: '400px', margin: '50px auto', padding: '20px' }}>
             <form onSubmit={handleSubmit}>
                 <div style={{ marginBottom: '15px' }}>
                     <label>Адрес электронной почты:</label>
-                    <input 
+                    <input
                         type="email"
                         value={email}
-                        onChange={(event)=>setEmail(event.target.value)}
+                        onChange={(event) => setEmail(event.target.value)}
                         required
                         style={{ width: '100%', padding: '8px' }}
                     />
@@ -43,10 +49,10 @@ function Login(){
 
                 <div style={{ marginBottom: '15px' }}>
                     <label>Пароль</label>
-                    <input 
+                    <input
                         type="password"
                         value={password}
-                        onChange={(event)=>setPassword(event.target.value)}
+                        onChange={(event) => setPassword(event.target.value)}
                         required
                         style={{ width: '100%', padding: '8px' }}
                     />
@@ -60,11 +66,11 @@ function Login(){
                 <button
                     type="submit"
                     disabled={loading}
-                    style={{ 
-                        width: '100%', 
+                    style={{
+                        width: '100%',
                         padding: '10px',
                         cursor: loading ? 'not-allowed' : 'pointer',
-                        backgroundColor: loading ? '#ccc' : '#007bff', 
+                        backgroundColor: loading ? '#ccc' : '#007bff',
                         color: 'white',
                         border: 'none',
                         borderRadius: '4px'
@@ -73,7 +79,7 @@ function Login(){
                 </button>
             </form>
 
-            <p style={{ marginTop: '15px', textAlign: 'center'  }}>
+            <p style={{ marginTop: '15px', textAlign: 'center' }}>
                 Нет аккаунта? <Link to="/register">Зарегистрироваться</Link>
             </p>
         </div>

@@ -10,7 +10,7 @@ from datetime import timedelta
 from core.config import settings
 
 ACCESS_TOKEN_EXPIRE_MINUTES = settings.ACCESS_TOKEN_EXPIRE_MINUTES
-router = APIRouter(prefix="/auth", tags=["authentication"])
+router = APIRouter(prefix="/auth", tags=["Аuthentication"])
 
 
 @router.post("/token")

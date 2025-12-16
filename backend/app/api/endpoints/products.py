@@ -12,19 +12,22 @@ from schemas.product_schema import (
 from services.product_service import ProductService
 from dependencies.services import get_product_service
 
-router = APIRouter(prefix="/products", tags=["products"])
+
 
 
 # -------------------
 # CUSTOMER ENDPOINTS
 # -------------------
-@router.get("/", response_model=List[ProductReadCustomer])
+
+router_public = APIRouter(prefix="/products", tags=["Products - Public"])
+
+@router_public.get("/", response_model=List[ProductReadCustomer])
 async def list_products(product_service: ProductService = Depends(get_product_service)):
     products = await product_service.get_all_products()
     return products
 
 
-@router.get("/{product_id}", response_model=ProductReadCustomer)
+@router_public.get("/{product_id}", response_model=ProductReadCustomer)
 async def get_product(
     product_id: int, product_service: ProductService = Depends(get_product_service)
 ):
@@ -35,10 +38,13 @@ async def get_product(
 
 
 # -------------------
-# MANAGER / ADMIN ENDPOINTS
+# ADMIN ENDPOINTS
 # -------------------
+
+router_admin = APIRouter(prefix="/admin/products", tags=["Products - Admin"])
+
 # Create new product
-@router.post(
+@router_admin.post(
     "/", response_model=ProductReadManagerAdmin, status_code=status.HTTP_201_CREATED
 )
 async def create_product(
@@ -52,7 +58,7 @@ async def create_product(
 
 
 # Update product info by id
-@router.put("/{product_id}", response_model=ProductReadManagerAdmin)
+@router_admin.put("/{product_id}", response_model=ProductReadManagerAdmin)
 async def update_product(
     product_id: int,
     product_in: ProductUpdateAdmin,
@@ -70,7 +76,7 @@ async def update_product(
 
 
 # Delete product by id
-@router.delete("/{product_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router_admin.delete("/{product_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_product(
     product_id: int,
     current_user: User = Depends(require_manager_or_admin),
