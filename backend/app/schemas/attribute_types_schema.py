@@ -1,18 +1,16 @@
 from pydantic import BaseModel,ConfigDict, Field
 from typing import Optional
-from models import AttributeName
+
 
 class AttributeTypeBase(BaseModel):
-    attribute_name: AttributeName= Field(..., example=AttributeName.milk)
-    class Config:
-        from_attributes = True
+    attribute_name: str = Field(..., min_length=1, max_length=50, example="milk")
 
 #только админ 
 class AttributeTypeCreateManagerAdmin(AttributeTypeBase):
     pass
 #только админ
 class AttributeTypeUpdateManagerAdmin(BaseModel):
-    attribute_name: Optional[AttributeName] = Field(None, example=AttributeName.size)
+    attribute_name: Optional[str] = Field(None, min_length=1, max_length=50, example="size")
     class Config:
         from_attributes = True
     

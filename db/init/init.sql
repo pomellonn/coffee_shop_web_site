@@ -16,14 +16,6 @@ BEGIN
 END
 $$;
 
--- enum for attribute
-DO $$ 
-BEGIN
-  IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'attribute_name') THEN
-    CREATE TYPE attribute_name AS ENUM ('milk', 'size', 'syrup', 'roast');
-  END IF;
-END
-$$;
 
 CREATE TABLE IF NOT EXISTS users (
   user_id        INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -81,7 +73,7 @@ CREATE TABLE IF NOT EXISTS order_items (
 -- Типы атрибутов (например, milk, size, syrup)
 CREATE TABLE IF NOT EXISTS attribute_types (
     attribute_type_id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    attribute_name attribute_name NOT NULL UNIQUE
+    attribute_name VARCHAR(50) NOT NULL UNIQUE
 );
 
 

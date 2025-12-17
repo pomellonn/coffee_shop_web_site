@@ -2,7 +2,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from typing import List, Optional
 from models import AttributeType
-from models.attribute_types import AttributeName
 from schemas.attribute_types_schema import (
     AttributeTypeCreateManagerAdmin,
     AttributeTypeUpdateManagerAdmin
@@ -19,7 +18,7 @@ class AttributeTypesService:
         )
         return result.scalar_one_or_none()
     
-    async def get_attribute_type_by_name(self, type_name:AttributeName)->Optional[AttributeType]:
+    async def get_attribute_type_by_name(self, type_name: str)->Optional[AttributeType]:
         result=await self.db.execute(
             select(AttributeType).where(AttributeType.attribute_name==type_name)
         )

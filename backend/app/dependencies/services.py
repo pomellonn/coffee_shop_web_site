@@ -6,6 +6,7 @@ from services.product_service import ProductService
 from services.coffeeshop_service import CoffeeShopService
 from services.shopmenu_service import ShopMenuService
 from services.attribute_types_service import AttributeTypesService
+from services.product_attribute_options_service import ProductAttributeOptionsService
 
 async def get_user_service(db: AsyncSession = Depends(get_session)) -> UserService:
     return UserService(db)
@@ -32,3 +33,8 @@ async def get_attribute_types_service(
     db: AsyncSession = Depends(get_session),
 )-> AttributeTypesService:
     return AttributeTypesService(db)
+
+async def get_product_attribute_options_service(
+    db: AsyncSession = Depends(get_session),
+)-> ProductAttributeOptionsService:
+    return ProductAttributeOptionsService(db)
