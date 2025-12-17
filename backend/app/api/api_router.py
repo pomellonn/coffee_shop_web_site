@@ -11,6 +11,7 @@ api_router.include_router(products.router_public)
 api_router.include_router(coffee_shops.router_public)
 api_router.include_router(shop_menu.router_public)
 api_router.include_router(orders.router_public)
+
 # Admin routes
 api_router.include_router(users.router_admin)
 api_router.include_router(products.router_admin)
@@ -19,6 +20,8 @@ api_router.include_router(shop_menu.router_admin)
 api_router.include_router(analytics.router_admin)
 api_router.include_router(orders.router_admin)
 
+# Manager routes
+api_router.include_router(coffee_shops.router_manager)
 api_router.include_router(shop_menu.router_manager)
 api_router.include_router(analytics.router_manager)
 api_router.include_router(orders.router_manager)

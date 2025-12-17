@@ -77,7 +77,8 @@ class ShopMenuService:
 
         result = await self.db.execute(query)
         return result.scalars().all()
-# Sort menu items by popularity (most sold first)
+
+    # Sort menu items by popularity (most sold first)
     async def get_shop_menu_by_popularity(
         self, shop_id: int, limit: int = 100
     ) -> List[ShopMenu]:
@@ -197,7 +198,6 @@ class ShopMenuService:
         await self.db.commit()
         await self.db.refresh(item, attribute_names=["product"])
         return item
-
 
     async def delete_menu_item(self, item: ShopMenu) -> None:
         await self.db.delete(item)

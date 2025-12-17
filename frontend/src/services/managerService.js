@@ -41,3 +41,8 @@ export const getOrdersCount = async (date) => {
     const { data } = await api.get('/manager/orders-count', { params });
     return data.count;
 };
+
+export const getShopInfo = async () => {
+    const { data } = await api.get("/manager/shops/info");
+    return data;
+};

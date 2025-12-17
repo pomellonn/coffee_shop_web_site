@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from typing import List
 
-from core.security import require_admin
+from core.security import require_admin, require_manager
 from models import User
 from schemas.coffeeshop_schema import (
     CoffeeShopCreateAdmin,
@@ -37,7 +37,6 @@ async def get_shop(
 
 
 router_admin = APIRouter(prefix="/admin/shops", tags=["Shops - Admin"])
-
 
 
 # List all shops - Admin View
@@ -106,3 +105,18 @@ async def delete_shop(
         raise HTTPException(status_code=404, detail="Coffee shop not found")
 
     await shop_service.delete_shop(shop)
+
+
+router_admin = APIRouter(prefix="/admin/shops", tags=["Shops - Admin"])
+
+
+router_manager = APIRouter(prefix="/manager/shops", tags=["Shops - Manager"])
+
+
+@router_manager.get("/info", response_model=CoffeeShopReadManagerAdmin)
+async def get_my_shop(
+    current_user: User = Depends(require_manager),
+    shop_service: CoffeeShopService = Depends(get_coffee_shop_service),
+):
+    shop = await shop_service.get_manager_shop(current_user.user_id)
+    return shop

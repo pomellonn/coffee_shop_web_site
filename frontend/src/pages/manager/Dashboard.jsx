@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import Menu from "../menu";
 // import Analytics from "./Analytics";
-import { getOrdersCount } from "../../services/managerService";
+import { getOrdersCount, getShopInfo } from "../../services/managerService";
 import { getCurrentUser } from "../../services/authService";
 const Dashboard = () => {
     const [menuItems, setMenuItems] = useState([]);
     const [analytics, setAnalytics] = useState(null);
     const [user, setUser] = useState(null);
     const [todayOrders, setTodayOrders] = useState(0);
+    const [shopInfo, setShopInfo] = useState(null);
     useEffect(() => {
         fetchData();
     }, []);
@@ -17,6 +18,8 @@ const Dashboard = () => {
         setUser(user);
         const ordersCount = await getOrdersCount();
         setTodayOrders(ordersCount);
+        const info = await getShopInfo();
+        setShopInfo(info);
     };
 
 
@@ -27,12 +30,16 @@ const Dashboard = () => {
 
             <div className="row">
                 <div className="col-md-8">
-                    {/* <Menu menuItems={menuItems} refresh={fetchData} /> */}
+                    <h5>Ваша кофейня</h5>
+                    {/* <p>{shopInfo.name}</p>
+                    <p>{shopInfo.adress}</p> */}
+
                 </div>
                 <div className="card p-3">
                     <h5>Заказы за сегодня</h5>
                     <p style={{ fontSize: "24px", fontWeight: "bold" }}>{todayOrders}</p>
                 </div>
+
             </div>
         </div>
     );

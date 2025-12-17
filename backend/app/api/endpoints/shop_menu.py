@@ -29,6 +29,32 @@ async def get_shop_menu(
 ):
     return await service.get_shop_menu(shop_id)
 
+# Sorted by price asc
+@router_public.get("/{shop_id}/sorted-price-asc", response_model=List[ShopMenuReadCustomer])
+async def get_shop_menu(
+    shop_id: int, service: ShopMenuService = Depends(get_shop_menu_service)
+):
+    return await service.get_shop_menu_sorted(shop_id, sort_by="price")
+
+# Sorted by price desc
+@router_public.get("/{shop_id}/sorted-price-desc", response_model=List[ShopMenuReadCustomer])
+async def get_shop_menu(
+    shop_id: int, service: ShopMenuService = Depends(get_shop_menu_service)
+):
+    return await service.get_shop_menu_sorted(shop_id, sort_by="price", order='desc')
+
+
+# Sorted by name alphabet asc
+@router_public.get("/{shop_id}/sorted-name-asc", response_model=List[ShopMenuReadCustomer])
+async def get_shop_menu(
+    shop_id: int, service: ShopMenuService = Depends(get_shop_menu_service)
+):
+    return await service.get_shop_menu_sorted(shop_id, sort_by="name", order='asc')
+
+
+
+
+
 
 # -----------------------------
 # MANAGER ENDPOINTS

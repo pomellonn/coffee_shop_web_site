@@ -3,7 +3,7 @@ from typing import Optional
 from .user_schema import ManagerName
 
 class CoffeeShopBase(BaseModel):
-    name: str = Field(..., max_length=128, example="gotcha - Nevsky")
+    name: str = Field(..., max_length=128, example="FLTR - Nevsky")
     address: str = Field(
         ..., max_length=256, example="Санкт-Петербург, Невский проспект, 28"
     )
