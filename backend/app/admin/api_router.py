@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends
-from core.security import require_admin
+from app.core.security import require_admin
 from .endpoints import shop_menu, analytics
 
 admin_api_router = APIRouter(

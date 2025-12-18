@@ -3,8 +3,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from sqlalchemy.orm import selectinload
 from fastapi import HTTPException, status
-from models import CoffeeShop
-from schemas.coffeeshop_schema import CoffeeShopCreateAdmin, CoffeeShopUpdateAdmin
+from app.models import CoffeeShop
+from app.schemas.coffeeshop_schema import CoffeeShopCreateAdmin, CoffeeShopUpdateAdmin
 
 
 class CoffeeShopService:

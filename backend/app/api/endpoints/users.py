@@ -3,9 +3,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from typing import List
 
-from db.session import get_session
-from models.users import User, UserRole
-from schemas.user_schema import (
+from app.db.session import get_session
+from app.models.users import User, UserRole
+from app.schemas.user_schema import (
     UserCreate,
     UserCreateAdmin,
     UserReadCustomer,
@@ -15,12 +15,12 @@ from schemas.user_schema import (
     UserWithToken,
     Token,
 )
-from dependencies.services import get_user_service
+from app.dependencies.services import get_user_service
 
-from core.security import get_current_user, require_admin
-from services.user_service import UserService
-from core.security import create_access_token
-from core.config import settings
+from app.core.security import get_current_user, require_admin
+from app.services.user_service import UserService
+from app.core.security import create_access_token
+from app.core.config import settings
 from datetime import timedelta
 
 ACCESS_TOKEN_EXPIRE_MINUTES = settings.ACCESS_TOKEN_EXPIRE_MINUTES

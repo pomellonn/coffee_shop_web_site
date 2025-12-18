@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from typing import List
 
-from core.security import require_manager_or_admin, require_admin, require_manager
-from models import User
-from schemas.shopmenu_schema import (
+from app.core.security import require_manager_or_admin, require_admin, require_manager
+from app.models import User
+from app.schemas.shopmenu_schema import (
     ShopMenuCreateAdmin,
     ShopMenuReadCustomer,
     ShopMenuReadManagerAdmin,
@@ -11,8 +11,8 @@ from schemas.shopmenu_schema import (
     ShopMenuUpdateAdmin,
     ShopMenuCreateManager,
 )
-from services.shopmenu_service import ShopMenuService
-from dependencies.services import get_shop_menu_service
+from app.services.shopmenu_service import ShopMenuService
+from app.dependencies.services import get_shop_menu_service
 
 
 # -----------------------------

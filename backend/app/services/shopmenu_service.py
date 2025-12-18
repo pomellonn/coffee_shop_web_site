@@ -5,9 +5,9 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import selectinload
 from fastapi import HTTPException, status
 from sqlalchemy import asc, desc
-from models import Product
-from models import ShopMenu, CoffeeShop, User, UserRole, OrderItem, Order
-from schemas.shopmenu_schema import (
+from app.models import Product
+from app.models import ShopMenu, CoffeeShop, User, UserRole, OrderItem, Order
+from app.schemas.shopmenu_schema import (
     ShopMenuCreateAdmin,
     ShopMenuCreateManager,
 )

@@ -2,10 +2,10 @@ from sqladmin.authentication import AuthenticationBackend
 from starlette.requests import Request
 from sqlalchemy.orm import Session
 
-from db.session import SessionLocal
-from models import User
-from core.config import settings
-from core.security import verify_password
+from app.db.session import SessionLocal
+from app.models import User
+from app.core.config import settings
+from app.core.security import verify_password
 SECRET_KEY = settings.SECRET_KEY
 
 

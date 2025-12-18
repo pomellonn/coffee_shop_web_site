@@ -1,16 +1,16 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from typing import List
 
-from core.security import require_manager_or_admin
-from models import User
-from schemas.product_schema import (
+from app.core.security import require_manager_or_admin
+from app.models import User
+from app.schemas.product_schema import (
     ProductCreateManagerAdmin,
     ProductReadCustomer,
     ProductReadManagerAdmin,
     ProductUpdateAdmin,
 )
-from services.product_service import ProductService
-from dependencies.services import get_product_service
+from app.services.product_service import ProductService
+from app.dependencies.services import get_product_service
 
 
 

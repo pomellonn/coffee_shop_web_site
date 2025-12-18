@@ -1,6 +1,6 @@
 from pydantic import BaseModel, ConfigDict, Field
 from typing import Optional
-from models import ProductType
+from app.models import ProductType
 
 
 class ProductBase(BaseModel):

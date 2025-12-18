@@ -5,8 +5,8 @@ from sqlalchemy import select, func, cast, Date
 from datetime import datetime, date
 from typing import Optional
 from sqlalchemy.orm import selectinload, joinedload
-from models import Order, OrderItem, Product, User, CoffeeShop, ShopMenu
-from schemas.orders_schema import OrderCreateCustomer
+from app.models import Order, OrderItem, Product, User, CoffeeShop, ShopMenu
+from app.schemas.orders_schema import OrderCreateCustomer
 
 
 class OrderService:
@@ -28,13 +28,14 @@ class OrderService:
                         detail=f"Product ID {item_in.product_id} not found",
                     )
 
-                shop_menu_item = await self.db.execute(
+                result = await self.db.execute(
                     select(ShopMenu).where(
                         ShopMenu.shop_id == order_in.shop_id,
                         ShopMenu.product_id == item_in.product_id,
                         ShopMenu.is_available == True,
                     )
-                ).scalar_one_or_none()
+                )
+                shop_menu_item = result.scalar_one_or_none()
                 if not shop_menu_item:
                     raise HTTPException(
                         status_code=400,

@@ -1,16 +1,16 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from typing import List
 
-from core.security import require_admin, require_manager
-from models import User
-from schemas.coffeeshop_schema import (
+from app.core.security import require_admin, require_manager
+from app.models import User
+from app.schemas.coffeeshop_schema import (
     CoffeeShopCreateAdmin,
     CoffeeShopReadCustomer,
     CoffeeShopReadManagerAdmin,
     CoffeeShopUpdateAdmin,
 )
-from services.coffeeshop_service import CoffeeShopService
-from dependencies.services import get_coffee_shop_service
+from app.services.coffeeshop_service import CoffeeShopService
+from app.dependencies.services import get_coffee_shop_service
 
 router_public = APIRouter(prefix="/shops", tags=["Shop - Public"])
 

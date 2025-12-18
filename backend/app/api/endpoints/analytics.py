@@ -2,9 +2,9 @@ from fastapi import APIRouter, Depends, Query, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func, case
 from datetime import date, timedelta
-from db.session import get_session
-from core.security import get_current_user, require_manager
-from models import Order, OrderItem, Product, CoffeeShop, User, UserRole
+from app.db.session import get_session
+from app.core.security import get_current_user, require_manager
+from app.models import Order, OrderItem, Product, CoffeeShop, User, UserRole
 
 
 router_manager = APIRouter(

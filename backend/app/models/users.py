@@ -1,6 +1,6 @@
 from __future__ import annotations
 from typing import List, Optional
-from db.base import Base
+from app.db.base import Base
 from sqlalchemy import String, Text, Enum, TIMESTAMP, func
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 import enum

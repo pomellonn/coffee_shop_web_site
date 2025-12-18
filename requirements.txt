@@ -36,4 +36,6 @@ redis>=4.2.0rc1
 sqladmin
 itsdangerous
 psycopg2-binary
+pytest
+pytest-asyncio
 httpx

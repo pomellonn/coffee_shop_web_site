@@ -1,5 +1,5 @@
 from __future__ import annotations 
-from db.base import Base
+from app.db.base import Base
 from sqlalchemy import ForeignKey, Boolean, UniqueConstraint
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 

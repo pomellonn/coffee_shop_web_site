@@ -2,9 +2,9 @@ from typing import Optional, List
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 
-from models.users import User, UserRole
-from schemas.user_schema import UserCreate, UserUpdateAdmin, UserCreateAdmin
-from core.security import get_password_hash
+from app.models.users import User, UserRole
+from app.schemas.user_schema import UserCreate, UserUpdateAdmin, UserCreateAdmin
+from app.core.security import get_password_hash
 
 
 class UserService:

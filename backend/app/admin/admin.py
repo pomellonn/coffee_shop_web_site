@@ -1,12 +1,12 @@
 from sqladmin import ModelView, expose, BaseView
 from fastapi import Request
 from sqlalchemy import func, select
-from db.session import SessionLocal
-from models import Order
-from models import User, CoffeeShop, Product, Order
-from db.session import AsyncSessionLocal
+from app.db.session import SessionLocal
+from app.models import Order
+from app.models import User, CoffeeShop, Product, Order
+from app.db.session import AsyncSessionLocal
 import httpx
-from core.config import settings
+from app.core.config import settings
 from fastapi.responses import HTMLResponse
 
 
