@@ -7,3 +7,4 @@ from .order_items import OrderItem
 from .attribute_types import AttributeType
 from .product_attribute_options import ProductAttributeOptions
 from .product_attributes import ProductAttributes
+from .order_item_attributes import OrderItemAttribute

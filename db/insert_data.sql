@@ -302,7 +302,6 @@ INSERT INTO
         description,
         image_url,
         price,
-        volume,
         product_type
     )
 VALUES
@@ -311,7 +310,6 @@ VALUES
         'Насыщенный кофейный напиток',
         '/static/images/products/coffee/espresso.png',
         180,
-        40,
         'coffee'
     ),
     (
@@ -319,7 +317,6 @@ VALUES
         'Кофейный напиток на основе эспрессо с добавлением вспененного молока',
         '/static/images/products/coffee/capuchino.png',
         280,
-        250,
         'coffee'
     ),
     (
@@ -327,7 +324,6 @@ VALUES
         'Кофе на основе эспрессо с большим количеством молока',
         '/static/images/products/coffee/latte.png',
         290,
-        350,
         'coffee'
     ),
     (
@@ -335,7 +331,6 @@ VALUES
         'Кофе на основе двойного эспрессо и молока',
         '/static/images/products/coffee/capuchino.png',
         310,
-        180,
         'coffee'
     ),
     (
@@ -343,7 +338,6 @@ VALUES
         'Охлаждённый латте со льдом и молочной пеной',
         '/static/images/products/coffee/ice_latte.png',
         330,
-        400,
         'coffee'
     ),
     (
@@ -351,7 +345,6 @@ VALUES
         'Чёрный фильтр-кофе с насыщенным вкусом и ароматом',
         '/static/images/products/coffee/filter.png',
         220,
-        300,
         'coffee'
     ),
     (
@@ -359,7 +352,6 @@ VALUES
         'Напиток на основе зелёного японского чая матча с молоком',
         '/static/images/products/noncoffee/matcha.png',
         320,
-        300,
         'non_coffee'
     ),
     (
@@ -367,7 +359,6 @@ VALUES
         'Напиток на основе зелёного японского чая матча с молоком со льдом',
         '/static/images/products/non_coffee/ice_matcha.png',
         320,
-        300,
         'non_coffee'
     ),
     (
@@ -375,7 +366,6 @@ VALUES
         'Натуральный какао с молоком',
         '/static/images/products/non_coffee/cacao.png',
         310,
-        350,
         'non_coffee'
     ),
     (
@@ -383,14 +373,12 @@ VALUES
         'Густой шоколад с молочной пеной',
         '/static/images/products/non_coffee/hotchoc.png',
         330,
-        350,
         'non_coffee'
     ),
     (
         'Апельсиновый фреш',
         'Свежевыжатый сок из сочных апельсинов',
         '/static/images/products/non_coffee/orangejuice.png',
-        250,
         250,
         'non_coffee'
     ),
@@ -399,7 +387,6 @@ VALUES
         'Эспрессо с добавлением апельсинового фреша',
         '/static/images/products/coffee/bumble.png',
         300,
-        350,
         'coffee'
     ),
     (
@@ -407,7 +394,6 @@ VALUES
         'Чёрный чай с бергамотом',
         '',
         240,
-        300,
         'non_coffee'
     ),
     (
@@ -415,7 +401,6 @@ VALUES
         'Пряный латте с тыквенным сиропом и корицей',
         '/static/images/products/coffee/latte.png',
         380,
-        350,
         'coffee'
     ),
     (
@@ -423,7 +408,6 @@ VALUES
         'Чай матча-латте с клубничным пюре',
         '/static/images/products/non_coffee/strawberry_matcha.png',
         380,
-        350,
         'coffee'
     ),
     (
@@ -431,7 +415,6 @@ VALUES
         'Чай матча-латте с манговым пюре',
         '/static/images/products/non_coffee/mango_matcha.png',
         380,
-        350,
         'non_coffee'
     );
 

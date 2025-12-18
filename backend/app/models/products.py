@@ -21,7 +21,6 @@ class Product(Base):
     name: Mapped[str] = mapped_column(String(128))
     description: Mapped[Optional[str]] = mapped_column(Text)
     image_url: Mapped[Optional[str]] = mapped_column(Text)
-    volume: Mapped[int]
     product_type: Mapped[ProductType] = mapped_column(
         Enum(ProductType, name="product_type"), default=ProductType.coffee
     )
@@ -41,15 +40,8 @@ class Product(Base):
 
 
     __table_args__ = (
-        CheckConstraint("volume > 0", name="check_volume_positive"),
         CheckConstraint("price >= 0", name="check_price_nonnegative"),
     )
-
-    @validates("volume")
-    def validate_volume(self, key, value):
-        if value <= 0:
-            raise ValueError("Volume must be greater than 0")
-        return value
 
     @validates("price")
     def validate_price(self, key, value):

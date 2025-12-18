@@ -23,7 +23,6 @@ class ProductService:
             name=product_in.name,
             description=product_in.description,
             image_url=product_in.image_url,
-            volume=product_in.volume,
             product_type=product_in.product_type,
             price=product_in.price,
         )
@@ -38,7 +37,6 @@ class ProductService:
             "name",
             "description",
             "image_url",
-            "volume",
             "product_type",
             "price",
         }
@@ -73,7 +71,7 @@ class ProductService:
             await self.db.rollback()
             raise HTTPException(
                 status_code=400,
-                detail="Invalid product data (volume must be > 0, price must be >= 0)",
+                detail="Invalid product data (price must be >= 0)",
             )
 
     async def delete_product(self, product: Product) -> None:
