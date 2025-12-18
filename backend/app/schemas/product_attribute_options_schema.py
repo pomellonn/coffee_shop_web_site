@@ -1,6 +1,6 @@
 from pydantic import BaseModel,ConfigDict, Field
 from typing import Optional
-# from models import ProductAttributeOptions
+
 
 class ProductAttributeOptionsBase(BaseModel):
     attribute_type_id:int

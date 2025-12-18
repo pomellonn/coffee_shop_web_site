@@ -28,7 +28,7 @@ async def get_product_options_value(
      product_attr_options_service: ProductAttributeOptionsService=Depends(get_product_attribute_options_service),
      current_user: User = Depends(require_admin),
 ):
-    option=await product_attr_options_service.get_product_attr_option_by_id(option_id)
+    option=await product_attr_options_service.get_product_attribute_option_by_id(option_id)
     if not option:
         raise HTTPException(status_code=404, detail="Attribute type not found")
     return option

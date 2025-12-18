@@ -4,6 +4,8 @@ from db.base import Base
 from sqlalchemy import String, Text, Enum, CheckConstraint
 from sqlalchemy.orm import relationship, validates, Mapped, mapped_column
 import enum
+from sqlalchemy.ext.associationproxy import association_proxy
+
 
 
 class ProductType(str, enum.Enum):
@@ -27,6 +29,16 @@ class Product(Base):
 
     menu_entries: Mapped[List["ShopMenu"]] = relationship(back_populates="product")
     order_items: Mapped[List["OrderItem"]] = relationship(back_populates="product")
+    
+    
+    product_attributes: Mapped[List["ProductAttributes"]] = relationship(
+        "ProductAttributes",
+        back_populates="product",
+        cascade="all, delete-orphan",
+    )
+    
+    attribute_options = association_proxy("product_attributes", "option")
+
 
     __table_args__ = (
         CheckConstraint("volume > 0", name="check_volume_positive"),

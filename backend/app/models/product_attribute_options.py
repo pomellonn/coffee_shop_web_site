@@ -1,7 +1,6 @@
 from __future__ import annotations 
 from typing import List
 from db.base import Base
-import enum
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 
@@ -18,4 +17,10 @@ class ProductAttributeOptions(Base):
     attribute_type: Mapped["AttributeType"] = relationship(
         "AttributeType",
         back_populates="options"
+    )
+    
+    product_attributes: Mapped[List["ProductAttributes"]] = relationship(
+        "ProductAttributes",
+        back_populates="option",
+        cascade="all, delete-orphan"
     )
