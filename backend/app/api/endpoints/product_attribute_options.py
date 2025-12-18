@@ -12,9 +12,9 @@ from app.schemas.product_attribute_options_schema import (
 from app.services.product_attribute_options_service import ProductAttributeOptionsService
 from app.dependencies.services import get_product_attribute_options_service
 
-router = APIRouter(prefix="/product-attr-types-options", tags=["product attribute types options"])
+router_admin = APIRouter(prefix="/admin/product-attr-types-options", tags=["Product attribute types options - Admin"])
 
-@router.get("/admin", response_model=List[ProductAttributeOptionsRead])
+@router_admin.get("/", response_model=List[ProductAttributeOptionsRead])
 async def list_product_attr_types_options(
     product_attr_options_service: ProductAttributeOptionsService = Depends(get_product_attribute_options_service),
     current_user: User = Depends(require_admin)
@@ -22,7 +22,7 @@ async def list_product_attr_types_options(
     options = await product_attr_options_service.get_all_product_attr_options()
     return options
 
-@router.get("/admin/{option_id}", response_model=ProductAttributeOptionsRead)
+@router_admin.get("/{option_id}", response_model=ProductAttributeOptionsRead)
 async def get_product_options_value(
      option_id: int,
      product_attr_options_service: ProductAttributeOptionsService=Depends(get_product_attribute_options_service),
@@ -33,8 +33,8 @@ async def get_product_options_value(
         raise HTTPException(status_code=404, detail="Attribute type not found")
     return option
 
-@router.post(
-    "/admin",
+@router_admin.post(
+    "/",
     response_model=ProductAttributeOptionsRead,
     status_code=status.HTTP_201_CREATED
 )
@@ -52,7 +52,7 @@ async def create_product_attr_option(
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
     
-@router.put("/admin/{option_id}", response_model=ProductAttributeOptionsRead)
+@router_admin.put("/{option_id}", response_model=ProductAttributeOptionsRead)
 async def update_product_attr_option(
     option_id: int,
     option_in: ProductAttributeOptionsUpdate,
@@ -69,7 +69,7 @@ async def update_product_attr_option(
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
 
-@router.delete("/admin/{option_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router_admin.delete("/{option_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_product_attribute_option(
     option_id: int,
     product_attr_options_service: ProductAttributeOptionsService = Depends(get_product_attribute_options_service),
