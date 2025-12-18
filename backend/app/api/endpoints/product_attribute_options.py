@@ -1,16 +1,16 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from typing import List
 
-from models import User
-from core.security import require_admin
-from schemas.product_attribute_options_schema import (
+from app.models import User
+from app.core.security import require_admin
+from app.schemas.product_attribute_options_schema import (
     ProductAttributeOptionsCreate,
     ProductAttributeOptionsUpdate,
     ProductAttributeOptionsRead
 )
 
-from services.product_attribute_options_service import ProductAttributeOptionsService
-from dependencies.services import get_product_attribute_options_service
+from app.services.product_attribute_options_service import ProductAttributeOptionsService
+from app.dependencies.services import get_product_attribute_options_service
 
 router = APIRouter(prefix="/product-attr-types-options", tags=["product attribute types options"])
 

@@ -1,8 +1,8 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from typing import List, Optional
-from models import AttributeType
-from schemas.attribute_types_schema import (
+from app.models import AttributeType
+from app.schemas.attribute_types_schema import (
     AttributeTypeCreateManagerAdmin,
     AttributeTypeUpdateManagerAdmin
 )

@@ -1,15 +1,15 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from typing import List
 
-from models import User
-from core.security import require_admin
-from schemas.attribute_types_schema import (
+from app.models import User
+from app.core.security import require_admin
+from app.schemas.attribute_types_schema import (
     AttributeTypeCreateManagerAdmin,
     AttributeTypeUpdateManagerAdmin,
     AttributeTypeRead
 )
-from services.attribute_types_service import AttributeTypesService
-from dependencies.services import get_attribute_types_service
+from app.services.attribute_types_service import AttributeTypesService
+from app.dependencies.services import get_attribute_types_service
 
 router = APIRouter(prefix="/attribute-types", tags=["attribute types"])
 

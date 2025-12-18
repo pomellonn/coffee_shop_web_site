@@ -1,9 +1,9 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from typing import List, Optional
-from models import ProductAttributeOptions
+from app.models import ProductAttributeOptions
 
-from schemas.product_attribute_options_schema import (
+from app.schemas.product_attribute_options_schema import (
     ProductAttributeOptionsCreate,
     ProductAttributeOptionsUpdate
 )

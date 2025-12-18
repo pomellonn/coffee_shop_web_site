@@ -1,6 +1,5 @@
 from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
-from app.db.session import sync_engine
 from typing import Annotated
 from app.api.api_router import api_router
 from app.core.security import get_current_user

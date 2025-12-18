@@ -6,9 +6,9 @@ from typing import List, Optional, Dict, Any
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from models.product_attributes import ProductAttributes
-from models.product_attribute_options import ProductAttributeOptions
-from models.attribute_types import AttributeType
+from app.models.product_attributes import ProductAttributes
+from app.models.product_attribute_options import ProductAttributeOptions
+from app.models.attribute_types import AttributeType
 
 
 class ProductAttributesService:

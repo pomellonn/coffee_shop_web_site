@@ -1,15 +1,15 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from typing import List
 
-from core.security import require_admin
-from models import User
-from schemas.product_attributes_schema import (
+from app.core.security import require_admin
+from app.models import User
+from app.schemas.product_attributes_schema import (
     ProductAttributesCreate,
     ProductAttributesReadAdminManager,
     ProductAttributesReadUser,
 )
-from services.product_attributes_service import ProductAttributesService
-from dependencies.services import get_product_attributes_service
+from app.services.product_attributes_service import ProductAttributesService
+from app.dependencies.services import get_product_attributes_service
 
 
 router = APIRouter(prefix="/products", tags=["product attributes"])
