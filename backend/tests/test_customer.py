@@ -2,7 +2,7 @@ import pytest
 
 @pytest.mark.anyio
 async def test_login_user(client):
-    # Регистрация пользователя
+
     register_payload = {
         "email": "loginuser@example.com",
         "password": "loginpass123",
@@ -11,7 +11,7 @@ async def test_login_user(client):
     register_response = await client.post("/api/v1/users/register", json=register_payload)
     assert register_response.status_code == 201
 
-    # Вход в систему
+
     login_payload = {
         "username": "loginuser@example.com",
         "password": "loginpass123"
@@ -37,7 +37,6 @@ async def test_login_for_access_token(client, customer_user):
 
 @pytest.mark.anyio
 async def test_get_user_profile(client, token_headers_customer):
-    # Получение профиля пользователя с токеном
     response = await client.get("/api/v1/users/me", headers=token_headers_customer)
     assert response.status_code == 200
     data = response.json()
@@ -47,7 +46,6 @@ async def test_get_user_profile(client, token_headers_customer):
 
 @pytest.mark.anyio
 async def test_update_user_profile(client, token_headers_customer):
-    # Обновление имени пользователя
     payload = {"name": "Updated Customer"}
     response = await client.put("/api/v1/users/me", json=payload, headers=token_headers_customer)
     assert response.status_code == 200
@@ -57,14 +55,12 @@ async def test_update_user_profile(client, token_headers_customer):
 
 @pytest.mark.anyio
 async def test_customer_cannot_access_manager_endpoints(client, token_headers_customer):
-    # Клиент не должен иметь доступ к менеджерским эндпоинтам
     response = await client.get("/api/v1/manager/orders/", headers=token_headers_customer)
     assert response.status_code == 403
 
 
 @pytest.mark.anyio
 async def test_list_shops_and_get_shop(client, db_session, manager_user):
-    # Должен вернуть список доступных кофеен и информацию о конкретной кофейне
     from sqlalchemy import select
     from app.models import CoffeeShop
 
@@ -74,7 +70,6 @@ async def test_list_shops_and_get_shop(client, db_session, manager_user):
     assert isinstance(shops, list)
     assert len(shops) >= 1
 
-    # Get shop id directly from DB (customer view doesn't expose shop_id)
     shop = (await db_session.execute(select(CoffeeShop))).scalars().first()
     assert shop is not None
 
@@ -87,7 +82,6 @@ async def test_list_shops_and_get_shop(client, db_session, manager_user):
 
 @pytest.mark.anyio
 async def test_products_listing_and_get(client, create_product_factory):
-    # Создаем продукт через фабрику и проверяем публичные эндпоинты
     p = await create_product_factory(
         name="Test Coffee",
         description="Tasty",
@@ -110,7 +104,6 @@ async def test_products_listing_and_get(client, create_product_factory):
 
 @pytest.mark.anyio
 async def test_shop_menu_and_sorting(client, db_session, manager_user, create_product_factory):
-    # Prepare: create products and add them to the shop menu
     from sqlalchemy import select
     from app.models import ShopMenu, CoffeeShop
 
@@ -133,7 +126,6 @@ async def test_shop_menu_and_sorting(client, db_session, manager_user, create_pr
 
     shop = (await db_session.execute(select(CoffeeShop))).scalars().first()
 
-    # add menu entries
     m1 = ShopMenu(shop_id=shop.shop_id, product_id=p1.product_id, is_available=True)
     m2 = ShopMenu(shop_id=shop.shop_id, product_id=p2.product_id, is_available=True)
     db_session.add_all([m1, m2])
@@ -157,7 +149,6 @@ async def test_shop_menu_and_sorting(client, db_session, manager_user, create_pr
 
 @pytest.mark.anyio
 async def test_create_order_and_get_my_orders(client, db_session, manager_user, token_headers_customer, create_product_factory):
-    # Prepare shop, product and add to menu
     from sqlalchemy import select
     from app.models import ShopMenu, CoffeeShop
 
@@ -189,7 +180,6 @@ async def test_create_order_and_get_my_orders(client, db_session, manager_user, 
 
 @pytest.mark.anyio
 async def test_order_fails_if_product_not_in_shop(client, db_session, manager_user, token_headers_customer, create_product_factory):
-    # Create a product but do not add to shop
     from sqlalchemy import select
     from app.models import CoffeeShop
 
@@ -205,7 +195,6 @@ async def test_order_fails_if_product_not_in_shop(client, db_session, manager_us
 
     order_payload = {"shop_id": shop.shop_id, "items": [{"product_id": p.product_id, "quantity": 1}]}
     resp = await client.post("/api/v1/orders/", json=order_payload, headers=token_headers_customer)
-    # Debug on failure
     if resp.status_code != 400:
         print("ORDER_NOT_IN_SHOP FAILED:", await resp.aread())
     assert resp.status_code == 400
@@ -213,7 +202,6 @@ async def test_order_fails_if_product_not_in_shop(client, db_session, manager_us
 
 @pytest.mark.anyio
 async def test_order_fails_if_product_not_found(client, db_session, manager_user, token_headers_customer):
-    # Product id does not exist - use shop id from DB
     from sqlalchemy import select
     from app.models import CoffeeShop
     shop = (await db_session.execute(select(CoffeeShop))).scalars().first()
@@ -226,6 +214,6 @@ async def test_order_fails_if_product_not_found(client, db_session, manager_user
 
 @pytest.mark.anyio
 async def test_customer_cannot_use_admin_endpoints_delete_user(client, token_headers_customer, customer_user):
-    # Customer should not be able to delete other users via admin endpoint
+  
     resp = await client.delete(f"/api/v1/admin/users/{customer_user.user_id}", headers=token_headers_customer)
     assert resp.status_code == 403
