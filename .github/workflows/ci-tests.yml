@@ -63,6 +63,7 @@ jobs:
       - name: Run backend tests
         env:
           DATABASE_URL: postgresql+asyncpg://coffee:coffee@localhost:5432/coffee_test
+          SECRET_KEY: testsecretkey
         run: |
           cd backend
           pytest -q

@@ -22,12 +22,9 @@ from app.db.session import get_session
 from app.core.security import create_access_token, get_password_hash
 from app.models import User, UserRole, CoffeeShop
 
-
-# Use DATABASE_URL from .env.test (fall back to default if needed)
-TEST_DB_URL = os.getenv("DATABASE_URL") or "postgresql+asyncpg://coffee:coffee@localhost:5432/coffee_test"
+TEST_DB_URL = os.getenv("DATABASE_URL")
 
 
-# Create test engine and session factory
 engine_test = create_async_engine(TEST_DB_URL, poolclass=NullPool)
 AsyncSessionTest = async_sessionmaker(engine_test, expire_on_commit=False)
 
