@@ -1,6 +1,6 @@
 from pydantic import BaseModel, ConfigDict, Field
 from typing import Optional
-from .product_schema import ProductName
+from .product_schema import ProductName, ProductReadManagerAdmin
 
 
 class ShopMenuBase(BaseModel):
@@ -31,7 +31,7 @@ class ShopMenuCreateManager(BaseModel):
 # Read schema - Manager/Admin View
 class ShopMenuReadManagerAdmin(ShopMenuBase):
     shop_menu_id: int
-    product: Optional[ProductName] = None
+    product: Optional[ProductReadManagerAdmin] = None
     model_config = ConfigDict(from_attributes=True)
 
 

@@ -23,6 +23,14 @@ class UserService:
     async def get_all_users(self, skip: int = 0, limit: int = 100) -> List[User]:
         result = await self.db.execute(select(User).offset(skip).limit(limit))
         return result.scalars().all()
+    
+    async def get_managers(self, skip: int = 0, limit: int = 100) -> List[User]:
+        result = await self.db.execute(select(User).where(User.role==UserRole.manager).offset(skip).limit(limit))
+        return result.scalars().all()
+    
+    async def get_clients(self, skip: int = 0, limit: int = 100) -> List[User]:
+        result = await self.db.execute(select(User).where(User.role==UserRole.customer).offset(skip).limit(limit))
+        return result.scalars().all()
 
     # CREATE USER: CUSTOMER
     async def create_user(self, user_in: UserCreate) -> User:

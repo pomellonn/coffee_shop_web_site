@@ -107,7 +107,6 @@ async def delete_shop(
     await shop_service.delete_shop(shop)
 
 
-router_admin = APIRouter(prefix="/admin/shops", tags=["Shops - Admin"])
 
 
 router_manager = APIRouter(prefix="/manager/shops", tags=["Shops - Manager"])
