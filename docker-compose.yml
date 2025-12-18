@@ -11,6 +11,7 @@ services:
     volumes:
       - ./db/pgdata:/var/lib/postgresql/data
       - ./db/init:/docker-entrypoint-initdb.d
+      - ./db/add_data:/app/add_data
 
     restart: always
   backend:

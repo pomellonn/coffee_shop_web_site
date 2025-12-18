@@ -434,3 +434,30 @@ VALUES
         350,
         'non_coffee'
     );
+
+
+
+COPY orders(order_id, user_id, shop_id, total_amount,created_at ) 
+FROM '/app/add_data/orders.csv'
+DELIMITER ','
+CSV HEADER;
+
+COPY order_items(order_item_id, order_id, product_id, unit_price, quantity)
+FROM '/app/add_data/order_items.csv'
+DELIMITER ','
+CSV HEADER;
+
+COPY attribute_types(attribute_name ) 
+FROM '/app/add_data/attribute_types.csv'
+DELIMITER ','
+CSV HEADER;
+
+COPY product_attribute_options(attribute_type_id,value,extra_price)
+FROM '/app/add_data/product_attribute_options.csv'
+DELIMITER ','
+CSV HEADER;
+
+COPY product_attributes(product_id,option_id)
+FROM '/app/add_data/product_attributes.csv'
+DELIMITER ','
+CSV HEADER;
