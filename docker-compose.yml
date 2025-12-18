@@ -12,8 +12,10 @@ services:
       - ./db/pgdata:/var/lib/postgresql/data
       - ./db/init:/docker-entrypoint-initdb.d
       - ./db/add_data:/app/add_data
-
     restart: always
+    networks:
+      - coffee-network
+
   backend:
     build: ./backend
     container_name: coffeeshop_backend
@@ -26,5 +28,21 @@ services:
       - "8000:8000"
     depends_on:
       - db
+    networks:
+      - coffee-network
+
+  frontend:
+    build: ./frontend
+    container_name: coffeeshop_frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    networks:
+      - coffee-network
+
+networks:
+  coffee-network:
+    driver: bridge
 
 

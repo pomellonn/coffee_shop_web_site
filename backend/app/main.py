@@ -14,8 +14,20 @@ from starlette.middleware.sessions import SessionMiddleware
 
 app = FastAPI(title="Coffee Shop API", version="1.0.0")
 
-
-# app.add_middleware(SessionMiddleware, secret_key=SECRET_KEY, https_only=True)
+# CORS configuration
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:3000",
+        "http://localhost:5173",
+        "http://localhost:80",
+        "http://127.0.0.1:3000",
+        "http://127.0.0.1:5173",
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # admin = Admin(app, sync_engine, authentication_backend=authentication_backend)
 
@@ -32,14 +44,6 @@ app = FastAPI(title="Coffee Shop API", version="1.0.0")
 
 # api
 app.include_router(api_router, prefix="/api/v1")
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
 
 UserDep = Annotated[User, Depends(get_current_user)]
 
