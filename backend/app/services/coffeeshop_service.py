@@ -1,10 +1,10 @@
 from typing import List, Optional
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
-from sqlalchemy.orm import selectinload 
-
-from models import CoffeeShop
-from schemas.coffeeshop_schema import CoffeeShopCreateAdmin, CoffeeShopUpdateAdmin
+from sqlalchemy.orm import selectinload
+from fastapi import HTTPException, status
+from app.models import CoffeeShop
+from app.schemas.coffeeshop_schema import CoffeeShopCreateAdmin, CoffeeShopUpdateAdmin
 
 
 class CoffeeShopService:
@@ -48,3 +48,15 @@ class CoffeeShopService:
     async def delete_shop(self, shop: CoffeeShop):
         await self.db.delete(shop)
         await self.db.commit()
+
+    async def get_manager_shop(self, user_id: int) -> CoffeeShop:
+        result = await self.db.execute(
+            select(CoffeeShop).where(CoffeeShop.manager_id == user_id)
+        )
+        shop = result.scalar_one_or_none()
+        if not shop:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="User is not assigned as a manager to any coffee shop",
+            )
+        return shop

@@ -3,9 +3,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from typing import List
 
-from db.session import get_session
-from models.users import User, UserRole
-from schemas.user_schema import (
+from app.db.session import get_session
+from app.models.users import User, UserRole
+from app.schemas.user_schema import (
     UserCreate,
     UserCreateAdmin,
     UserReadCustomer,
@@ -15,25 +15,25 @@ from schemas.user_schema import (
     UserWithToken,
     Token,
 )
-from dependencies.services import get_user_service
+from app.dependencies.services import get_user_service
 
-from core.security import get_current_user, require_admin
-from services.user_service import UserService
-from core.security import create_access_token
-from core.config import settings
+from app.core.security import get_current_user, require_admin
+from app.services.user_service import UserService
+from app.core.security import create_access_token
+from app.core.config import settings
 from datetime import timedelta
 
 ACCESS_TOKEN_EXPIRE_MINUTES = settings.ACCESS_TOKEN_EXPIRE_MINUTES
 
-router = APIRouter(prefix="/users", tags=["users"])
 
 # -------------------
 # CUSTOMER ENDPOINTS
 # -------------------
 
+router_public = APIRouter(prefix="/users", tags=["Users - Customer"])
 
 # Register new user
-@router.post(
+@router_public.post(
     "/register", response_model=UserWithToken, status_code=status.HTTP_201_CREATED
 )
 async def register_user(
@@ -64,13 +64,13 @@ async def register_user(
 
 
 # Get current user info
-@router.get("/me", response_model=UserReadCustomer)
+@router_public.get("/me", response_model=UserReadCustomer)
 async def get_me(current_user: User = Depends(get_current_user)):
     return current_user
 
 
 # Update current user
-@router.put("/me", response_model=UserReadCustomer)
+@router_public.put("/me", response_model=UserReadCustomer)
 async def update_me(
     user_in: UserUpdateCustomer,
     current_user: User = Depends(get_current_user),
@@ -86,14 +86,15 @@ async def update_me(
 # -------------------
 # ADMIN ENDPOINTS
 # -------------------
+router_admin = APIRouter(prefix="/admin/users", tags=["Users - Admin"])
 
 
 # ADMIN: Create any type of user
-@router.post(
-    "/admin/create",
+@router_admin.post(
+    "/",
     response_model=UserReadManagerAdmin,
     status_code=status.HTTP_201_CREATED,
-    tags=["admin", "users"],
+ 
 )
 async def admin_create_user(
     user_in: UserCreateAdmin,
@@ -111,7 +112,7 @@ async def admin_create_user(
 
 
 # List all users
-@router.get("/", response_model=List[UserReadManagerAdmin])
+@router_admin.get("/", response_model=List[UserReadManagerAdmin])
 async def list_users(
     current_user: User = Depends(require_admin),
     user_service: UserService = Depends(get_user_service),
@@ -121,7 +122,7 @@ async def list_users(
 
 
 # Update  user
-@router.put("/{user_id}", response_model=UserReadManagerAdmin)
+@router_admin.put("/{user_id}", response_model=UserReadManagerAdmin)
 async def update_user_admin(
     user_id: int,
     user_in: UserUpdateAdmin,
@@ -140,7 +141,7 @@ async def update_user_admin(
 
 
 # Delete user
-@router.delete("/{user_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router_admin.delete("/{user_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_user(
     user_id: int,
     current_user: User = Depends(require_admin),

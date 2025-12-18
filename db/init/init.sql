@@ -70,10 +70,9 @@ CREATE TABLE IF NOT EXISTS order_items (
   quantity      INTEGER NOT NULL CHECK (quantity >= 1)
 );
 
--- Типы атрибутов (например, milk, size, syrup)
 CREATE TABLE IF NOT EXISTS attribute_types (
     attribute_type_id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    attribute_name VARCHAR(50) NOT NULL UNIQUE
+    attribute_name VARCHAR(128) NOT NULL UNIQUE
 );
 
 
@@ -99,6 +98,8 @@ CREATE TABLE IF NOT EXISTS order_item_attributes (
     option_id INTEGER NOT NULL REFERENCES product_attribute_options(option_id) ON DELETE CASCADE,
     PRIMARY KEY (order_item_id, option_id)
 );
+
+
 
 CREATE INDEX IF NOT EXISTS idx_orders_user_created ON orders(user_id, created_at);
 CREATE INDEX IF NOT EXISTS idx_order_items_order ON order_items(order_id);

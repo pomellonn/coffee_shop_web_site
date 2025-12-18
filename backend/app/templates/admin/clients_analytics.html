@@ -1,0 +1,100 @@
+{% extends "sqladmin/layout.html" %}
+
+{% block title %}Аналитика клиентов{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+  <div class="row mb-3">
+    <div class="col-md-3">
+      <label>From</label>
+      <input type="date" id="date_from" class="form-control" />
+    </div>
+    <div class="col-md-3">
+      <label>To</label>
+      <input type="date" id="date_to" class="form-control" />
+    </div>
+    <div class="col-md-3 d-flex align-items-end">
+      <button class="btn btn-primary" onclick="loadClientsAnalytics()">Показать</button>
+    </div>
+  </div>
+
+  <!-- Top Clients Table -->
+  <div class="row mb-4">
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-header">Топ клиентов</div>
+        <div class="card-body">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Email</th>
+                <th>Покупки</th>
+                <th>Потрачено</th>
+                <th>Посещенные кофейни</th>
+              </tr>
+            </thead>
+            <tbody id="top-clients-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- New vs Returning Clients Pie -->
+  <div class="row mb-4">
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-header">Новые vs Постоянные клиенты</div>
+        <div class="card-body">
+          <canvas id="clients-pie-chart"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block tail %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+async function loadClientsAnalytics() {
+  const from = document.getElementById("date_from").value;
+  const to = document.getElementById("date_to").value;
+
+  if (!from || !to) {
+    alert("Выберите диапазон дат");
+    return;
+  }
+
+  const clientsResp = await fetch(`/api/v1/admin/analytics/analizeclients?date_from=${from}&date_to=${to}`);
+  const clientsData = await clientsResp.json();
+
+  const tbody = document.getElementById("top-clients-body");
+  tbody.innerHTML = "";
+  clientsData.top_clients.forEach(c => {
+    tbody.innerHTML += `<tr>
+      <td>${c.email}</td>
+      <td>${c.total_purchases}</td>
+      <td>${c.spent_money.toFixed(2)}</td>
+      <td>${c.shops_visited}</td>
+    </tr>`;
+  });
+
+  const pieResp = await fetch(`/api/v1/admin/analytics/clients-stats?date_from=${from}&date_to=${to}`);
+  const pieData = await pieResp.json();
+
+  const ctx = document.getElementById("clients-pie-chart").getContext("2d");
+  if (window.clientsPieChart) window.clientsPieChart.destroy();
+  window.clientsPieChart = new Chart(ctx, {
+    type: 'pie',
+    data: {
+      labels: ['Новые клиенты', 'Постоянные клиенты'],
+      datasets: [{
+        data: [pieData.one_time, pieData.returning],
+        backgroundColor: ['#36A2EB', '#FF6384'],
+      }]
+    }
+  });
+}
+</script>
+{% endblock %}

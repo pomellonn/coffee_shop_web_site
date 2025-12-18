@@ -2,9 +2,9 @@ from typing import List, Optional
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 
-from models import Product, ProductType
+from app.models import Product, ProductType
 from sqlalchemy.exc import IntegrityError
-from schemas.product_schema import ProductCreateManagerAdmin, ProductUpdateAdmin
+from app.schemas.product_schema import ProductCreateManagerAdmin, ProductUpdateAdmin
 
 
 class ProductService:

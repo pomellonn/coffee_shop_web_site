@@ -1,27 +1,46 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from typing import List
 
-from core.security import require_admin
-from models import User
-from schemas.coffeeshop_schema import (
+from app.core.security import require_admin, require_manager
+from app.models import User
+from app.schemas.coffeeshop_schema import (
     CoffeeShopCreateAdmin,
     CoffeeShopReadCustomer,
     CoffeeShopReadManagerAdmin,
     CoffeeShopUpdateAdmin,
 )
-from services.coffeeshop_service import CoffeeShopService
-from dependencies.services import get_coffee_shop_service
+from app.services.coffeeshop_service import CoffeeShopService
+from app.dependencies.services import get_coffee_shop_service
 
-router = APIRouter(prefix="/shops", tags=["coffee shops"])
+router_public = APIRouter(prefix="/shops", tags=["Shop - Public"])
 
 
-# ---------------------------
-# ADMIN ENDPOINTS
-# ---------------------------
+# List all shops
+@router_public.get("/", response_model=List[CoffeeShopReadCustomer])
+async def list_shops(
+    shop_service: CoffeeShopService = Depends(get_coffee_shop_service),
+):
+    shops = await shop_service.get_all_shops()
+    return shops
+
+
+# Get shop by id
+@router_public.get("/{shop_id}", response_model=CoffeeShopReadCustomer)
+async def get_shop(
+    shop_id: int, shop_service: CoffeeShopService = Depends(get_coffee_shop_service)
+):
+    """Get shop info by id (public)."""
+    shop = await shop_service.get_shop_by_id(shop_id)
+    if not shop:
+        raise HTTPException(status_code=404, detail="Coffee shop not found")
+    return shop
+
+
+router_admin = APIRouter(prefix="/admin/shops", tags=["Shops - Admin"])
 
 
 # List all shops - Admin View
-@router.get("/admin", response_model=List[CoffeeShopReadManagerAdmin])
+@router_admin.get("/", response_model=List[CoffeeShopReadManagerAdmin])
 async def list_shops_admin(
     shop_service: CoffeeShopService = Depends(get_coffee_shop_service),
     current_user: User = Depends(require_admin),
@@ -29,10 +48,12 @@ async def list_shops_admin(
     shops = await shop_service.get_all_shops()
     return shops
 
+
 # Get shop by id
-@router.get("/admin/{shop_id}", response_model=CoffeeShopReadManagerAdmin)
+@router_admin.get("/{shop_id}", response_model=CoffeeShopReadManagerAdmin)
 async def get_shop_admin(
-    shop_id: int, shop_service: CoffeeShopService = Depends(get_coffee_shop_service),
+    shop_id: int,
+    shop_service: CoffeeShopService = Depends(get_coffee_shop_service),
     current_user: User = Depends(require_admin),
 ):
     shop = await shop_service.get_shop_by_id(shop_id)
@@ -42,7 +63,7 @@ async def get_shop_admin(
 
 
 # Create new shop
-@router.post(
+@router_admin.post(
     "/", response_model=CoffeeShopReadManagerAdmin, status_code=status.HTTP_201_CREATED
 )
 async def create_shop(
@@ -55,7 +76,7 @@ async def create_shop(
 
 
 # Update shop by id
-@router.put("/{shop_id}", response_model=CoffeeShopReadManagerAdmin)
+@router_admin.put("/{shop_id}", response_model=CoffeeShopReadManagerAdmin)
 async def update_shop(
     shop_id: int,
     shop_in: CoffeeShopUpdateAdmin,
@@ -73,7 +94,7 @@ async def update_shop(
 
 
 # Delete shop by id
-@router.delete("/{shop_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router_admin.delete("/{shop_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_shop(
     shop_id: int,
     current_user: User = Depends(require_admin),
@@ -86,27 +107,16 @@ async def delete_shop(
     await shop_service.delete_shop(shop)
 
 
-# ---------------------------
-# CUSTOMER ENDPOINTS
-# ---------------------------
+router_admin = APIRouter(prefix="/admin/shops", tags=["Shops - Admin"])
 
 
-# List all shops
-@router.get("/", response_model=List[CoffeeShopReadCustomer])
-async def list_shops(
+router_manager = APIRouter(prefix="/manager/shops", tags=["Shops - Manager"])
+
+
+@router_manager.get("/info", response_model=CoffeeShopReadManagerAdmin)
+async def get_my_shop(
+    current_user: User = Depends(require_manager),
     shop_service: CoffeeShopService = Depends(get_coffee_shop_service),
 ):
-    shops = await shop_service.get_all_shops()
-    return shops
-
-
-# Get shop by id
-@router.get("/{shop_id}", response_model=CoffeeShopReadCustomer)
-async def get_shop(
-    shop_id: int, shop_service: CoffeeShopService = Depends(get_coffee_shop_service)
-):
-    """Get shop info by id (public)."""
-    shop = await shop_service.get_shop_by_id(shop_id)
-    if not shop:
-        raise HTTPException(status_code=404, detail="Coffee shop not found")
+    shop = await shop_service.get_manager_shop(current_user.user_id)
     return shop

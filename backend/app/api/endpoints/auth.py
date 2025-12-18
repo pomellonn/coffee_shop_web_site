@@ -3,14 +3,14 @@ from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.future import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from db.session import get_session
-from models.users import User
-from core.security import verify_password, create_access_token
+from app.db.session import get_session
+from app.models.users import User
+from app.core.security import verify_password, create_access_token
 from datetime import timedelta
-from core.config import settings
+from app.core.config import settings
 
 ACCESS_TOKEN_EXPIRE_MINUTES = settings.ACCESS_TOKEN_EXPIRE_MINUTES
-router = APIRouter(prefix="/auth", tags=["authentication"])
+router = APIRouter(prefix="/auth", tags=["Аuthentication"])
 
 
 @router.post("/token")
@@ -37,4 +37,4 @@ async def login_for_access_token(
         expires_delta=access_token_expires,
     )
 
-    return {"access_token": access_token, "token_type": "bearer"}
+    return {"access_token": access_token, "token_type": "bearer", "role": user.role}
