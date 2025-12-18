@@ -1,6 +1,6 @@
 from pydantic import BaseModel, ConfigDict, Field
 from typing import Optional
-from models import ProductType
+from app.models import ProductType
 
 
 class ProductBase(BaseModel):
@@ -21,6 +21,7 @@ class ProductCreateManagerAdmin(ProductBase):
 
 # Read schema - Customer View
 class ProductReadCustomer(ProductBase):
+    product_id: int
     model_config = ConfigDict(from_attributes=True)
 
 # Read schema - Manager/Admin View

@@ -11,17 +11,20 @@ services:
     volumes:
       - ./db/pgdata:/var/lib/postgresql/data
       - ./db/init:/docker-entrypoint-initdb.d
+      - ./db/add_data:/app/add_data
 
     restart: always
   backend:
     build: ./backend
     container_name: coffeeshop_backend
-    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
     volumes:
-      - ./backend/app:/app
+      - ./backend:/app
     env_file:
       - ./backend/.env
     ports:
       - "8000:8000"
     depends_on:
       - db
+
+

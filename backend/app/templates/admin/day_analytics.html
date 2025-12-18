@@ -1,0 +1,116 @@
+{% extends "sqladmin/layout.html" %}
+
+{% block title %}Аналитика заказов{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12">
+      <h1>Заказы в одной кофейне</h1>
+    </div>
+  </div>
+  <div class="row mb-3">
+    <div class="col-md-3">
+      <label>ID кофейни</label>
+      <input type="number" id="shop_id" class="form-control" />
+    </div>
+    <div class="col-md-3">
+      <label>From</label>
+      <input type="date" id="date_from" class="form-control" />
+    </div>
+    <div class="col-md-3">
+      <label>To</label>
+      <input type="date" id="date_to" class="form-control" />
+    </div>
+    <div class="col-md-3 d-flex align-items-end">
+      <button class="btn btn-primary" onclick="loadAnalytics()">Показать</button>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header">Таблица: Количество заказов в день</div>
+        <div class="card-body">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Дата</th>
+                <th>Количество заказов</th>
+              </tr>
+            </thead>
+            <tbody id="analytics-table-body">
+              <!-- Данные будут добавлены через JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header">Визуализация</div>
+        <div class="card-body">
+          <canvas id="chart" width="600" height="600"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block tail %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+async function loadAnalytics() {
+  const from = document.getElementById("date_from").value;
+  const to = document.getElementById("date_to").value;
+  const shop_id = document.getElementById("shop_id").value;
+
+  if (!from || !to) {
+    alert("Select date range");
+    return;
+  }
+
+  let url = `/api/v1/admin/analytics?date_from=${from}&date_to=${to}`;
+  if (shop_id) {
+    url += `&shop_id=${shop_id}`;
+  }
+
+  const response = await fetch(url);
+  const result = await response.json();
+
+  const labels = result.data.map(i => i.date);
+  const values = result.data.map(i => i.orders); // Убедитесь, что API возвращает поле "orders"
+
+  const tableBody = document.getElementById("analytics-table-body");
+  tableBody.innerHTML = "";
+  labels.forEach((label, index) => {
+    const row = document.createElement("tr");
+    row.innerHTML = `<td>${label}</td><td>${values[index]}</td>`;
+    tableBody.appendChild(row);
+  });
+
+
+  const ctx = document.getElementById("chart").getContext("2d");
+  window.chart = new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels,
+      datasets: [{
+        label: "Количество заказов",
+        data: values,
+        backgroundColor: 'rgba(54, 162, 235, 0.6)',
+        borderColor: 'rgba(54, 162, 235, 1)',
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        y: { beginAtZero: true }
+      }
+    }
+  });
+}
+</script>
+{% endblock %}

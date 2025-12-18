@@ -1,6 +1,6 @@
 from __future__ import annotations 
 from typing import Optional
-from db.base import Base
+from app.db.base import Base
 from sqlalchemy import ForeignKey, CheckConstraint
 from sqlalchemy.orm import relationship, validates, Mapped, mapped_column
 

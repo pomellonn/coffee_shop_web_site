@@ -1,52 +1,3 @@
--- Coffee Shops
-INSERT INTO
-    coffee_shops (name, address, manager_id)
-VALUES
-    (
-        'FLTR - Peterhof',
-        'Санкт-Петербург, ул. Аврова, 36',
-        1
-    ),
-    (
-        'FLTR - Nekrasov',
-        'Санкт-Петербург, ул. Некрасова, 23',
-        2
-    ),
-    (
-        'FLTR - Nevsky',
-        'Санкт-Петербург, Невский пр., 25',
-        3
-    ),
-    (
-        'FLTR - Strelna',
-        'Санкт-Петербург, Ново-Нарвское шоссе, 12',
-        4
-    ),
-    (
-        'FLTR - Kupchino',
-        'Санкт-Петербург, ул. Ярослава Гашека, 4',
-        3
-    );
-
--- Administrator
-INSERT INTO
-    users (email, password_hash, name, role)
-VALUES
-    /* password= adminmel */
-    (
-        'melania@coffee.com',
-        '$2b$12$.HHPSjIAwskZRuZ8D.LyI.CvWb8HRYe9M0Ko/kNjyjwUSDWm0OZp6',
-        'Мелания',
-        'admin'
-    ),
-    /* password= adminks */
-    (
-        'ksenia@coffee.com',
-        '$2b$12$n06aocCZvJCfGS5f40.yvepVIgToix4VPUmCVGxrqxBG5f1hrN.mK',
-        'Ксения',
-        'admin'
-    );
-
 -- Managers
 INSERT INTO
     users (email, password_hash, name, role)
@@ -87,6 +38,55 @@ VALUES
         'manager'
     );
 
+-- Coffee Shops
+INSERT INTO
+    coffee_shops (name, address, manager_id)
+VALUES
+    (
+        'FLTR - Peterhof',
+        'Санкт-Петербург, ул. Аврова, 36',
+        1
+    ),
+    (
+        'FLTR - Nekrasov',
+        'Санкт-Петербург, ул. Некрасова, 23',
+        2
+    ),
+    (
+        'FLTR - Nevsky',
+        'Санкт-Петербург, Невский пр., 25',
+        3
+    ),
+    (
+        'FLTR - Strelna',
+        'Санкт-Петербург, Ново-Нарвское шоссе, 12',
+        4
+    ),
+    (
+        'FLTR - Kupchino',
+        'Санкт-Петербург, ул. Ярослава Гашека, 4',
+        5
+    );
+
+-- -- Administrator
+INSERT INTO
+    users (email, password_hash, name, role)
+VALUES
+    /* password= adminmel */
+    (
+        'melania@coffee.com',
+        '$2b$12$.HHPSjIAwskZRuZ8D.LyI.CvWb8HRYe9M0Ko/kNjyjwUSDWm0OZp6',
+        'Мелания',
+        'admin'
+    ),
+    /* password= adminks */
+    (
+        'ksenia@coffee.com',
+        '$2b$12$n06aocCZvJCfGS5f40.yvepVIgToix4VPUmCVGxrqxBG5f1hrN.mK',
+        'Ксения',
+        'admin'
+    );
+
 -- Customers
 INSERT INTO
     users (email, password_hash, name, role, created_at)
@@ -100,56 +100,56 @@ VALUES
     ),
     (
         'pechorin_gore@coffeemail.com',
-        '$2b$12$C94zOImJezPePLsEtGdKoOVy4i/OOGeMi.gKx2TunM8Lq52D.2hcW' -- 'hash_pechorin_xyz',
+        '$2b$12$C94zOImJezPePLsEtGdKoOVy4i/OOGeMi.gKx2TunM8Lq52D.2hcW', -- 'hash_pechorin_xyz',
         'Григорий',
         'customer',
         NOW ()
     ),
     (
         'raskolnikov_topor@coffeemail.com',
-        '$2b$12$vZeGQeZfTRHzyV55Ew8jquUUURypR0dQGl7ksgJWqiCtdx5Xy/dwm' -- 'raskolnikov_123', 
+        '$2b$12$vZeGQeZfTRHzyV55Ew8jquUUURypR0dQGl7ksgJWqiCtdx5Xy/dwm', -- 'raskolnikov_123', 
         'Родион',
         'customer',
         NOW ()
     ),
     (
         'bazarov_nigilist@coffeemail.com',
-        '$2b$12$J2Y3pePeqkvzof01zQ2uNexPSF1nOiDBJdGlqoYYHTyj1hXVnyJli' -- 'bazarov_456',
+        '$2b$12$J2Y3pePeqkvzof01zQ2uNexPSF1nOiDBJdGlqoYYHTyj1hXVnyJli', -- 'bazarov_456',
         'Евгений',
         'customer',
         NOW ()
     ),
     (
         'oblomov_divan@coffeemail.com',
-        '$2b$12$ife0xNTBmoawat0DToKL5OIJHuXnZ/eknHPcAWdCvztvBnm6ObFoq' --'oblomov_777',
+        '$2b$12$ife0xNTBmoawat0DToKL5OIJHuXnZ/eknHPcAWdCvztvBnm6ObFoq', --'oblomov_777',
         'Илья',
         'customer',
         NOW ()
     ),
     (
         'chichikov_mertvie@coffeemail.com',
-        '$2b$12$YW5JPpkmkOA4eqroAYZ/N.QwZ.Ya5n3e3kJJEvVsrgBEtVig8kgz.' -- 'chichikov_888',
+        '$2b$12$YW5JPpkmkOA4eqroAYZ/N.QwZ.Ya5n3e3kJJEvVsrgBEtVig8kgz.', -- 'chichikov_888',
         'Павел',
         'customer',
         NOW ()
     ),
     (
         'karamazov_brat@coffeemail.com',
-        '$2b$12$5B62n0/gImjGCD.dOQc2XOaw.cvyLGh6j5NoyCbtZxGH1b1oEBLZu' -- 'karamazov_trinity',
+        '$2b$12$5B62n0/gImjGCD.dOQc2XOaw.cvyLGh6j5NoyCbtZxGH1b1oEBLZu', -- 'karamazov_trinity',
         'Алексей',
         'customer',
         NOW ()
     ),
     (
         'sofya_gore@coffeemail.com',
-        '$2b$12$7P1fBbJ7V9MLTPPQtQMh3euzucediKRdQYEPwV9SDSNf/2QcW0zi2' -- 'sofya_smekh',
+        '$2b$12$7P1fBbJ7V9MLTPPQtQMh3euzucediKRdQYEPwV9SDSNf/2QcW0zi2', -- 'sofya_smekh',
         'Софья',
         'customer',
         NOW ()
     ),
     (
         'masha_kapitanskaya@coffeemail.com',
-        '$2b$12$CGU5vy5rgJ3P6sksvcBQ/.QX/fGAKXMCc3ac4GhayPAVIXllarJ0e' -- 'masha_krepost',
+        '$2b$12$CGU5vy5rgJ3P6sksvcBQ/.QX/fGAKXMCc3ac4GhayPAVIXllarJ0e', -- 'masha_krepost',
         'Маша',
         'customer',
         NOW ()
@@ -429,8 +429,35 @@ VALUES
     (
         'Манго матча-латте',
         'Чай матча-латте с манговым пюре',
-        "/static/images/products/non_coffee/mango_matcha.png",
+        '/static/images/products/non_coffee/mango_matcha.png',
         380,
         350,
         'non_coffee'
-    ),
+    );
+
+
+
+COPY orders(order_id, user_id, shop_id, total_amount,created_at ) 
+FROM '/app/add_data/orders.csv'
+DELIMITER ','
+CSV HEADER;
+
+COPY order_items(order_item_id, order_id, product_id, unit_price, quantity)
+FROM '/app/add_data/order_items.csv'
+DELIMITER ','
+CSV HEADER;
+
+COPY attribute_types(attribute_name ) 
+FROM '/app/add_data/attribute_types.csv'
+DELIMITER ','
+CSV HEADER;
+
+COPY product_attribute_options(attribute_type_id,value,extra_price)
+FROM '/app/add_data/product_attribute_options.csv'
+DELIMITER ','
+CSV HEADER;
+
+COPY product_attributes(product_id,option_id)
+FROM '/app/add_data/product_attributes.csv'
+DELIMITER ','
+CSV HEADER;

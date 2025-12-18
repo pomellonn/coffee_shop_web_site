@@ -5,11 +5,14 @@ from jose import jwt, JWTError
 from fastapi.security import OAuth2PasswordBearer
 from fastapi import Depends, HTTPException, status
 
-from db.session import get_session
-from models.users import User, UserRole
+from app.db.session import get_session
+from app.models.users import User, UserRole
 from sqlalchemy.ext.asyncio import AsyncSession
-from core.config import settings
+from app.core.config import settings
+from fastapi.templating import Jinja2Templates
 
+
+templates = Jinja2Templates(directory="templates")
 
 SECRET_KEY = settings.SECRET_KEY
 ALGORITHM = settings.ALGORITHM
@@ -78,6 +81,14 @@ async def get_current_active_user(current_user: User = Depends(get_current_user)
 
 def require_admin(current_user: User = Depends(get_current_user)) -> User:
     if current_user.role != UserRole.admin:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN, detail="Not enough privileges"
+        )
+    return current_user
+
+
+def require_manager(current_user: User = Depends(get_current_user)) -> User:
+    if current_user.role != UserRole.manager:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN, detail="Not enough privileges"
         )

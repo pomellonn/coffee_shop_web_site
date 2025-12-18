@@ -1,14 +1,38 @@
 from fastapi import FastAPI, Depends, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
-from db.session import engine
+from app.db.session import sync_engine
 from typing import Annotated
-from api.api_router import api_router
-from core.security import get_current_user
-from models import User
+from app.api.api_router import api_router
+from app.core.security import get_current_user
+from app.models import User
+from fastapi.staticfiles import StaticFiles
+from sqladmin import Admin
+
+
+from starlette.middleware.sessions import SessionMiddleware
+
 
 app = FastAPI(title="Coffee Shop API", version="1.0.0")
 
+
+# app.add_middleware(SessionMiddleware, secret_key=SECRET_KEY, https_only=True)
+
+# admin = Admin(app, sync_engine, authentication_backend=authentication_backend)
+
+# admin.add_view(UserAdmin)
+# admin.add_view(CoffeeShopAdmin)
+# admin.add_view(ProductAdmin)
+# admin.add_view(OrderAdmin)
+
+# admin.add_view(AnalyticsOneShopView)
+# admin.add_view(AnalyticsAllShopsView)
+# admin.add_view(AnalyticsClientsView)
+
+
+
+# api
 app.include_router(api_router, prefix="/api/v1")
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -16,7 +40,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
 
 UserDep = Annotated[User, Depends(get_current_user)]
 
