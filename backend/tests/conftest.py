@@ -2,11 +2,10 @@ import os
 from pathlib import Path
 
 import pytest
-from httpx import AsyncClient
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
 from sqlalchemy.pool import NullPool
 from sqlalchemy import text
-
+from httpx import AsyncClient, ASGITransport
 from dotenv import load_dotenv
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -91,10 +90,13 @@ async def clean_tables():
 
 @pytest.fixture
 async def client():
-    async with AsyncClient(app=app, base_url="http://test") as ac:
+    transport = ASGITransport(app=app)
+    async with AsyncClient(
+        transport=transport,
+        base_url="http://test"
+    ) as ac:
         yield ac
-
-
+        
 @pytest.fixture
 async def admin_user(db_session: AsyncSession):
     user = User(
