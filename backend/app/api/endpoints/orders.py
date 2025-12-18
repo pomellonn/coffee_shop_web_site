@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status, Query
 from typing import List, Optional
 from datetime import date
 from models import User, UserRole
-from core.security import get_current_user, require_manager_or_admin, require_admin
+from core.security import get_current_user, require_manager, require_admin
 from schemas.orders_schema import (
     OrderCreateCustomer,
     OrderReadCustomer,
@@ -49,18 +49,30 @@ async def get_my_orders(
 router_manager = APIRouter(prefix="/manager/orders", tags=["Orders - Manager"])
 
 
-@router_manager.get("/orders", response_model=List[OrderReadManagerAdmin])
+@router_manager.get("/", response_model=List[OrderReadManagerAdmin])
 async def get_orders_for_my_shop(
-    current_user: User = Depends(require_manager_or_admin),
+    current_user: User = Depends(require_manager),
     service: OrderService = Depends(get_order_service),
 ):
     orders = await service.get_orders_for_manager_shop(current_user.user_id)
     return orders
 
 
+@router_manager.get("/today", response_model=List[OrderReadManagerAdmin])
+async def get_orders_for_my_shop(
+    current_user: User = Depends(require_manager),
+    service: OrderService = Depends(get_order_service),
+):
+    today = date.today
+    orders = await service.get_orders_for_manager_shop(        
+        user_id=current_user.user_id,
+        start_date=today,
+        end_date=today)
+    return orders
+
 @router_manager.get("/orders-count", response_model=OrdersCountResponse)
 async def get_orders_count_for_my_shop(
-    current_user: User = Depends(require_manager_or_admin),
+    current_user: User = Depends(require_manager),
     service: OrderService = Depends(get_order_service),
     target_date: Optional[date] = Query(None, description="Дата для подсчета заказов, формат YYYY-MM-DD")
 ):

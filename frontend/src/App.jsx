@@ -9,9 +9,15 @@ import Register from "./pages/register"
 import ProtectedRoute from "./services/PrRoute.jsx"
 import { AuthProvider } from './services/AuthContext.jsx';
 import Dashboard from './pages/manager/Dashboard.jsx';
-import Layout from "./components/admin/Layot";
+import LayoutManager from "./components/admin/LayotManager.jsx";
+import LayoutAdmin from "./components/admin/LayotAdmin.jsx";
 import AnalyticsManager from "./pages/manager/AnalyticsManager.jsx";
 import ManagerMenu from './pages/manager/MenuManager.jsx';
+import AnalyticsAllShopsAdmin from './pages/admin/AnalyticsAllShopsAdmin.jsx'
+import CoffeeShopsAdmin from './pages/admin/CoffeeShopsAdmin.jsx';
+import DashboardAdmin from './pages/admin/DashboardAdmin.jsx';
+import ProductsAdmin from './pages/admin/ProductsAdmin.jsx';
+import UsersAdmin from './pages/admin/UsersAdmin.jsx';
 function App() {
   return (
     <>
@@ -38,24 +44,29 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="*" element={<div>Страница не найдена (404)</div>} />
 
-         
 
-            <Route element={<Layout><Outlet /></Layout>}>
+
+            <Route element={<LayoutManager><Outlet /></LayoutManager>}>
               <Route element={<ProtectedRoute roles={["manager"]} />}>
                 <Route path="/manager" element={<Dashboard />} />
                 <Route path="/manager/menu" element={<ManagerMenu />} />
                 <Route path="/manager/analytics" element={<AnalyticsManager />} />
-               
+
+              </Route>
+            </Route>
+
+            <Route element={<LayoutAdmin><Outlet /></LayoutAdmin>}>
+              <Route element={<ProtectedRoute roles={["admin"]} />}>
+                <Route path="/admin" element={<DashboardAdmin />} />
+                <Route path="/admin/analyticsAllShops" element={<AnalyticsAllShopsAdmin />} />
+                <Route path="/admin/users" element={<UsersAdmin />} />
+                <Route path="/admin/products" element={<ProductsAdmin />} />
+                <Route path="/admin/shops" element={<CoffeeShopsAdmin />} />
+            
               </Route>
             </Route>
 
 
-
-            {/* admin */}
-            <Route element={<ProtectedRoute roles={['admin']} />}>
-              <Route path="/admin_smth" element={<Menu />} />
-              <Route path="/admin" element={<div>Управление пользователями (Admin Only)</div>} />
-            </Route>
 
           </Routes>
         </AuthProvider>

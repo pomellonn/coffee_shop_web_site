@@ -1,14 +1,14 @@
 import { Outlet } from 'react-router-dom';
 import './styles.css'
-const Layout = () => {
+const LayoutManager = () => {
   return (
-    <div className="app-layout">
+    <div className="app-layot">
       <aside className="sidebar">
         <h2 className="logo">Менеджер</h2>
         <nav className="menu">
           <ul>
             <li>
-              <a href="/">
+              <a href="/manager">
 
                 <span>Главная</span>
               </a>
@@ -36,4 +36,4 @@ const Layout = () => {
   );
 };
 
-export default Layout;
+export default LayoutManager;

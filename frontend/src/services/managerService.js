@@ -38,11 +38,16 @@ export const deleteMenuItem = async (menuId) => {
 export const getOrdersCount = async (date) => {
     const params = {};
     if (date) params.target_date = date;
-    const { data } = await api.get('/manager/orders-count', { params });
+    const { data } = await api.get('/manager/orders/orders-count', { params });
     return data.count;
 };
 
 export const getShopInfo = async () => {
     const { data } = await api.get("/manager/shops/info");
+    return data;
+};
+
+export const getTodayOrders = async () => {
+    const { data } = await api.get("/manager/orders/today");
     return data;
 };
