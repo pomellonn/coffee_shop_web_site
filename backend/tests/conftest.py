@@ -7,11 +7,8 @@ from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, Asyn
 from sqlalchemy.pool import NullPool
 from sqlalchemy import text
 
-# Load test env early so Settings reads correct values
 from dotenv import load_dotenv
 
-
-# locate repo backend folder and load `.env.test`
 ROOT = Path(__file__).resolve().parents[1]
 import sys
 sys.path.insert(0, str(ROOT))
@@ -19,8 +16,6 @@ env_path = ROOT / ".env.test"
 if env_path.exists():
     load_dotenv(env_path)
 
-
-# Now import app and DB components (after env loaded)
 from app.main import app
 from app.db.base import Base
 from app.db.session import get_session

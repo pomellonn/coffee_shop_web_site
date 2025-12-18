@@ -1,0 +1,68 @@
+name: CI - tests
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:14
+        env:
+          POSTGRES_USER: coffee
+          POSTGRES_PASSWORD: coffee
+          POSTGRES_DB: coffee_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U coffee"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential libpq-dev libssl-dev
+
+      - name: Cache pip
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/backend/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r backend/requirements.txt
+          # ensure test tooling is available
+          pip install pytest httpx anyio
+
+      - name: Wait for Postgres
+        run: |
+          for i in {1..30}; do
+            pg_isready -h localhost -p 5432 -U coffee && break
+            sleep 1
+          done
+
+      - name: Run backend tests
+        env:
+          DATABASE_URL: postgresql+asyncpg://coffee:coffee@localhost:5432/coffee_test
+        run: |
+          cd backend
+          pytest -q
