@@ -111,3 +111,11 @@ Backend доступен по адресу: http://localhost:8000
 ```
 docker exec -it coffee-postgres psql -U coffee -d coffee_dev
 ```
+
+
+# HTTPS:
+Web site:
+https://localhost
+
+Swagger UI: 
+https://localhost/api/docs
