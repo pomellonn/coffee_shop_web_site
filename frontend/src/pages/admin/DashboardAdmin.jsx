@@ -16,10 +16,8 @@ const DashboardAdmin = () => {
     const fetchData = async () => {
         const user = await getCurrentUser();
         setUser(user);
-        const ordersCount = await getOrdersCount();
-        setTodayOrders(ordersCount);
-        const info = await getShopInfo();
-        setShopInfo(info);
+
+
     };
 
 
@@ -30,20 +28,10 @@ const DashboardAdmin = () => {
 
             <div className="row">
                 <div className="col-md-8">
-                    <h5>Ваша кофейня</h5>
-                    {shopInfo ? (
-                        <>
-                            <p>Название: {shopInfo?.name}</p>
-                            <p>Адрес: {shopInfo?.address}</p>
-                        </>
-                    ) : (<p> Вы не управляете ни одной кофейней сети
-                    </p>
-                    )}
+
+
                 </div>
-                <div className="card p-3">
-                    <h5>Заказы за сегодня</h5>
-                    <p style={{ fontSize: "24px", fontWeight: "bold" }}>{todayOrders}</p>
-                </div>
+
 
             </div>
         </div>
