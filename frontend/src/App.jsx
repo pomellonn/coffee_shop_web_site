@@ -1,8 +1,9 @@
 import React from 'react';
-import { Routes, Route, Link, Outlet } from 'react-router-dom'
+import { Routes, Route, Outlet, useLocation } from 'react-router-dom'
 import Account from "./pages/customerAccount"
 import Home from "./pages/home"
-import Menu from "./pages/menu"
+import MenuShopSelector from "./pages/MenuShopSelector"
+import ShopMenu from "./pages/ShopMenu"
 import OrdersHistory from "./pages/orders_history"
 import Login from "./pages/login"
 import Register from "./pages/register"
@@ -18,30 +19,24 @@ import CoffeeShopsAdmin from './pages/admin/CoffeeShopsAdmin.jsx';
 import DashboardAdmin from './pages/admin/DashboardAdmin.jsx';
 import ProductsAdmin from './pages/admin/ProductsAdmin.jsx';
 import UsersAdmin from './pages/admin/UsersAdmin.jsx';
-import ClientsAnalytics from './pages/admin/СlientsAnalytics.jsx';
+import Header from './components/Header.jsx';
+import ClientsAnalytics from './pages/admin/ClientsAnalytics.jsx';
 import AnalyticsOneShopAdmin from './pages/admin/AnalyticsOneShopAdmin.jsx';
+
 function App() {
+  const location = useLocation();
+  const hideHeader = ['/admin', '/manager'].some(p => location.pathname.startsWith(p));
   return (
     <>
-      <nav>
-        <Link to="/home">Главная</Link>
-        <Link to="/menu">Меню</Link>
-        <Link to="/orders_history">Заказы</Link>
-        <Link to="/customerAccount">Мой аккаунт</Link>
-        <Link to="/login">Войти в аккаунт</Link>
-        <Link to="/register">Зарегистрироваться</Link>
-
-      </nav>
-
       <main>
-
         <AuthProvider>
+          {/* <Header /> */}
+          {!hideHeader && <Header />}
           <Routes>
-
             <Route path="/" element={<Home />} />
-            {/* <Route path="/menu" element={<Menu />} /> */}
-            <Route path="/orders_history" element={<OrdersHistory />} />
-            <Route path="/customerAccount" element={<Account />} />
+            <Route path="/menu" element={<MenuShopSelector />} />
+            <Route path="/menu/:shopId" element={<ShopMenu />} />
+            <Route path="/account" element={<Account />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="*" element={<div>Страница не найдена (404)</div>} />
@@ -64,11 +59,11 @@ function App() {
                 <Route path="/admin/users" element={<UsersAdmin />} />
                 <Route path="/admin/products" element={<ProductsAdmin />} />
                 <Route path="/admin/shops" element={<CoffeeShopsAdmin />} />
-                <Route path="/admin/analyticsClients" element={<ClientsAnalytics />} />
+                <Route path="/admin/analyticsClients" element={< ClientsAnalytics/>} />
                 <Route path="/admin/analyticsOneShop" element={<AnalyticsOneShopAdmin />} />
               </Route>
             </Route>
-     
+
 
 
 
