@@ -62,10 +62,5 @@ https://localhost/api/docs
 docker-compose up --build
 ```
 
-Backend доступен по адресу: http://localhost:8000
-
-Документация API (Swagger UI): http://localhost:8000/docs
-
-
 Веб-сайт доступен по ссылке:
 https://localhost
