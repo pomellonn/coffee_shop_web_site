@@ -3,7 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { useShop } from '../hooks/useShops';
 import { useShopMenu } from '../hooks/useMenu';
 import ProductCard from '../components/ProductCard';
-// import ProductModal from '../components/ProductModal';
+import ProductModal from '../components/ProductModal';
 import './ShopMenu.css';
 
 export default function ShopMenu() {
