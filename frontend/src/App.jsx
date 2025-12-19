@@ -20,23 +20,23 @@ import DashboardAdmin from './pages/admin/DashboardAdmin.jsx';
 import ProductsAdmin from './pages/admin/ProductsAdmin.jsx';
 import UsersAdmin from './pages/admin/UsersAdmin.jsx';
 import Header from './components/Header.jsx';
-
+import ClientsAnalytics from './pages/admin/СlientsAnalytics.jsx';
+import AnalyticsOneShopAdmin from './pages/admin/AnalyticsOneShopAdmin.jsx';
 function App() {
   return (
     <>
       <main>
         <AuthProvider>
-          <Header />
+
           <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/menu" element={<MenuShopSelector />} />
-            <Route path="/menu/:shopId" element={<ShopMenu />} />
-            <Route path="/account" element={<Account />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="*" element={<div>Страница не найдена (404)</div>} />
-
-
+            <Route element={<><Header /><Outlet /></>}>
+              <Route path="/" element={<Home />} />
+              <Route path="/menu" element={<MenuShopSelector />} />
+              <Route path="/menu/:shopId" element={<ShopMenu />} />
+              <Route path="/account" element={<Account />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+            </Route>
 
             <Route element={<LayoutManager><Outlet /></LayoutManager>}>
               <Route element={<ProtectedRoute roles={["manager"]} />}>
@@ -54,9 +54,12 @@ function App() {
                 <Route path="/admin/users" element={<UsersAdmin />} />
                 <Route path="/admin/products" element={<ProductsAdmin />} />
                 <Route path="/admin/shops" element={<CoffeeShopsAdmin />} />
-            
+                <Route path="/admin/analyticsClients" element={<ClientsAnalytics />} />
+                <Route path="/admin/analyticsOneShop" element={<AnalyticsOneShopAdmin />} />
               </Route>
             </Route>
+
+
 
 
 

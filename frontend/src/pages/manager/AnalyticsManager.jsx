@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { getOneShopAnalytics } from "../../services/managerService";
-import './styles.css'
+
 import {
     Bar,
     Pie,
@@ -35,14 +35,6 @@ const AnalyticsManager = () => {
     const [dateTo, setDateTo] = useState("");
     const [analytics, setAnalytics] = useState(null);
     const [loading, setLoading] = useState(false);
-    const COLORS = [
-        "rgba(54, 162, 235, 0.6)",
-        "rgba(255, 99, 132, 0.6)",
-        "rgba(255, 206, 86, 0.6)",
-        "rgba(75, 192, 192, 0.6)",
-        "rgba(153, 102, 255, 0.6)",
-        "rgba(255, 159, 64, 0.6)",
-    ];
 
     const loadAnalytics = async () => {
         if (!dateFrom || !dateTo) {
@@ -62,101 +54,129 @@ const AnalyticsManager = () => {
     };
 
     return (
-        <div className="container-fluid">
-            <h2 className="mb-4">Аналитика кофейни</h2>
+        <div className="min-h-screen">
+            <div className="px-10">
+                {/* Заголовок */}
+                <h1 className="text-3xl font-light text-gray-900 mb-12">
+                    Аналитика кофейни
+                </h1>
 
-            {/* Filters */}
-            <div className="row mb-3">
-                <div className="col-md-3">
-                    <label>From</label>
-                    <input
-                        type="date"
-                        className="form-control"
-                        value={dateFrom}
-                        onChange={(e) => setDateFrom(e.target.value)}
-                    />
+                {/* Форма выбора параметров */}
+                <div className="mb-14">
+                    <h2 className="text-sm text-gray-500 uppercase tracking-wide mb-4">
+                        Параметры отчета
+                    </h2>
+                    <div className="flex gap-3">
+                        <input
+                            type="date"
+                            className="flex-1 px-4 py-3 border-b border-gray-300 focus:border-gray-900 outline-none transition-colors"
+                            value={dateFrom}
+                            onChange={(e) => setDateFrom(e.target.value)}
+                            placeholder="От"
+                        />
+
+                        <input
+                            type="date"
+                            className="flex-1 px-4 py-3 border-b border-gray-300 focus:border-gray-900 outline-none transition-colors"
+                            value={dateTo}
+                            onChange={(e) => setDateTo(e.target.value)}
+                            placeholder="До"
+                        />
+
+                        <button
+                            className="px-6 py-3 bg-gray-900 text-white text-sm font-medium hover:bg-gray-800 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed"
+                            onClick={loadAnalytics}
+                            disabled={loading}
+                        >
+                            {loading ? "..." : "Показать"}
+                        </button>
+                    </div>
                 </div>
 
-                <div className="col-md-3">
-                    <label>To</label>
-                    <input
-                        type="date"
-                        className="form-control"
-                        value={dateTo}
-                        onChange={(e) => setDateTo(e.target.value)}
-                    />
-                </div>
+                {analytics && (
+                    <>
+                        {/* Аналитика по месяцам */}
+                        <div className="mb-20">
+                            <h2 className="text-2xl font-light text-gray-900 mb-8">
+                                Аналитика по месяцам
+                            </h2>
 
-                <div className="col-md-3 d-flex align-items-end">
-                    <button
-                        className="btn btn-primary w-100"
-                        onClick={loadAnalytics}
-                        disabled={loading}
-                    >
-                        {loading ? "Загрузка..." : "Показать"}
-                    </button>
-                </div>
-            </div>
-
-            {analytics && (
-                <>
-                    {/* Monthly summary */}
-                    <div className="row mb-4">
-                        <div className="col-md-6">
-                            <div className="card">
-                                <div className="card-header">Аналитика по месяцам</div>
-                                <div className="card-body">
-                                    <table className="table table-bordered">
-                                        <thead>
-                                            <tr>
-                                                <th>Месяц</th>
-                                                <th>Заказы</th>
-                                                <th>Выручка</th>
-                                                <th>Средний чек</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {analytics.monthly_summary.map((m) => (
-                                                <tr key={m.month}>
-                                                    <td>{m.month}</td>
-                                                    <td>{m.orders_count}</td>
-                                                    <td>{m.revenue.toFixed(2)}</td>
-                                                    <td>{m.avg_check.toFixed(2)}</td>
-                                                </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="col-md-6">
-                            <div className="card mb-3">
-                                <div className="card-header">Заказы по месяцам</div>
-                                <div className="card-body">
-                                    <Bar
-                                        data={{
-                                            labels: analytics.monthly_summary.map((m) => m.month),
-                                            datasets: [
-                                                {
-                                                    label: "Количество заказов",
-                                                    data: analytics.monthly_summary.map(
-                                                        (m) => m.orders_count
-                                                    ),
-                                                    backgroundColor: "rgba(54, 162, 235, 0.6)",
-                                                },
-                                            ],
-                                        }}
-                                    />
-                                </div>
-                            </div>
-
-                            <div className="col-md-6">
-                                <div className="card">
-                                    <div className="card-header">
-                                        Выручка по месяцам
+                            <div className="grid grid-cols-12 gap-8">
+                                {/* Таблица */}
+                                <div className="col-span-4">
+                                    <div className="flex items-center justify-between py-3 border-b border-gray-300 mb-1">
+                                        <span className="text-xs text-gray-500 uppercase tracking-wide flex-1">
+                                            Месяц
+                                        </span>
+                                        <span className="text-xs text-gray-500 uppercase tracking-wide w-20 text-right">
+                                            Заказы
+                                        </span>
+                                        <span className="text-xs text-gray-500 uppercase tracking-wide w-24 text-right">
+                                            Выручка
+                                        </span>
+                                        <span className="text-xs text-gray-500 uppercase tracking-wide w-24 text-right">
+                                            Ср. чек
+                                        </span>
                                     </div>
-                                    <div className="card-body">
+
+                                    <div className="space-y-1">
+                                        {analytics.monthly_summary.map((m) => (
+                                            <div
+                                                key={m.month}
+                                                className="flex items-center justify-between py-3 border-b border-gray-200"
+                                            >
+                                                <span className="text-gray-900 text-sm flex-1">{m.month}</span>
+                                                <span className="text-gray-900 text-sm w-20 text-right">
+                                                    {m.orders_count}
+                                                </span>
+                                                <span className="text-gray-900 text-sm w-24 text-right">
+                                                    {m.revenue.toFixed(0)} ₽
+                                                </span>
+                                                <span className="text-gray-900 text-sm w-24 text-right">
+                                                    {m.avg_check.toFixed(0)} ₽
+                                                </span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                {/* Графики */}
+                                <div className="col-span-8 space-y-8">
+                                    {/* График заказов */}
+                                    <div className="border border-gray-200 p-6">
+                                        <h3 className="text-sm text-gray-500 uppercase tracking-wide mb-4">
+                                            Заказы по месяцам
+                                        </h3>
+                                        <Bar
+                                            data={{
+                                                labels: analytics.monthly_summary.map((m) => m.month),
+                                                datasets: [
+                                                    {
+                                                        label: "Количество заказов",
+                                                        data: analytics.monthly_summary.map(
+                                                            (m) => m.orders_count
+                                                        ),
+                                                        backgroundColor: "rgb(185, 201, 166)",
+                                                    },
+                                                ],
+                                            }}
+                                            options={{
+                                                responsive: true,
+                                                maintainAspectRatio: true,
+                                                plugins: {
+                                                    legend: {
+                                                        display: false,
+                                                    },
+                                                },
+                                            }}
+                                        />
+                                    </div>
+
+                                    {/* График выручки */}
+                                    <div className="border border-gray-200 p-6">
+                                        <h3 className="text-sm text-gray-500 uppercase tracking-wide mb-4">
+                                            Выручка по месяцам
+                                        </h3>
                                         <Chart
                                             type="bar"
                                             data={{
@@ -168,7 +188,7 @@ const AnalyticsManager = () => {
                                                         data: analytics.monthly_summary.map(
                                                             (m) => m.revenue
                                                         ),
-                                                        backgroundColor: "rgba(54, 162, 235, 0.6)",
+                                                        backgroundColor: "rgb(185, 201, 166)",
                                                     },
                                                     {
                                                         type: "line",
@@ -176,8 +196,8 @@ const AnalyticsManager = () => {
                                                         data: analytics.monthly_summary.map(
                                                             (m) => m.revenue
                                                         ),
-                                                        borderColor: "rgba(255, 99, 132, 1)",
-                                                        backgroundColor: "rgba(255, 99, 132, 0.3)",
+                                                        borderColor: "rgb(182, 166, 201)",
+                                                        backgroundColor: "rgba(182, 166, 201, 0.3)",
                                                         tension: 0.3,
                                                         pointRadius: 4,
                                                         pointHoverRadius: 6,
@@ -202,86 +222,117 @@ const AnalyticsManager = () => {
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    {/* Product ranking */}
-                    <div className="row mb-4">
-                        <div className="col-md-6">
-                            <div className="card">
-                                <div className="card-header">Рейтинг продуктов</div>
-                                <div className="card-body">
-                                    <table className="table table-bordered">
-                                        <thead>
-                                            <tr>
-                                                <th>Продукт</th>
-                                                <th>Продано</th>
-                                                <th>Выручка</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {analytics.product_ranking.map((p) => (
-                                                <tr key={p.product}>
-                                                    <td>{p.product}</td>
-                                                    <td>{p.total_sold}</td>
-                                                    <td>{p.revenue.toFixed(2)}</td>
-                                                </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
+                        {/* Рейтинг продуктов */}
+                        <div className="mb-20">
+                            <h2 className="text-2xl font-light text-gray-900 mb-8">
+                                Рейтинг продуктов
+                            </h2>
+
+                            <div className="grid grid-cols-12 gap-8">
+                                {/* Таблица */}
+                                <div className="col-span-4">
+                                    <div className="flex items-center justify-between py-3 border-b border-gray-300 mb-1">
+                                        <span className="text-xs text-gray-500 uppercase tracking-wide flex-1">
+                                            Продукт
+                                        </span>
+                                        <span className="text-xs text-gray-500 uppercase tracking-wide w-24 text-right">
+                                            Продано
+                                        </span>
+                                        <span className="text-xs text-gray-500 uppercase tracking-wide w-28 text-right">
+                                            Выручка
+                                        </span>
+                                    </div>
+
+                                    <div className="space-y-1">
+                                        {analytics.product_ranking.map((p) => (
+                                            <div
+                                                key={p.product}
+                                                className="flex items-center justify-between py-3 border-b border-gray-200"
+                                            >
+                                                <span className="text-gray-900 text-sm flex-1">{p.product}</span>
+                                                <span className="text-gray-900 text-sm w-24 text-right">
+                                                    {p.total_sold}
+                                                </span>
+                                                <span className="text-gray-900 text-sm w-28 text-right">
+                                                    {p.revenue.toFixed(0)} ₽
+                                                </span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                {/* График */}
+                                <div className="col-span-8 border border-gray-200 p-6">
+                                    <Bar
+                                        data={{
+                                            labels: analytics.product_ranking.map((p) => p.product),
+                                            datasets: [
+                                                {
+                                                    label: "Продано",
+                                                    data: analytics.product_ranking.map((p) => p.total_sold),
+                                                    backgroundColor: "rgb(185, 201, 166)",
+                                                },
+                                                {
+                                                    label: "Выручка",
+                                                    data: analytics.product_ranking.map((p) => p.revenue),
+                                                    backgroundColor: "rgb(182, 166, 201)",
+                                                },
+                                            ],
+                                        }}
+                                        options={{
+                                            responsive: true,
+                                            maintainAspectRatio: true,
+                                            plugins: {
+                                                legend: {
+                                                    display: true,
+                                                    position: "top",
+                                                },
+                                            },
+                                        }}
+                                    />
                                 </div>
                             </div>
                         </div>
 
-                        <div className="col-md-6">
-                            <Bar
-                                data={{
-                                    labels: analytics.product_ranking.map((p) => p.product),
-                                    datasets: [
-                                        {
-                                            label: "Продано",
-                                            data: analytics.product_ranking.map((p) => p.total_sold),
-                                            backgroundColor: COLORS,
-                                        },
-                                        {
-                                            label: "Выручка",
-                                            data: analytics.product_ranking.map((p) => p.revenue),
-                                            backgroundColor: "rgba(54, 162, 235, 0.6)",
-                                            
-                                        },
-                                    ],
-                                }}
-                            />
-                        </div>
-                    </div>
+                        {/* Продажи по времени суток */}
+                        <div className="mb-20">
+                            <h2 className="text-2xl font-light text-gray-900 mb-8">
+                                Продажи по времени суток
+                            </h2>
 
-                    {/* Time period */}
-                    <div className="row mb-4">
-                        <div className="col-md-4">
-                            <div className="card">
-                                <div className="card-header">Продажи по времени суток</div>
-                                <div className="card-body">
-            <Pie
-    data={{
-        labels: analytics.time_period_sales.map((t) => t.period),
-        datasets: [
-            {
-                data: analytics.time_period_sales.map((t) => t.orders),
-                backgroundColor: COLORS.slice(
-                    0,
-                    analytics.time_period_sales.length
-                ),
-                borderColor: "#fff",
-                borderWidth: 1,
-            },
-        ],
-    }}
-/>
-                                </div>
+                            <div className="max-w-md border border-gray-200 p-8">
+                                <Pie
+                                    data={{
+                                        labels: analytics.time_period_sales.map((t) => t.period),
+                                        datasets: [
+                                            {
+                                                data: analytics.time_period_sales.map((t) => t.orders),
+                                                backgroundColor: [
+                                                    "rgb(114, 153, 72)",
+                                                    "rgb(12, 60, 124)",
+                                                    "rgb(226, 168, 41)",
+                                                ],
+                                                borderWidth: 0,
+                                            },
+                                        ],
+                                    }}
+                                    options={{
+                                        responsive: true,
+                                        maintainAspectRatio: true,
+                                        plugins: {
+                                            legend: {
+                                                display: true,
+                                                position: "bottom",
+                                            },
+                                        },
+                                    }}
+                                />
                             </div>
                         </div>
-                    </div>
-                </>
-            )}
+                    </>
+                )}
+            </div>
         </div>
     );
 };
