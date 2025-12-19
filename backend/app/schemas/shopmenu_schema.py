@@ -1,6 +1,6 @@
 from pydantic import BaseModel, ConfigDict, Field
 from typing import Optional
-from .product_schema import ProductName, ProductReadManagerAdmin
+from .product_schema import ProductReadCustomer, ProductReadManagerAdmin
 
 
 class ShopMenuBase(BaseModel):
@@ -12,7 +12,7 @@ class ShopMenuBase(BaseModel):
 
 
 class ShopMenuReadCustomer(ShopMenuBase):
-    product: Optional[ProductName] = None
+    product: Optional[ProductReadCustomer] = None
     model_config = ConfigDict(from_attributes=True)
 
 
