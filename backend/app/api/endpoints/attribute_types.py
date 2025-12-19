@@ -11,16 +11,16 @@ from app.schemas.attribute_types_schema import (
 from app.services.attribute_types_service import AttributeTypesService
 from app.dependencies.services import get_attribute_types_service
 
-router = APIRouter(prefix="/attribute-types", tags=["attribute types"])
-
 
 # ---------------------------
-# ADMIN ENDPOINTS: нужны ли пользовательские? 
+# ADMIN ENDPOINTS
 # ---------------------------
+
+router_admin = APIRouter(prefix="/admin/attribute-types", tags=["Attribute types - Admin"])
 
 
 # List all attribute types
-@router.get("/admin", response_model=List[AttributeTypeRead])
+@router_admin.get("/", response_model=List[AttributeTypeRead])
 async def list_attribute_types_admin(
     attribute_types_service: AttributeTypesService = Depends(get_attribute_types_service),
     current_user: User = Depends(require_admin),
@@ -29,7 +29,7 @@ async def list_attribute_types_admin(
     return types
 
 # Get attribute by id
-@router.get("/admin/{type_id}", response_model=AttributeTypeRead)
+@router_admin.get("/{type_id}", response_model=AttributeTypeRead)
 async def get_attribute_type_admin(
     type_id: int, 
     attribute_types_service: AttributeTypesService=Depends(get_attribute_types_service),
@@ -41,8 +41,8 @@ async def get_attribute_type_admin(
     return attr_type
 
 # Create new type
-@router.post(
-    "/admin", 
+@router_admin.post(
+    "/", 
     response_model=AttributeTypeRead, 
     status_code=status.HTTP_201_CREATED
 )
@@ -58,7 +58,7 @@ async def create_attribute_type(
     return attr_type
 
 
-@router.put("/admin/{type_id}", response_model=AttributeTypeRead)
+@router_admin.put("/{type_id}", response_model=AttributeTypeRead)
 async def update_attribute_type(
     type_id:int,
     type_in: AttributeTypeUpdateManagerAdmin,
@@ -72,7 +72,7 @@ async def update_attribute_type(
     return updated_type
 
 
-@router.delete("/admin/{type_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router_admin.delete("/admin/{type_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_attribute_type(
     type_id: int,
     current_user: User = Depends(require_admin),
