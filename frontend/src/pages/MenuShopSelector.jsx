@@ -4,7 +4,7 @@ import './MenuShopSelector.css';
 
 export default function MenuShopSelector() {
     const { shops, loading: shopsLoading, error: shopsError } = useShops();
-    if (shopsLoading) return <div className="menu-selector-loading">Загрузка...</div>;
+    // if (shopsLoading) return <div className="menu-selector-loading">Загрузка...</div>;
     if (shopsError) return <div className="menu-selector-error">Ошибка: {String(shopsError)}</div>;
 
     return (

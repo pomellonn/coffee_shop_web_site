@@ -58,7 +58,7 @@ async def register_user(
     )
 
     return UserWithToken(
-        user=UserReadCustomer.from_orm(db_user),
+        user=UserReadCustomer.model_validate(db_user),
         token=Token(access_token=access_token, token_type="bearer"),
     )
 

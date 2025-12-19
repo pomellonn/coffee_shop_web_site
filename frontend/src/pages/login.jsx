@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { getAuthDataFromStorage } from '../services/authService';
-import { useAuth } from '../services/AuthContext.jsx';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
+import { useAuth } from '../services/AuthContext';
+import { useCart } from '../services/CartContext';
 
 function Login() {
     const [email, setEmail] = useState('');
@@ -9,26 +9,34 @@ function Login() {
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
-    const { login: authLogin } = useAuth();
+    const location = useLocation();
+    const { login } = useAuth();
+    const { pendingItem, addToCart, setPendingItem } = useCart();
 
     const handleSubmit = async (event) => {
         event.preventDefault();
         setError('');
         setLoading(true);
         try {
-            await authLogin(email, password);
-            const { role } = getAuthDataFromStorage();
-            if (role === "customer") {
-                navigate('/customerAccount');
-            } else if (role === "manager") {
-                navigate('/manager');
-            } else if (role === "admin") {
-               navigate('/admin');
-            } else {
-               navigate('/');
+            await login(email, password);
+            
+            // If there's a pending item, add it to cart
+            if (pendingItem) {
+                addToCart(pendingItem);
+                setPendingItem(null);
             }
-
-        } catch {
+            
+            // Check if we have a redirect location
+            const from = location.state?.from;
+            
+            if (from) {
+                // Return to the page user came from (e.g., shop menu)
+                navigate(from);
+            } else {
+                navigate('/account');
+            }
+        } catch (err) {
+            console.error('Login error:', err);
             setError('Неверный email или пароль');
         } finally {
             setLoading(false);

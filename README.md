@@ -43,15 +43,23 @@ https://localhost/api/docs
 - FastAPI
 - ORM: SQLAlchemy
 - JWT аутентификация
+- JWT аутентификация
 
 ### Frontend
 - React
 - Vite
 - TailwindCSS
+- React
+- Vite
+- TailwindCSS
 
 ### База данных
+### База данных
 - PostgreSQL
+[ER-диаграмма](db/ER-diagram.png)
 
+### Тестирование
+- pytest
 ### Тестирование
 - pytest
 
@@ -70,4 +78,6 @@ https://localhost
 ```
 docker exec -it coffee-postgres psql -U coffee -d coffee_dev
 ```
+2. Вставьте содержимое файла db/insert_data.sql
+
 2. Вставьте содержимое файла db/insert_data.sql

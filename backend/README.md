@@ -14,11 +14,13 @@
   Создает пользователя с ролью customer и возвращает токен доступа.
 
   Входные данные:
-  ``` 
+
+  ```
   "email": "user@example.com",
   "name": "Ivan Ivanov",
   "password": "password" (min: 8 символов)
   ```
+
 - **GET** `/api/v1/users/me`  
   Получение данных текущего пользователя.
 - **PUT** `/api/v1/users/me`  
@@ -48,6 +50,21 @@
 
 - **GET** `/api/v1/menu/{shop_id}`  
   Получение меню кофейни по ID кофейни.
+- **GET** `/api/v1/menu/{shop_id}/sorted-price-asc`  
+  Получение меню кофейни, отсортированного по возрастанию цены.
+
+- **GET** `/api/v1/menu/{shop_id}/sorted-price-desc`  
+  Получение меню кофейни, отсортированного по убыванию цены.
+
+- **GET** `/api/v1/menu/{shop_id}/sorted-name-asc`  
+  Получение меню кофейни, отсортированного по названию.
+
+---
+
+## Product Attributes - Public
+
+- **GET** `/api/v1/products/{product_id}/attributes`  
+  Получение всех доступных опций для продукта.
 
 ---
 
@@ -78,7 +95,8 @@
 - **POST** `/api/v1/admin/products/`  
   Создание нового продукта.
 
-  Входные данные: 
+  Входные данные:
+
   ```
   "name": "Матча латте",
   "description": "Напиток на основе зелёного японского чая матча с молоком",
@@ -87,6 +105,7 @@
   "product_type": "non-coffee",
   "price": 250
   ```
+
 - **PUT** `/api/v1/admin/products/{product_id}`  
   Обновление данных о продукте по ID.
 - **DELETE** `/api/v1/admin/products/{product_id}`  
@@ -102,11 +121,13 @@
   Создание новой кофейни.
 
   Входные данные:
-  ``` 
+
+  ```
   "name": "FLTR - Nevsky",
   "address": "Санкт-Петербург, Невский проспект, 28",
   "manager_id": 1
   ```
+
 - **GET** `/api/v1/admin/shops/{shop_id}`  
   Получение кофейни по ID.
 - **PUT** `/api/v1/admin/shops/{shop_id}`  
@@ -129,6 +150,55 @@
 
 ---
 
+## Attribute Types - Admin
+
+- **GET** `/api/v1/admin/attribute-types/`  
+  Список всех типов атрибутов.
+
+- **POST** `/api/v1/admin/attribute-types/`  
+  Создание нового типа атрибута.
+
+- **GET** `/api/v1/admin/attribute-types/{type_id}`  
+  Получение типа атрибута по ID.
+
+- **PUT** `/api/v1/admin/attribute-types/{type_id}`  
+  Обновление типа атрибута по ID.
+
+- **DELETE** `/api/v1/admin/attribute-types/admin/{type_id}`  
+  Удаление типа атрибута по ID.
+
+---
+
+## Product Attributes - Admin
+
+- **GET** `/api/v1/admin/products/{product_id}/attribute-links`  
+  Список всех связей продукта с опциями.
+
+- **POST** `/api/v1/admin/products/attribute-links`  
+  Создание связи продукта с опцией.
+
+- **DELETE** `/api/v1/admin/products/{product_id}/attribute-links/{option_id}`  
+  Удаление связи продукта с опцией.
+
+---
+
+## Product Attribute Types Options - Admin
+
+- **GET** `/api/v1/admin/product-attr-types-options/`  
+  Список всех опций атрибутов.
+
+- **POST** `/api/v1/admin/product-attr-types-options/`  
+  Создание новой опции атрибута.
+  
+- **GET** `/api/v1/admin/product-attr-types-options/{option_id}`  
+  Получение опции атрибута по ID.
+
+- **PUT** `/api/v1/admin/product-attr-types-options/{option_id}`  
+  Обновление опции атрибута по ID.
+
+- **DELETE** `/api/v1/admin/product-attr-types-options/{option_id}`  
+  Удаление опции атрибута по ID.
+
 ## Analytics - Admin
 
 - **GET** `/api/v1/admin/analytics/shops/one`  
@@ -145,7 +215,14 @@
 ## Orders - Admin
 
 - **GET** `/api/v1/admin/orders/`  
-  Список всех заказов (для админа).
+  Список всех заказов.
+
+---
+
+## Shops - Manager
+
+- **GET** `/api/v1/manager/shops/info`  
+  Получение информации о кофейне менеджера.
 
 ---
 
@@ -171,14 +248,16 @@
 
 ## Orders - Manager
 
-- **GET** `/api/v1/manager/orders/orders`  
-  Заказы для кофейни менеджера.
+- **GET** `/api/v1/manager/orders/`  
+  Получение всех заказов для кофейни менеджера.
+
+- **GET** `/api/v1/manager/orders/today`  
+  Получение заказов для кофейни менеджера за сегодня.
+
 - **GET** `/api/v1/manager/orders/orders-count`  
-  Количество заказов для кофейни менеджера за день.
+  Получение количества заказов для кофейни менеджера за день.
 
-
-
-
+---
 
 ### Аналитика по одной кофейне за выбранный период времени
 
@@ -192,6 +271,7 @@
   Количество заказов по временным интервалам (утро, день, вечер).
 
 ### Аналитика по всем кофейням за выбранный период времени
+
 - **Заказы по дням**  
   Количество заказов за каждый день.
 - **Заказы по месяцам**  
@@ -200,12 +280,12 @@
   Топ-продуктов по количеству продаж и выручке.
 - **Продажи по времени суток**  
   Количество заказов по временным интервалам (утро, день, вечер) для всех кофеен.
-- **Средний чек и количество заказов по кофейням**  
-  Средний чек, количество заказов и общая выручка по каждой кофейне.
+- **Средний чек, количество заказов и общая выручка по каждой кофейне.**  
+  
 
 ### Клиентская аналитика за выбранный период времени
+
 - **Топ клиентов**  
   Топ-20 клиентов по количеству покупок, потраченным деньгам и посещённым кофейням.
 - **Статистика клиентов**  
   Соотношение новых и постоянных клиентов.
-
