@@ -51,6 +51,7 @@ http://localhost/api/docs
 
 ### База данных
 - PostgreSQL
+[ER-диаграмма](db/ER-diagram.png)
 
 ### Тестирование
 - pytest
@@ -61,7 +62,9 @@ http://localhost/api/docs
 docker-compose up --build
 ```
 Веб-сайт: http://localhost:3000
+
 Backend доступен по адресу: http://localhost:8000
+
 Документация API (Swagger UI): http://localhost:8000/docs
 
 Для того чтобы протестировать сайт, лучше добавить данные в БД:
