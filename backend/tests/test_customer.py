@@ -1,21 +1,20 @@
 import pytest
 
+
 @pytest.mark.anyio
 async def test_login_user(client):
 
     register_payload = {
         "email": "loginuser@example.com",
         "password": "loginpass123",
-        "name": "Login User"
+        "name": "Login User",
     }
-    register_response = await client.post("/api/v1/users/register", json=register_payload)
+    register_response = await client.post(
+        "/api/v1/users/register", json=register_payload
+    )
     assert register_response.status_code == 201
 
-
-    login_payload = {
-        "username": "loginuser@example.com",
-        "password": "loginpass123"
-    }
+    login_payload = {"username": "loginuser@example.com", "password": "loginpass123"}
     login_response = await client.post("/api/v1/auth/token", data=login_payload)
     assert login_response.status_code == 200
     login_data = login_response.json()
@@ -25,15 +24,13 @@ async def test_login_user(client):
 
 @pytest.mark.anyio
 async def test_login_for_access_token(client, customer_user):
-    login_payload = {
-        "username": "customer@example.com",
-        "password": "custpass"
-    }
+    login_payload = {"username": "customer@example.com", "password": "custpass"}
     response = await client.post("/api/v1/auth/token", data=login_payload)
     assert response.status_code == 200
     data = response.json()
     assert "access_token" in data
     assert data["token_type"] == "bearer"
+
 
 @pytest.mark.anyio
 async def test_get_user_profile(client, token_headers_customer):
@@ -47,7 +44,9 @@ async def test_get_user_profile(client, token_headers_customer):
 @pytest.mark.anyio
 async def test_update_user_profile(client, token_headers_customer):
     payload = {"name": "Updated Customer"}
-    response = await client.put("/api/v1/users/me", json=payload, headers=token_headers_customer)
+    response = await client.put(
+        "/api/v1/users/me", json=payload, headers=token_headers_customer
+    )
     assert response.status_code == 200
     data = response.json()
     assert data["name"] == "Updated Customer"
@@ -55,7 +54,9 @@ async def test_update_user_profile(client, token_headers_customer):
 
 @pytest.mark.anyio
 async def test_customer_cannot_access_manager_endpoints(client, token_headers_customer):
-    response = await client.get("/api/v1/manager/orders/", headers=token_headers_customer)
+    response = await client.get(
+        "/api/v1/manager/orders/", headers=token_headers_customer
+    )
     assert response.status_code == 403
 
 
@@ -86,7 +87,6 @@ async def test_products_listing_and_get(client, create_product_factory):
         name="Test Coffee",
         description="Tasty",
         image_url=None,
-        volume=250,
         product_type="coffee",
         price=150,
     )
@@ -103,7 +103,9 @@ async def test_products_listing_and_get(client, create_product_factory):
 
 
 @pytest.mark.anyio
-async def test_shop_menu_and_sorting(client, db_session, manager_user, create_product_factory):
+async def test_shop_menu_and_sorting(
+    client, db_session, manager_user, create_product_factory
+):
     from sqlalchemy import select
     from app.models import ShopMenu, CoffeeShop
 
@@ -111,7 +113,6 @@ async def test_shop_menu_and_sorting(client, db_session, manager_user, create_pr
         name="A Coffee",
         description="A",
         image_url=None,
-        volume=200,
         product_type="coffee",
         price=100,
     )
@@ -119,7 +120,6 @@ async def test_shop_menu_and_sorting(client, db_session, manager_user, create_pr
         name="B Coffee",
         description="B",
         image_url=None,
-        volume=200,
         product_type="coffee",
         price=200,
     )
@@ -148,7 +148,9 @@ async def test_shop_menu_and_sorting(client, db_session, manager_user, create_pr
 
 
 @pytest.mark.anyio
-async def test_create_order_and_get_my_orders(client, db_session, manager_user, token_headers_customer, create_product_factory):
+async def test_create_order_and_get_my_orders(
+    client, db_session, manager_user, token_headers_customer, create_product_factory
+):
     from sqlalchemy import select
     from app.models import ShopMenu, CoffeeShop
 
@@ -156,7 +158,6 @@ async def test_create_order_and_get_my_orders(client, db_session, manager_user, 
         name="Order Coffee",
         description="",
         image_url=None,
-        volume=250,
         product_type="coffee",
         price=120,
     )
@@ -165,8 +166,13 @@ async def test_create_order_and_get_my_orders(client, db_session, manager_user, 
     db_session.add(m)
     await db_session.commit()
 
-    order_payload = {"shop_id": shop.shop_id, "items": [{"product_id": p.product_id, "quantity": 2}]}
-    resp = await client.post("/api/v1/orders/", json=order_payload, headers=token_headers_customer)
+    order_payload = {
+        "shop_id": shop.shop_id,
+        "items": [{"product_id": p.product_id, "quantity": 2}],
+    }
+    resp = await client.post(
+        "/api/v1/orders/", json=order_payload, headers=token_headers_customer
+    )
     assert resp.status_code == 201
     order = resp.json()
     assert order["total_amount"] == 240
@@ -179,7 +185,9 @@ async def test_create_order_and_get_my_orders(client, db_session, manager_user, 
 
 
 @pytest.mark.anyio
-async def test_order_fails_if_product_not_in_shop(client, db_session, manager_user, token_headers_customer, create_product_factory):
+async def test_order_fails_if_product_not_in_shop(
+    client, db_session, manager_user, token_headers_customer, create_product_factory
+):
     from sqlalchemy import select
     from app.models import CoffeeShop
 
@@ -187,33 +195,49 @@ async def test_order_fails_if_product_not_in_shop(client, db_session, manager_us
         name="NotInShop",
         description="",
         image_url=None,
-        volume=100,
         product_type="coffee",
         price=50,
     )
     shop = (await db_session.execute(select(CoffeeShop))).scalars().first()
 
-    order_payload = {"shop_id": shop.shop_id, "items": [{"product_id": p.product_id, "quantity": 1}]}
-    resp = await client.post("/api/v1/orders/", json=order_payload, headers=token_headers_customer)
+    order_payload = {
+        "shop_id": shop.shop_id,
+        "items": [{"product_id": p.product_id, "quantity": 1}],
+    }
+    resp = await client.post(
+        "/api/v1/orders/", json=order_payload, headers=token_headers_customer
+    )
     if resp.status_code != 400:
         print("ORDER_NOT_IN_SHOP FAILED:", await resp.aread())
     assert resp.status_code == 400
 
 
 @pytest.mark.anyio
-async def test_order_fails_if_product_not_found(client, db_session, manager_user, token_headers_customer):
+async def test_order_fails_if_product_not_found(
+    client, db_session, manager_user, token_headers_customer
+):
     from sqlalchemy import select
     from app.models import CoffeeShop
+
     shop = (await db_session.execute(select(CoffeeShop))).scalars().first()
     assert shop is not None
 
-    order_payload = {"shop_id": shop.shop_id, "items": [{"product_id": 99999, "quantity": 1}]}
-    resp = await client.post("/api/v1/orders/", json=order_payload, headers=token_headers_customer)
+    order_payload = {
+        "shop_id": shop.shop_id,
+        "items": [{"product_id": 99999, "quantity": 1}],
+    }
+    resp = await client.post(
+        "/api/v1/orders/", json=order_payload, headers=token_headers_customer
+    )
     assert resp.status_code == 404
 
 
 @pytest.mark.anyio
-async def test_customer_cannot_use_admin_endpoints_delete_user(client, token_headers_customer, customer_user):
-  
-    resp = await client.delete(f"/api/v1/admin/users/{customer_user.user_id}", headers=token_headers_customer)
+async def test_customer_cannot_use_admin_endpoints_delete_user(
+    client, token_headers_customer, customer_user
+):
+
+    resp = await client.delete(
+        f"/api/v1/admin/users/{customer_user.user_id}", headers=token_headers_customer
+    )
     assert resp.status_code == 403

@@ -44,7 +44,7 @@ async def test_admin_product_crud(client, token_headers_admin):
         "name": "Admin Coffee",
         "description": "Admin special",
         "image_url": None,
-        "volume": 250,
+
         "product_type": "coffee",
         "price": 199,
     }
@@ -81,7 +81,7 @@ async def test_admin_product_requires_auth(client):
         "name": "NoAuth Coffee",
         "description": "",
         "image_url": None,
-        "volume": 200,
+ 
         "product_type": "coffee",
         "price": 100,
     }
@@ -144,7 +144,7 @@ async def test_admin_menu_crud_and_list(
         name="Menu Product",
         description="",
         image_url=None,
-        volume=100,
+   
         product_type="coffee",
         price=50,
     )
@@ -211,7 +211,7 @@ async def test_admin_orders_and_analytics(
         name="Order Product",
         description="",
         image_url=None,
-        volume=120,
+  
         product_type="coffee",
         price=150,
     )

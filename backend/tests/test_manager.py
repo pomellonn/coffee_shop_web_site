@@ -27,7 +27,6 @@ async def test_manager_create_menu_item_and_list(
         name="Mgr Coffee",
         description="",
         image_url=None,
-        volume=200,
         product_type="coffee",
         price=99,
     )
@@ -60,7 +59,6 @@ async def test_manager_update_menu_item_and_delete(
         name="To Update",
         description="",
         image_url=None,
-        volume=200,
         product_type="coffee",
         price=150,
     )
@@ -99,7 +97,6 @@ async def test_manager_get_orders_and_count(
         name="Order Mgr",
         description="",
         image_url=None,
-        volume=200,
         product_type="coffee",
         price=50,
     )
@@ -137,7 +134,6 @@ async def test_manager_create_product_allowed(client, token_headers_manager):
         "name": "MgrProduct",
         "description": "",
         "image_url": None,
-        "volume": 250,
         "product_type": "coffee",
         "price": 120,
     }
@@ -157,7 +153,6 @@ async def test_manager_cannot_delete_product(
         name="DelProd",
         description="",
         image_url=None,
-        volume=120,
         product_type="coffee",
         price=50,
     )
