@@ -350,7 +350,7 @@ VALUES
     (
         'Чай Матча латте',
         'Напиток на основе зелёного японского чая матча с молоком',
-        '/static/images/products/noncoffee/matcha.png',
+        '/static/images/products/non_coffee/matcha.png',
         320,
         'non_coffee'
     ),
@@ -392,23 +392,16 @@ VALUES
     (
         'Чай эрл грей',
         'Чёрный чай с бергамотом',
-        '',
+        '/static/images/products/non_coffee/earl.png',
         240,
         'non_coffee'
-    ),
-    (
-        'Тыквенный латте',
-        'Пряный латте с тыквенным сиропом и корицей',
-        '/static/images/products/coffee/latte.png',
-        380,
-        'coffee'
     ),
     (
         'Клубничный матча-латте',
         'Чай матча-латте с клубничным пюре',
         '/static/images/products/non_coffee/strawberry_matcha.png',
         380,
-        'coffee'
+        'non_coffee'
     ),
     (
         'Манго матча-латте',
@@ -416,7 +409,15 @@ VALUES
         '/static/images/products/non_coffee/mango_matcha.png',
         380,
         'non_coffee'
+    ),
+    (
+        'Тыквенный пряный латте',
+        'Кофейный напиток с тыквенным пюре и пряными спецями',
+        '/static/images/products/coffee/pumpkin.png',
+        350,
+        'coffee'
     );
+
 
 
 
@@ -442,5 +443,10 @@ CSV HEADER;
 
 COPY product_attributes(product_id,option_id)
 FROM '/app/add_data/product_attributes.csv'
+DELIMITER ','
+CSV HEADER;
+
+COPY shop_menu(shop_id,product_id,is_available)
+FROM '/app/add_data/shop_menu.csv'
 DELIMITER ','
 CSV HEADER;
