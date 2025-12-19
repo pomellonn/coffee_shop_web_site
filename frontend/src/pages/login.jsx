@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { login } from '../services/authService';
+import { getAuthDataFromStorage } from '../services/authService';
+import { useAuth } from '../services/AuthContext.jsx';
 
 function Login() {
     const [email, setEmail] = useState('');
@@ -8,22 +9,23 @@ function Login() {
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
+    const { login: authLogin } = useAuth();
 
     const handleSubmit = async (event) => {
         event.preventDefault();
         setError('');
         setLoading(true);
         try {
-            const data = await login(email, password);
-            const role = data.role
+            await authLogin(email, password);
+            const { role } = getAuthDataFromStorage();
             if (role === "customer") {
                 navigate('/customerAccount');
-            }
-            if (role === "manager") {
+            } else if (role === "manager") {
                 navigate('/manager');
-            }
-            if (role === "admin") {
+            } else if (role === "admin") {
                navigate('/admin');
+            } else {
+               navigate('/');
             }
 
         } catch {

@@ -17,7 +17,7 @@ export const getAllProducts = async () => {
 
 export const getShopMenu = async () => {
     const { data } = await api.get("/manager/menu/");
-    return data;
+    return data;    
 };
 
 export const addMenuItem = async (payload) => {

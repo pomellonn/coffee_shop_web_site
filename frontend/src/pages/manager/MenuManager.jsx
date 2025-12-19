@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { getAllProducts, getShopMenu, addMenuItem, updateMenuItem, deleteMenuItem } from "../../services/managerService";
-// import './styles.css';
 
 const ManagerMenu = () => {
     const [allProducts, setAllProducts] = useState([]);
@@ -25,7 +24,6 @@ const ManagerMenu = () => {
         }
 
         setLoading(true);
-
         try {
             const productId = Number(selectedProduct);
             if (!Number.isInteger(productId) || productId <= 0) {
@@ -38,26 +36,11 @@ const ManagerMenu = () => {
                 is_available: true,
             };
 
-            // Отправляем на сервер
-            console.log("payload", payload);
-
-
             const newItem = await addMenuItem(payload);
-
-            // Обновляем локальное состояние меню
             setMenu(prev => [...prev, newItem]);
-
-            // Сбрасываем выбор
             setSelectedProduct("");
         } catch (e) {
-            console.error(e.response?.data || e);
-
-            console.log("RAW ERROR", e);
-            console.log("RESPONSE", e.response);
-            console.log("RESPONSE DATA", e.response?.data);
             alert("Ошибка добавления продукта в меню");
-
-
         } finally {
             setLoading(false);
         }
@@ -90,70 +73,104 @@ const ManagerMenu = () => {
     };
 
     return (
-        <div className="container-fluid">
-            <h2 className="mb-4">Меню вашей кофейни</h2>
+        <div className="min-h-screen">
+            <div className="px-10">
+                {/* Заголовок */}
+                <h1 className="text-3xl font-light text-gray-900 mb-12">
+                    Меню вашей кофейни
+                </h1>
 
-            {/* Добавление продукта */}
-            <div className="add-product row mb-4">
-                <div className="col-md-6">
-                    <select
-                        className="form-control"
-                        value={selectedProduct}
-                        onChange={(e) => setSelectedProduct(e.target.value)}
-                    >
-                        <option value="">Выберите продукт</option>
-                        {allProducts.map(p => (
-                            <option key={p.product_id} value={p.product_id}>
-                                {p.name} ({p.product_type}, {p.price} руб.)
-                            </option>
-                        ))}
-                    </select>
+                {/* Форма добавления продукта */}
+                <div className="mb-14">
+                    <h2 className="text-sm text-gray-500 uppercase tracking-wide mb-4">
+                        Добавить продукт
+                    </h2>
+                    <div className="flex gap-3">
+                        <select
+                            className="flex-1 px-4 py-3 border-b border-gray-300 focus:border-gray-900 outline-none transition-colors bg-white"
+                            value={selectedProduct}
+                            onChange={(e) => setSelectedProduct(e.target.value)}
+                        >
+                            <option value="">Выберите продукт</option>
+                            {allProducts.map(p => (
+                                <option key={p.product_id} value={p.product_id}>
+                                    {p.name} ({p.product_type}, {p.price} руб.)
+                                </option>
+                            ))}
+                        </select>
+
+                        <button
+                            className="px-6 py-3 bg-gray-900 text-white text-sm font-medium hover:bg-gray-800 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed"
+                            onClick={handleAdd}
+                            disabled={loading || !selectedProduct}
+                        >
+                            {loading ? "..." : "Добавить"}
+                        </button>
+                    </div>
                 </div>
-                <div className="col-md-3">
-                    <button className="btn btn-primary w-100" onClick={handleAdd} disabled={loading}>
-                        {loading ? "Добавление..." : "Добавить"}
-                    </button>
+
+                {/* Заголовки таблицы */}
+                <div className="flex items-center py-3 border-b border-gray-300 mb-1">
+                    <span className="text-xs text-gray-500 uppercase tracking-wide w-1/5">
+                        Продукт
+                    </span>
+                    <span className="text-xs text-gray-500 uppercase tracking-wide w-2/5">
+                        Описание
+                    </span>
+                    <span className="text-xs text-gray-500 uppercase tracking-wide w-1/5 text-center">
+                        Цена
+                    </span>
+                    <span className="text-xs text-gray-500 uppercase tracking-wide w-1/5 text-center">
+                        Доступность
+                    </span>
+                    <span className="text-xs text-gray-500 uppercase tracking-wide w-1/5 text-center">
+                        Действия
+                    </span>
+                </div>
+
+                {/* Список меню */}
+                <div className="space-y-1">
+                    {menu.length > 0 ? (
+                        menu.map(item => (
+                            <div
+                                key={item.shop_menu_id}
+                                className="flex items-center py-4 border-b border-gray-200 hover:bg-gray-50 transition-colors"
+                            >
+                                <span className="text-gray-900 text-sm w-1/5">
+                                    {item.product.name}
+                                </span>
+                                <span className="text-gray-600 text-sm w-2/5">
+                                    {item.product.description || "—"}
+                                </span>
+                                <span className="text-gray-900 text-sm w-1/5 text-center">
+                                    {item.product.price} руб.
+                                </span>
+                                <div className="w-1/5 flex justify-center">
+                                    <input
+                                        type="checkbox"
+                                        checked={item.is_available}
+                                        onChange={() => handleToggleAvailable(item)}
+                                        className="w-5 h-5 cursor-pointer accent-gray-900"
+                                    />
+                                </div>
+                                <div className="w-1/5 flex justify-center">
+                                    <button
+                                        className="text-sm text-gray-400 hover:text-red-600 transition-colors"
+                                        onClick={() => handleDelete(item)}
+                                        disabled={loading}
+                                    >
+                                        Удалить
+                                    </button>
+                                </div>
+                            </div>
+                        ))
+                    ) : (
+                        <div className="py-16 text-center text-gray-400 text-sm">
+                            Меню пустое
+                        </div>
+                    )}
                 </div>
             </div>
-
-            {/* Таблица меню */}
-            <table className="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>Продукт</th>
-                        <th>Описание</th>
-                        <th>Цена</th>
-                        <th>Доступность</th>
-                        <th>Действия</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {menu.map(item => (
-                        <tr key={item.shop_menu_id}>
-                            <td>{item.product.name}</td>
-                            <td>{item.product.description}</td>
-                            <td>{item.product.price}</td>
-                            <td>
-                                <input
-                                    type="checkbox"
-                                    checked={item.is_available}
-                                    onChange={() => handleToggleAvailable(item)}
-                                />
-                            </td>
-                            <td>
-                                <button className="btn btn-danger btn-sm" onClick={() => handleDelete(item)}>
-                                    Удалить
-                                </button>
-                            </td>
-                        </tr>
-                    ))}
-                    {menu.length === 0 && (
-                        <tr>
-                            <td colSpan="5" style={{ textAlign: "center" }}>Меню пустое</td>
-                        </tr>
-                    )}
-                </tbody>
-            </table>
         </div>
     );
 };
