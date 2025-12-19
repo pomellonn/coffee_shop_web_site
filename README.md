@@ -64,3 +64,11 @@ docker-compose up --build
 
 Веб-сайт доступен по ссылке:
 https://localhost
+
+
+Для того чтобы протестировать сайт, лучше добавить данные в БД:
+1. Подключение к базе данных PostgreSQL:
+```
+docker exec -it coffee-postgres psql -U coffee -d coffee_dev
+```
+2. Вставьте содержимое файла db/insert_data.sql
