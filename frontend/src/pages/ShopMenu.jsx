@@ -11,7 +11,7 @@ export default function ShopMenu() {
     const shopId = params.shopId ?? params.id ?? params.shop_id;
     console.debug('ShopMenu -> shopId:', shopId);
 
-    //const [selectedProduct, setSelectedProduct] = useState(null);
+    const [selectedProduct, setSelectedProduct] = useState(null);
     const [filter, setFilter] = useState('all');
 
     const { shop, loading: shopLoading, error: shopError } = useShop(shopId);
@@ -21,12 +21,6 @@ export default function ShopMenu() {
     const error = shopError || menuError;
 
     if (!shopId) return <div className="shop-not-found">Кофейня не найдена (нет id)</div>;
-
-
-    // const handleAddToCart = (product) => {
-    //     //TODO: Реализовать добавление в корзину
-        
-    // };
 
     //фильтрация продуктов по типу
     const filteredItems = filter === 'all' 
@@ -103,7 +97,7 @@ export default function ShopMenu() {
                                     <ProductCard
                                         key={item.shop_menu_id}
                                         product={item.product}
-                                        // onClick={setSelectedProduct}
+                                        onClick={setSelectedProduct}
                                     />
                                 )
                             ))}
@@ -112,14 +106,14 @@ export default function ShopMenu() {
                 </main>
             </div>
 
-            {/* Модальное окно продукта
+            {/* Модальное окно продукта */}
             {selectedProduct && (
                 <ProductModal
                     product={selectedProduct}
+                    shopId={shopId}
                     onClose={() => setSelectedProduct(null)}
-                    onAddToCart={handleAddToCart}
                 />
-            )} */}
+            )}
         </div>
     );
 }
