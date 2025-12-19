@@ -48,7 +48,6 @@ https://localhost/api/docs
 - React
 - Vite
 - TailwindCSS
-- 
 
 ### База данных
 - PostgreSQL
