@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const API_URL='http://localhost:8000/api/v1/'
+const API_URL = "https://localhost/api/v1/";
 export const api=axios.create({baseURL: API_URL})
 
 api.interceptors.request.use((config) => {

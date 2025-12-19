@@ -5,13 +5,17 @@ from app.api.api_router import api_router
 from app.core.security import get_current_user
 from app.models import User
 
-app = FastAPI(title="Coffee Shop API", version="1.0.0")
-
-app.include_router(api_router, prefix="/api/v1")
+app = FastAPI(title="Coffee Shop API", version="1.0.0",root_path="/api"
+)
+app.include_router(api_router, prefix="/v1")
+origins = [
+    "https://localhost", 
+    "http://localhost",  
+]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
