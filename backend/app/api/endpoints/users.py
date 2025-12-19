@@ -120,6 +120,26 @@ async def list_users(
     users = await user_service.get_all_users()
     return users
 
+# List managers
+@router_admin.get("/managers", response_model=List[UserReadManagerAdmin])
+async def list_users(
+    current_user: User = Depends(require_admin),
+    user_service: UserService = Depends(get_user_service),
+):
+    users = await user_service.get_managers()
+    return users
+
+# List customers
+@router_admin.get("/customers", response_model=List[UserReadManagerAdmin])
+async def list_users(
+    current_user: User = Depends(require_admin),
+    user_service: UserService = Depends(get_user_service),
+):
+    users = await user_service.get_clients()
+    return users
+
+
+
 
 # Update  user
 @router_admin.put("/{user_id}", response_model=UserReadManagerAdmin)

@@ -1,5 +1,5 @@
-from __future__ import annotations 
-from typing import Optional
+from __future__ import annotations
+from typing import Optional, List
 from app.db.base import Base
 from sqlalchemy import ForeignKey, CheckConstraint
 from sqlalchemy.orm import relationship, validates, Mapped, mapped_column
@@ -20,7 +20,11 @@ class OrderItem(Base):
 
     order: Mapped["Order"] = relationship(back_populates="items")
     product: Mapped["Product"] = relationship(back_populates="order_items")
-
+    attributes: Mapped[List["OrderItemAttribute"]] = relationship(
+        "OrderItemAttribute",
+        back_populates="order_item",
+        cascade="all, delete-orphan",
+    )
     __table_args__ = (
         CheckConstraint("unit_price >= 0", name="check_unit_price_positive"),
         CheckConstraint("quantity >= 1", name="check_quantity_positive"),
@@ -37,3 +41,17 @@ class OrderItem(Base):
         if value < 1:
             raise ValueError("Quantity must be at least 1")
         return value
+
+    @property
+    def selected_options(self):
+        return [
+            {
+                "option_id": attr.option.option_id,
+                "attribute_type": getattr(
+                    attr.option.attribute_type, "attribute_name", None
+                ),
+                "value": attr.option.value,
+                "extra_price": attr.option.extra_price,
+            }
+            for attr in (self.attributes or [])
+        ]

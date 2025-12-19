@@ -1,16 +1,9 @@
-from fastapi import FastAPI, Depends, HTTPException, status
+from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
-from app.db.session import sync_engine
 from typing import Annotated
 from app.api.api_router import api_router
 from app.core.security import get_current_user
 from app.models import User
-from fastapi.staticfiles import StaticFiles
-from sqladmin import Admin
-
-
-from starlette.middleware.sessions import SessionMiddleware
-
 
 app = FastAPI(title="Coffee Shop API", version="1.0.0")
 

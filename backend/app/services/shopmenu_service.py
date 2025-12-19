@@ -50,7 +50,7 @@ class ShopMenuService:
             await self.db.rollback()
             raise ValueError("This product is already in the shop menu")
 
-        await self.db.refresh(item)
+        await self.db.refresh(item, attribute_names=["product"])
         return item
 
     # Sort menu items by price or name
@@ -124,7 +124,7 @@ class ShopMenuService:
             await self.db.rollback()
             raise ValueError("This updated menu conflicts with unique constraints")
 
-        await self.db.refresh(item)
+        await self.db.refresh(item, attribute_names=["product"])
         return item
 
     async def get_menu_for_manager(self, user_id: int) -> List[ShopMenu]:

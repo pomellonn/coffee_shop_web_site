@@ -1,9 +1,9 @@
 from typing import List, Optional
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
+from sqlalchemy import select, func
 from sqlalchemy.orm import selectinload
 from fastapi import HTTPException, status
-from app.models import CoffeeShop
+from app.models import CoffeeShop, Order
 from app.schemas.coffeeshop_schema import CoffeeShopCreateAdmin, CoffeeShopUpdateAdmin
 
 
@@ -25,6 +25,8 @@ class CoffeeShopService:
         )
         return result.scalars().all()
 
+
+
     async def create_shop(self, shop_in: CoffeeShopCreateAdmin) -> CoffeeShop:
         shop = CoffeeShop(
             name=shop_in.name,
@@ -33,7 +35,10 @@ class CoffeeShopService:
         )
         self.db.add(shop)
         await self.db.commit()
+
         await self.db.refresh(shop)
+     
+        await self.db.refresh(shop, attribute_names=["manager"])
         return shop
 
     async def update_shop(self, shop: CoffeeShop, updates: dict) -> CoffeeShop:
@@ -46,6 +51,14 @@ class CoffeeShopService:
         return shop
 
     async def delete_shop(self, shop: CoffeeShop):
+        orders_count = await self.db.scalar(
+        select(func.count()).select_from(Order).where(Order.shop_id == shop.shop_id)
+    )
+        if orders_count > 0:
+            raise HTTPException(
+            status_code=400,
+            detail="Невозможно удалить кофейню: есть связанные заказы"
+            )
         await self.db.delete(shop)
         await self.db.commit()
 

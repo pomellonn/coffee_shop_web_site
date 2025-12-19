@@ -8,16 +8,11 @@ from app.core.config import settings
 from app.db.base import Base
 
 
-ASYNC_DATABASE_URL = settings.DATABASE_URL
-SYNC_DATABASE_URL = settings.DATABASE_URL_SYNC
-
-if not ASYNC_DATABASE_URL or not SYNC_DATABASE_URL:
-    raise ValueError("DATABASE_URL or DATABASE_URL_SYNC not set")
-
+DATABASE_URL = settings.DATABASE_URL
 
 # ASYNC (FastAPI)
 async_engine = create_async_engine(
-    ASYNC_DATABASE_URL,
+    DATABASE_URL,
     echo=True,
 )
 
@@ -35,23 +30,3 @@ async def get_session() -> AsyncGenerator[AsyncSession, None]:
 
 AsyncDBDependency = Annotated[AsyncSession, Depends(get_session)]
 
-
-# SYNC (sqladmin)
-sync_engine = create_engine(
-    SYNC_DATABASE_URL,
-    echo=True,
-)
-
-SessionLocal = sessionmaker(
-    bind=sync_engine,
-    autoflush=False,
-    autocommit=False,
-)
-
-@contextmanager
-def get_sync_db() -> Session:
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()

@@ -2,16 +2,12 @@ import os
 from pathlib import Path
 
 import pytest
-from httpx import AsyncClient
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
 from sqlalchemy.pool import NullPool
 from sqlalchemy import text
-
-# Load test env early so Settings reads correct values
+from httpx import AsyncClient, ASGITransport
 from dotenv import load_dotenv
 
-
-# locate repo backend folder and load `.env.test`
 ROOT = Path(__file__).resolve().parents[1]
 import sys
 sys.path.insert(0, str(ROOT))
@@ -19,20 +15,15 @@ env_path = ROOT / ".env.test"
 if env_path.exists():
     load_dotenv(env_path)
 
-
-# Now import app and DB components (after env loaded)
 from app.main import app
 from app.db.base import Base
 from app.db.session import get_session
 from app.core.security import create_access_token, get_password_hash
 from app.models import User, UserRole, CoffeeShop
 
-
-# Use DATABASE_URL from .env.test (fall back to default if needed)
-TEST_DB_URL = os.getenv("DATABASE_URL") or "postgresql+asyncpg://coffee:coffee@localhost:5432/coffee_test"
+TEST_DB_URL = os.getenv("DATABASE_URL")
 
 
-# Create test engine and session factory
 engine_test = create_async_engine(TEST_DB_URL, poolclass=NullPool)
 AsyncSessionTest = async_sessionmaker(engine_test, expire_on_commit=False)
 
@@ -99,10 +90,13 @@ async def clean_tables():
 
 @pytest.fixture
 async def client():
-    async with AsyncClient(app=app, base_url="http://test") as ac:
+    transport = ASGITransport(app=app)
+    async with AsyncClient(
+        transport=transport,
+        base_url="http://test"
+    ) as ac:
         yield ac
-
-
+        
 @pytest.fixture
 async def admin_user(db_session: AsyncSession):
     user = User(

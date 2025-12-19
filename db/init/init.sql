@@ -17,7 +17,6 @@ END
 $$;
 
 
-
 CREATE TABLE IF NOT EXISTS users (
   user_id        INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   email          VARCHAR(255)  NOT NULL UNIQUE,
@@ -41,7 +40,6 @@ CREATE TABLE IF NOT EXISTS products (
   name        VARCHAR(128) NOT NULL, 
   description TEXT,
   image_url   TEXT,
-  volume      INTEGER NOT NULL CHECK (volume > 0),
   product_type  product_type NOT NULL DEFAULT 'coffee',
   price       INTEGER NOT NULL CHECK (price >= 0)
 );
