@@ -1,55 +1,57 @@
-import { Outlet } from 'react-router-dom';
-import './styles.css'
+import { Outlet, Link } from 'react-router-dom';
+
 const LayoutAdmin = () => {
   return (
-    <div className="app-layout">
-      <aside className="sidebar">
-        <h2 className="logo">Администратор</h2>
-        <nav className="menu">
-          <ul>
-            <li>
-              <a href="/admin">
-
+    <div className="min-h-screen">
+      <aside className="fixed left-0 top-0 w-64 h-screen bg-slate-800 text-white p-5 overflow-y-auto">
+        <h2 className="text-xl font-semibold text-center mb-8">Администратор</h2>
+        <nav>
+          <ul className="space-y-3">
+            <li >
+              <Link to="/admin" className="flex items-center gap-3 px-3 py-2 rounded hover:bg-slate-700">
                 <span>Главная</span>
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="/admin/users">
+              <Link to="/admin/users" className="flex items-center gap-3 px-3 py-2 rounded hover:bg-slate-700">
                 <span>Клиенты</span>
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="/admin/products">
+              <Link to="/admin/products" className="flex items-center gap-3 px-3 py-2 rounded hover:bg-slate-700">
                 <span>Продукция кофейни</span>
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="/admin/shops">
+              <Link to="/admin/shops" className="flex items-center gap-3 px-3 py-2 rounded hover:bg-slate-700">
                 <span>Кофейни сети</span>
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="/admin">
+              <Link to="/admin/analyticsOneShop" className="flex items-center gap-3 px-3 py-2 rounded hover:bg-slate-700">
                 <span>Аналитика по одной кофейне</span>
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="/admin/analyticsAllShops">
-
+              <Link to="/admin/analyticsAllShops" className="flex items-center gap-3 px-3 py-2 rounded hover:bg-slate-700">
                 <span>Аналитика всех кофеен</span>
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="/admin">
-
+              <Link to="/admin/analyticsClients" className="flex items-center gap-3 px-3 py-2 rounded hover:bg-slate-700">
                 <span>Анализ клиентов</span>
-              </a>
+              </Link>
+            </li>
+            <li>
+              <Link to="/login" className="flex items-center gap-3 px-3 py-2 rounded hover:bg-slate-700">
+                <span>Выход</span>
+              </Link>
             </li>
           </ul>
         </nav>
       </aside>
 
-      <main className="content">
+      <main className="ml-64 bg-slate-50 min-h-screen p-6">
         <Outlet />
       </main>
     </div>

@@ -143,7 +143,7 @@ router_admin = APIRouter(
 async def get_one_shop_analytics(
     date_from: date = Query(..., description="YYYY-MM-DD"),
     date_to: date = Query(..., description="YYYY-MM-DD"),
-    shop_id: int | None = Query(None, description="ID кофейни (только для админа)"),
+    shop_id: int | None = Query(None, description="ID кофейни"),
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_session),
 ):
