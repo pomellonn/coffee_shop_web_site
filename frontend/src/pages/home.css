@@ -1,0 +1,174 @@
+.home {
+  min-height: 100vh;
+}
+
+/* Постер */
+.poster-greeting {
+  width: 100%;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+.poster-greeting img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
+  max-height: 600px;
+}
+
+/* Кнопки */
+.btn-primary,
+.btn-secondary {
+  display: inline-block;
+  padding: 1rem 2.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border: none;
+}
+
+.btn-primary {
+  background-color: #d4a574;
+  color: #2c1810;
+}
+
+.btn-primary:hover {
+  background-color: #e0b685;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(212, 165, 116, 0.4);
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: #d4a574;
+  border: 2px solid #d4a574;
+}
+
+.btn-secondary:hover {
+  background-color: #d4a574;
+  color: #2c1810;
+  transform: translateY(-2px);
+}
+
+/* Секция популярных напитков */
+.featured-products {
+  clear: both;
+  padding: 4rem 2rem 6rem;
+  background-color: #f9f5f0;
+  margin-top: 1rem;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.featured-products h2 {
+  text-align: center;
+  font-size: 2.5rem;
+  color: #2c1810;
+  margin-bottom: 3rem;
+}
+
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, 340px); 
+    gap: 2rem;
+    margin-top: 2rem;
+
+    /* ВОТ ЭТИ ДВЕ СТРОЧКИ РЕШАЮТ ПРОБЛЕМУ: */
+    justify-content: center; /* Центрирует саму сетку (группу колонок) в контейнере */
+    justify-items: center; 
+
+}
+
+.product-card {
+    display: flex;
+    flex-direction: column;
+    height: 420px;
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    width: 340px;       /* фиксированная ширина карточки */
+}
+
+.product-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.product-image {
+    height: 240px;
+    /* overflow: hidden; */
+    background-color: #f0e6d6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.product-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.product-placeholder {
+  font-size: 4rem;
+  color: #d4a574;
+}
+
+.product-info {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  justify-content: space-between;
+}
+
+.product-info h3 {
+  font-size: 1.5rem;
+  color: #2c1810;
+  margin-bottom: 0.5rem;
+}
+
+.product-description {
+  min-height: 3.6em; /* гарантирует одну-две строки места для всех карточек */
+  color: #666;
+  margin-top: 8px;
+}
+
+.product-price {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #d4a574;
+}
+
+/* Секция призыва к действию */
+.cta-section {
+  /* background-color: #B9C9A6; */
+  background: linear-gradient(180deg, rgba(245, 249, 241, 1) 0%, rgba(227, 235, 217, 0.7) 45%, #B9C9A6 100%);
+  padding: 5rem 2rem;
+  text-align: center;
+}
+
+.cta-section h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: #2c1810;
+}
+
+.cta-section p {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  opacity: 0.9;
+  color: #2c1810
+}
+

@@ -19,6 +19,7 @@ class CoffeeShopCreateAdmin(CoffeeShopBase):
 
 # Read schema - Customer View
 class CoffeeShopReadCustomer(CoffeeShopBase):
+    shop_id: int
     model_config = ConfigDict(from_attributes=True)
 
 
