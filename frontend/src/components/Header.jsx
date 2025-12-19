@@ -1,10 +1,19 @@
 import { Link } from 'react-router-dom';
 import { useAuth } from '../services/AuthContext';
+import { useCart } from '../services/CartContext';
 import './Header.css';
 import logo from '../assets/logo.svg';
 
 export default function Header() {
-  const {isAuthenticated } = useAuth();
+  const { isAuthenticated } = useAuth();
+  // Only use cart hook if we're in a customer route
+  let cartCount = 0;
+  try {
+    const cart = useCart();
+    cartCount = cart?.getCartCount() || 0;
+  } catch {
+    // Cart context not available in this route
+  }
   
   return (
     <header className="header">
@@ -20,7 +29,10 @@ export default function Header() {
           {isAuthenticated ? (
             <>
               <Link to="/account">Личный кабинет</Link>
-              <Link to="/cart"> Корзина</Link>
+              <Link to="/cart" className="cart-link">
+                🛒 Корзина
+                {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
+              </Link>
             </>
           ) : (
             <Link to="/login">Войти</Link>
