@@ -34,7 +34,7 @@ password: adminmel
 
 ## API
 - Swagger UI: 
-https://localhost/api/docs
+http://localhost:8000/docs
 - Документация API также доступна в папке backend: [API](backend/README.md)
 
 ## Технологии разработки
@@ -48,7 +48,6 @@ https://localhost/api/docs
 - React
 - Vite
 - TailwindCSS
-- 
 
 ### База данных
 - PostgreSQL
@@ -63,4 +62,4 @@ docker-compose up --build
 ```
 
 Веб-сайт доступен по ссылке:
-https://localhost
+http://localhost:3000
