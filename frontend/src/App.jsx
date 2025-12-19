@@ -1,8 +1,9 @@
 import React from 'react';
-import { Routes, Route, Link, Outlet } from 'react-router-dom'
+import { Routes, Route, Outlet } from 'react-router-dom'
 import Account from "./pages/customerAccount"
 import Home from "./pages/home"
-import Menu from "./pages/menu"
+import MenuShopSelector from "./pages/MenuShopSelector"
+import ShopMenu from "./pages/ShopMenu"
 import OrdersHistory from "./pages/orders_history"
 import Login from "./pages/login"
 import Register from "./pages/register"
@@ -18,28 +19,19 @@ import CoffeeShopsAdmin from './pages/admin/CoffeeShopsAdmin.jsx';
 import DashboardAdmin from './pages/admin/DashboardAdmin.jsx';
 import ProductsAdmin from './pages/admin/ProductsAdmin.jsx';
 import UsersAdmin from './pages/admin/UsersAdmin.jsx';
+import Header from './components/Header.jsx';
+
 function App() {
   return (
     <>
-      <nav>
-        <Link to="/home">Главная</Link>
-        <Link to="/menu">Меню</Link>
-        <Link to="/orders_history">Заказы</Link>
-        <Link to="/customerAccount">Мой аккаунт</Link>
-        <Link to="/login">Войти в аккаунт</Link>
-        <Link to="/register">Зарегистрироваться</Link>
-
-      </nav>
-
       <main>
-
         <AuthProvider>
+          <Header />
           <Routes>
-
             <Route path="/" element={<Home />} />
-            {/* <Route path="/menu" element={<Menu />} /> */}
-            <Route path="/orders_history" element={<OrdersHistory />} />
-            <Route path="/customerAccount" element={<Account />} />
+            <Route path="/menu" element={<MenuShopSelector />} />
+            <Route path="/menu/:shopId" element={<ShopMenu />} />
+            <Route path="/account" element={<Account />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="*" element={<div>Страница не найдена (404)</div>} />
