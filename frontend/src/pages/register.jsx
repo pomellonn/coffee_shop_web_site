@@ -1,6 +1,7 @@
 import {useState} from 'react'
 import {useNavigate, Link} from 'react-router-dom' 
 import {register} from '../services/authService'
+import {useAuth} from '../services/AuthContext'
 
 function Register(){
     const [name, setName]=useState('');
@@ -9,14 +10,19 @@ function Register(){
     const [error, setError]=useState('');
     const [loading, setLoading]=useState(false);
     const navigate=useNavigate();
+    const { login } = useAuth();
+    
     const handleSubmit = async (event) => {
             event.preventDefault();
             setError('');
             setLoading(true);
             try {
                 await register({name, email, password});
+                // После регистрации делаем логин через AuthContext
+                await login(email, password);
                 navigate('/account');
-            } catch {
+            } catch (err) {
+                console.error('Registration error:', err);
                 setError('Упс! Ошибка регистрации. Возможно, этот адрес электронной почты уже занят');
             } finally {
                 setLoading(false);
