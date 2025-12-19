@@ -1,14 +1,16 @@
 import React from 'react';
-import { Routes, Route, Outlet } from 'react-router-dom'
-import Account from "./pages/customerAccount"
+import { Routes, Route, Outlet, useLocation } from 'react-router-dom'
+import Account from "./pages/account"
 import Home from "./pages/home"
 import MenuShopSelector from "./pages/MenuShopSelector"
 import ShopMenu from "./pages/ShopMenu"
+import Cart from "./pages/Cart"
 import OrdersHistory from "./pages/orders_history"
 import Login from "./pages/login"
 import Register from "./pages/register"
 import ProtectedRoute from "./services/PrRoute.jsx"
 import { AuthProvider } from './services/AuthContext.jsx';
+import CustomerLayout from './components/CustomerLayout.jsx';
 import Dashboard from './pages/manager/Dashboard.jsx';
 import LayoutManager from "./components/admin/LayotManager.jsx";
 import LayoutAdmin from "./components/admin/LayotAdmin.jsx";
@@ -22,22 +24,29 @@ import UsersAdmin from './pages/admin/UsersAdmin.jsx';
 import Header from './components/Header.jsx';
 
 function App() {
+  const location = useLocation();
+  const hideHeader = ['/admin', '/manager'].some(p => location.pathname.startsWith(p));
   return (
     <>
       <main>
         <AuthProvider>
-          <Header />
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/menu" element={<MenuShopSelector />} />
-            <Route path="/menu/:shopId" element={<ShopMenu />} />
-            <Route path="/account" element={<Account />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
+            
+            {!hideHeader && <Header />}
+            <Routes>
+            <Route element={<CustomerLayout />}>
+              <Route path="/" element={<Home />} />
+              <Route path="/menu" element={<MenuShopSelector />} />
+              <Route path="/menu/:shopId" element={<ShopMenu />} />
+              <Route path="/cart" element={<Cart />} />
+              <Route path="/cart/:shopId" element={<Cart />} />
+              <Route path="/account" element={<Account />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+            </Route>
+
             <Route path="*" element={<div>Страница не найдена (404)</div>} />
 
-
-
+            
             <Route element={<LayoutManager><Outlet /></LayoutManager>}>
               <Route element={<ProtectedRoute roles={["manager"]} />}>
                 <Route path="/manager" element={<Dashboard />} />
@@ -47,6 +56,7 @@ function App() {
               </Route>
             </Route>
 
+            
             <Route element={<LayoutAdmin><Outlet /></LayoutAdmin>}>
               <Route element={<ProtectedRoute roles={["admin"]} />}>
                 <Route path="/admin" element={<DashboardAdmin />} />
