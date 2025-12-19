@@ -4,6 +4,13 @@ from typing import Annotated
 from app.api.api_router import api_router
 from app.core.security import get_current_user
 from app.models import User
+from fastapi.staticfiles import StaticFiles
+from pathlib import Path
+from sqladmin import Admin
+
+
+from starlette.middleware.sessions import SessionMiddleware
+
 
 app = FastAPI(title="Coffee Shop API", version="1.0.0")
 
@@ -33,7 +40,8 @@ app.add_middleware(
 # admin.add_view(AnalyticsAllShopsView)
 # admin.add_view(AnalyticsClientsView)
 
-
+static_dir = Path(__file__).resolve().parent / "static"
+app.mount("/static", StaticFiles(directory=static_dir), name="static")
 
 # api
 app.include_router(api_router, prefix="/api/v1")
