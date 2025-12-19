@@ -18,14 +18,18 @@ class OrderCreateCustomer(OrderBase):
     items: List[OrderItemCreateCustomer] = Field(..., min_items=1)
 
 
+class OrderCreateByStaff(OrderBase):
+    user_id: int = Field(..., example=1)
+    items: List[OrderItemCreateCustomer] = Field(..., min_items=1)
+
+
 # Read schema - Customer View
 class OrderReadCustomer(OrderBase):
     order_id: int
-    created_at: datetime = Field(..., example="2024-10-05T14:48:00.000Z")
+    created_at: datetime
     items: List[OrderItemReadCustomer] = []
-    total_amount: int = Field(..., ge=0, example=500)
-
-
+    total_amount: int
+    
 # Read schema - Manager/Admin View
 class OrderReadManagerAdmin(OrderReadCustomer):
     user_id: int = Field(..., example=1)
