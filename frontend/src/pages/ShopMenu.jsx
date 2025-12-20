@@ -9,7 +9,7 @@ import './ShopMenu.css';
 export default function ShopMenu() {
     const params = useParams();
     const shopId = params.shopId ?? params.id ?? params.shop_id;
-    console.debug('ShopMenu -> shopId:', shopId);
+    // console.debug('ShopMenu -> shopId:', shopId);
 
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [filter, setFilter] = useState('all');
