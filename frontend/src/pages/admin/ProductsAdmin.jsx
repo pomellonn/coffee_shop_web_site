@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { getAllProducts, createProduct, deleteProduct, updateProduct, } from "../../services/adminService";
+import { getAllProducts } from "../../services/productService";
+import { createProduct, deleteProduct, updateProduct } from "../../services/adminService";
 
 const ProductsAdmin = () => {
   const [products, setProducts] = useState([]);
