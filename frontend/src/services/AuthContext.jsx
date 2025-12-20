@@ -8,22 +8,26 @@ export const AuthProvider = ({ children }) => {
     const [authData, setAuthData] = useState(getAuthDataFromStorage());
     const [loading, setLoading] = useState(false);
 
-    // Log auth state changes for debugging
     useEffect(() => {
-        console.log('[AuthContext] Auth state updated:', authData);
-    }, [authData]);
+        const interval = setInterval(() => {
+            const currentAuthData = getAuthDataFromStorage();
+            if (authData.isAuthenticated && !currentAuthData.isAuthenticated) {
+                setAuthData(currentAuthData);
+            }
+        }, 60000); 
+
+        return () => clearInterval(interval);
+    }, [authData.isAuthenticated]);
 
     const login = async (email, password) => {
         setLoading(true);
         try {
             await apiLogin(email, password);
             const newAuthData = getAuthDataFromStorage();
-            console.log('[AuthContext] Login successful, new auth data:', newAuthData);
             setAuthData(newAuthData);
             setLoading(false);
             return true;
         } catch (error) {
-            console.error('[AuthContext] Login failed:', error);
             setLoading(false);
             throw error;
         }

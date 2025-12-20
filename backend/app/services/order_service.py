@@ -103,7 +103,7 @@ class OrderService:
             order = Order(
                 user_id=user_id,
                 shop_id=order_in.shop_id,
-                total_amount=0,
+                total_amount=total_amount,
                 items=[spec[0] for spec in order_items_specs],
             )
             self.db.add(order)
@@ -118,7 +118,6 @@ class OrderService:
                         )
                     )
 
-            order.total_amount = total_amount
             await self.db.commit()
 
             query = select(Order).where(Order.order_id == order.order_id)

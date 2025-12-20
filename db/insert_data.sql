@@ -450,3 +450,9 @@ COPY shop_menu(shop_id,product_id,is_available)
 FROM '/app/add_data/shop_menu.csv'
 DELIMITER ','
 CSV HEADER;
+
+
+SELECT setval('orders_order_id_seq', COALESCE((SELECT MAX(order_id) FROM orders), 0) + 1, false);
+SELECT setval('order_items_order_item_id_seq', COALESCE((SELECT MAX(order_item_id) FROM order_items), 0) + 1, false);
+SELECT setval('attribute_types_attribute_type_id_seq', COALESCE((SELECT MAX(attribute_type_id) FROM attribute_types), 0) + 1, false);
+SELECT setval('product_attribute_options_option_id_seq', COALESCE((SELECT MAX(option_id) FROM product_attribute_options), 0) + 1, false);
