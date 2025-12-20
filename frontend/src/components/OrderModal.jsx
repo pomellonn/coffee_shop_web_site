@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { formatPrice, translateAttributeName } from '../utils/helpers';
 import './OrderModal.css';
 
@@ -19,7 +20,6 @@ export default function OrderModal({ order, products = [], onClose }) {
 
     if (!order) return null;
 
-    // Функция для получения названия продукта по ID
     const getProductName = (productId) => {
         const product = products.find(p => p.product_id === productId);
         return product?.name || 'Продукт';
@@ -27,7 +27,6 @@ export default function OrderModal({ order, products = [], onClose }) {
     
     const calculateTotal = () => {
         return order.items.reduce((sum, item) => {
-            // unit_price already includes all option prices from backend
             const itemTotal = item.unit_price * item.quantity;
             return sum + itemTotal;
         }, 0);
