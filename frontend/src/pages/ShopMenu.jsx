@@ -9,7 +9,7 @@ import './ShopMenu.css';
 export default function ShopMenu() {
     const params = useParams();
     const shopId = params.shopId ?? params.id ?? params.shop_id;
-    console.debug('ShopMenu -> shopId:', shopId);
+    // console.debug('ShopMenu -> shopId:', shopId);
 
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [filter, setFilter] = useState('all');
@@ -61,8 +61,14 @@ export default function ShopMenu() {
             <div className="shop-menu-header">
                 <div className="container">
                     <Link to="/menu" className="back-link">← Выбрать другую кофейню</Link>
-                    <h1>☕ {shop.name}</h1>
-                    <p className="shop-address">📍 {shop.address}</p>
+                    <h1>
+                        <span className="material-symbols-outlined" style={{verticalAlign: 'middle', marginRight: '10px'}}>coffee_maker</span>
+                        {shop.name}
+                    </h1>
+                    <p className="shop-address">
+                        <span className="material-symbols-outlined" style={{verticalAlign: 'middle', marginRight: '5px'}}>location_on</span>
+                        {shop.address}
+                    </p>
                 </div>
             </div>
 

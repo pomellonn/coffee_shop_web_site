@@ -1,6 +1,6 @@
 from __future__ import annotations 
 from app.db.base import Base
-from sqlalchemy import ForeignKey, Boolean, UniqueConstraint
+from sqlalchemy import ForeignKey, Boolean, UniqueConstraint, Integer, Identity
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 
 
@@ -8,7 +8,9 @@ from sqlalchemy.orm import relationship, Mapped, mapped_column
 class ShopMenu(Base):
     __tablename__ = "shop_menu"
 
-    shop_menu_id: Mapped[int] = mapped_column(primary_key=True, index=True)
+    shop_menu_id: Mapped[int] = mapped_column(
+        Integer,
+    Identity(), primary_key=True)
     shop_id: Mapped[int] = mapped_column(
         ForeignKey("coffee_shops.shop_id", ondelete="CASCADE"),
     )

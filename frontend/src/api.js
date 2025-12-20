@@ -13,4 +13,15 @@ api.interceptors.request.use((config) => {
     return config;
 });
 
+api.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        //401 Unauthorized - clear the token
+        if (error.response?.status === 401) {
+            localStorage.removeItem('access_token');
+        }
+        return Promise.reject(error);
+    }
+);
+
 export default api;

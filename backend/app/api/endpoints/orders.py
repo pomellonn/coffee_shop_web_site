@@ -12,7 +12,7 @@ from app.schemas.orders_schema import (
 )
 from app.services.order_service import OrderService
 from app.dependencies.services import get_order_service
-
+from datetime import date, datetime, time, timedelta
 
 # -----------------------------
 # CUSTOMER ENDPOINTS
@@ -69,7 +69,9 @@ async def get_orders_for_my_shop(
     return orders
 
 
-@router_manager.post("/", response_model=OrderReadManagerAdmin, status_code=status.HTTP_201_CREATED)
+@router_manager.post(
+    "/", response_model=OrderReadManagerAdmin, status_code=status.HTTP_201_CREATED
+)
 async def manager_create_order(
     order_in: OrderCreateByStaff,
     current_user: User = Depends(require_manager),
@@ -85,33 +87,43 @@ async def manager_create_order(
 
 
 
+
 @router_manager.get("/today", response_model=List[OrderReadManagerAdmin])
 async def get_orders_for_my_shop(
     current_user: User = Depends(require_manager),
     service: OrderService = Depends(get_order_service),
 ):
     today = date.today()
-    orders = await service.get_orders_for_manager_shop(        
+    start_dt = datetime.combine(today, time.min)
+    end_dt = start_dt + timedelta(days=1)
+
+    orders = await service.get_orders_for_manager_shop(
         user_id=current_user.user_id,
-        start_date=today,
-        end_date=today)
+        start_date=start_dt,
+        end_date=end_dt,
+    )
     return orders
+
 
 @router_manager.get("/orders-count", response_model=OrdersCountResponse)
 async def get_orders_count_for_my_shop(
     current_user: User = Depends(require_manager),
     service: OrderService = Depends(get_order_service),
-    target_date: Optional[date] = Query(None, description="Дата для подсчета заказов, формат YYYY-MM-DD")
+    target_date: Optional[date] = Query(
+        None, description="Дата для подсчета заказов, формат YYYY-MM-DD"
+    ),
 ):
     import logging
-    logging.getLogger("uvicorn.error").debug("orders-count called; target_date=%s", target_date)
+
+    logging.getLogger("uvicorn.error").debug(
+        "orders-count called; target_date=%s", target_date
+    )
 
     if not target_date:
         target_date = date.today()
 
     count = await service.get_orders_count_for_manager_shop(
-        user_id=current_user.user_id,
-        target_date=target_date
+        user_id=current_user.user_id, target_date=target_date
     )
     return OrdersCountResponse(count=count)
 
@@ -125,13 +137,14 @@ async def get_order_for_my_shop(
     order = await service.get_order_for_manager_shop(current_user.user_id, order_id)
     return order
 
-router_admin = APIRouter(prefix="/admin/orders", tags=["Orders - Admin"])
 
+router_admin = APIRouter(prefix="/admin/orders", tags=["Orders - Admin"])
 
 
 # -----------------------------
 # ADMIN ENDPOINTS
 # -----------------------------
+
 
 @router_admin.get("/", response_model=List[OrderReadManagerAdmin])
 async def list_all_orders_admin(
@@ -143,7 +156,9 @@ async def list_all_orders_admin(
     return orders
 
 
-@router_admin.post("/", response_model=OrderReadManagerAdmin, status_code=status.HTTP_201_CREATED)
+@router_admin.post(
+    "/", response_model=OrderReadManagerAdmin, status_code=status.HTTP_201_CREATED
+)
 async def admin_create_order(
     order_in: OrderCreateByStaff,
     current_user: User = Depends(require_admin),
