@@ -1,9 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getImageUrl, formatPrice } from '../utils/helpers';
+import { formatPrice, translateAttributeName } from '../utils/helpers';
 import { useAuth } from '../services/AuthContext';
 import { useCart } from '../services/CartContext';
 import { useProductAttributes } from '../hooks/useProductAttributes';
+import { useModal } from '../hooks/useModal';
+import { calculateProductTotal } from '../utils/priceCalculators';
+import ProductImage from './ProductImage';
 import './ProductModal.css';
 
 export default function ProductModal({ product, shopId, onClose }) {
@@ -16,26 +19,11 @@ export default function ProductModal({ product, shopId, onClose }) {
     // Use hook to load attributes and get initial options
     const { attributes, loading, error, initialSelectedOptions } = useProductAttributes(product?.product_id);
     
-    // Store manually selected options (overrides from user interaction)
-    const [manualSelections, setManualSelections] = useState({});
-    
-    // Merge initial options with manual selections
-    const selectedOptions = { ...initialSelectedOptions, ...manualSelections };
+    // Store user selected options (initially empty - no pre-selection)
+    const [selectedOptions, setSelectedOptions] = useState({});
 
-    // Close modal on ESC
-    useEffect(() => {
-        const handleEsc = (e) => {
-            if (e.key === 'Escape') onClose();
-        };
-        
-        document.body.style.overflow = 'hidden';
-        window.addEventListener('keydown', handleEsc);
-        
-        return () => {
-            window.removeEventListener('keydown', handleEsc);
-            document.body.style.overflow = 'unset';
-        };
-    }, [onClose]);
+    // Use modal hook for ESC and body scroll
+    useModal(onClose);
 
     if (!product) return null;
 
@@ -54,19 +42,7 @@ export default function ProductModal({ product, shopId, onClose }) {
     };
 
     const calculateTotalPrice = () => {
-        let total = product.price;
-        
-        if (attributes && Array.isArray(attributes)) {
-            attributes.forEach(attr => {
-                const selectedOptionId = selectedOptions[attr.attribute_type_id];
-                const option = attr.options?.find(opt => opt.option_id === selectedOptionId);
-                if (option) {
-                    total += option.extra_price;
-                }
-            });
-        }
-        
-        return total * quantity;
+        return calculateProductTotal(product.price, attributes, selectedOptions, quantity);
     };
 
     const handleAddToCart = () => {
@@ -122,41 +98,28 @@ export default function ProductModal({ product, shopId, onClose }) {
     return (
         <div className="modal-backdrop" onClick={onClose}>
             <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-                <button className="modal-close" onClick={onClose} aria-label="Закрыть">
-                    ✕
-                </button>
-                
-                <div className="modal-body">
-                    <div className="modal-image-container">
-                        {getImageUrl(product.image_url) ? (
-                            <img 
-                                src={getImageUrl(product.image_url)} 
-                                alt={product.name}
-                                className="modal-image"
-                                onError={(e) => {
-                                    e.target.style.display = 'none';
-                                    const placeholder = document.createElement('div');
-                                    placeholder.className = 'modal-image-placeholder';
-                                    placeholder.textContent = '☕';
-                                    e.target.parentElement.appendChild(placeholder);
-                                }}
-                            />
-                        ) : (
-                            <div className="modal-image-placeholder">☕</div>
-                        )}
+                <button className="modal-close" onClick={onClose} aria-label="Закрыть">✕</button>
+
+                <div className="modal-image-container">
+                    <ProductImage
+                        imageUrl={product.image_url}
+                        productName={product.name}
+                        className="modal-image"
+                        placeholderClassName="modal-image-placeholder"
+                    />
+                </div>
+
+                <div className="modal-info">
+                    <h2>{product.name}</h2>
+
+                    {product.description && (
+                        <p className="modal-description">{product.description}</p>
+                    )}
+
+                    <div className="modal-price">
+                        <span className="price-label">Базовая цена:</span>
+                        <span className="price-value">{formatPrice(product.price)}</span>
                     </div>
-                    
-                    <div className="modal-info">
-                        <h2>{product.name}</h2>
-                        
-                        {product.description && (
-                            <p className="modal-description">{product.description}</p>
-                        )}
-                        
-                        <div className="modal-price">
-                            <span className="price-label">Базовая цена:</span>
-                            <span className="price-value">{formatPrice(product.price)}</span>
-                        </div>
 
                         
 
@@ -239,7 +202,6 @@ export default function ProductModal({ product, shopId, onClose }) {
                     </div>
                 </div>
             </div>
-        </div>
     );
 }
 

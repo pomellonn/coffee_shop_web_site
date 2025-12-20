@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { getAllProducts, getShopMenu, addMenuItem, updateMenuItem, deleteMenuItem } from "../../services/managerService";
+import { getAllProducts } from "../../services/productService";
+import { getShopMenu, addMenuItem, updateMenuItem, deleteMenuItem } from "../../services/managerService";
 
 const ManagerMenu = () => {
     const [allProducts, setAllProducts] = useState([]);

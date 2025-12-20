@@ -1,34 +1,17 @@
-import { useEffect } from 'react';
-import { formatPrice } from '../utils/helpers';
+import { formatPrice, translateAttributeName } from '../utils/helpers';
+import { useModal } from '../hooks/useModal';
+import { calculateItemTotal } from '../utils/priceCalculators';
 import './OrderModal.css';
 
-export default function OrderModal({ order, onClose }) {
-
-    useEffect(() => {
-        const handleEsc = (e) => {
-            if (e.key === 'Escape') onClose();
-        };
-        
-        document.body.style.overflow = 'hidden';
-        window.addEventListener('keydown', handleEsc);
-        
-        return () => {
-            window.removeEventListener('keydown', handleEsc);
-            document.body.style.overflow = 'unset';
-        };
-    }, [onClose]);
+export default function OrderModal({ order, products = [], onClose }) {
+    // Use modal hook for ESC and body scroll
+    useModal(onClose);
 
     if (!order) return null;
 
     
     const calculateTotal = () => {
-        return order.items.reduce((sum, item) => {
-            const itemTotal = item.unit_price * item.quantity;
-            const optionsTotal = item.attributes?.reduce((optSum, attr) => {
-                return optSum + (attr.option?.extra_price || 0) * item.quantity;
-            }, 0) || 0;
-            return sum + itemTotal + optionsTotal;
-        }, 0);
+        return order.items.reduce((sum, item) => sum + calculateItemTotal(item), 0);
     };
 
     return (
@@ -79,12 +62,7 @@ export default function OrderModal({ order, onClose }) {
                                 )}
 
                                 <div className="order-item-price">
-                                    {formatPrice(
-                                        item.unit_price * item.quantity + 
-                                        (item.attributes?.reduce((sum, attr) => 
-                                            sum + (attr.option?.extra_price || 0) * item.quantity, 0
-                                        ) || 0)
-                                    )}
+                                    {formatPrice(calculateItemTotal(item))}
                                 </div>
                             </div>
                         ))}

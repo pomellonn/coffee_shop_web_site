@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import api from '../api';
 
 export function useProductAttributes(productId) {
@@ -28,18 +28,5 @@ export function useProductAttributes(productId) {
         loadAttributes();
     }, [productId]);
 
-    // Calculate initial selected options based on attributes
-    const initialSelectedOptions = useMemo(() => {
-        if (!attributes || attributes.length === 0) return {};
-        
-        const initial = {};
-        attributes.forEach(attr => {
-            if (attr.options && attr.options.length > 0) {
-                initial[attr.attribute_type_id] = attr.options[0].option_id;
-            }
-        });
-        return initial;
-    }, [attributes]);
-
-    return { attributes, loading, error, initialSelectedOptions };
+    return { attributes, loading, error };
 }
