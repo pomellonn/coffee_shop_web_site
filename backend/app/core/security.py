@@ -9,10 +9,6 @@ from app.db.session import get_session
 from app.models.users import User, UserRole
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.config import settings
-from fastapi.templating import Jinja2Templates
-
-
-templates = Jinja2Templates(directory="templates")
 
 SECRET_KEY = settings.SECRET_KEY
 ALGORITHM = settings.ALGORITHM
