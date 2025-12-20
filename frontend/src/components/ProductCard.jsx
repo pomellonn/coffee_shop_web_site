@@ -11,11 +11,13 @@ export default function ProductCard({ product, onClick }) {
                         alt={product.name}
                         onError={(e) => {
                             e.target.style.display = 'none';
-                            e.target.parentElement.innerHTML = '<div class="product-card-placeholder">☕</div>';
+                            e.target.parentElement.innerHTML = '<div class="product-card-placeholder"><span class="material-symbols-outlined">coffee_maker</span></div>';
                         }}
                     />
                 ) : (
-                    <div className="product-card-placeholder">☕</div>
+                    <div className="product-card-placeholder">
+                        <span className="material-symbols-outlined">coffee_maker</span>
+                    </div>
                 )}
             </div>
             <div className="product-card-content">

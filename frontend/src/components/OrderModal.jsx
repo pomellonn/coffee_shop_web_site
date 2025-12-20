@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
-import { formatPrice } from '../utils/helpers';
+import { formatPrice, translateAttributeName } from '../utils/helpers';
 import './OrderModal.css';
 
-export default function OrderModal({ order, onClose }) {
+export default function OrderModal({ order, products = [], onClose }) {
 
     useEffect(() => {
         const handleEsc = (e) => {
@@ -20,6 +20,11 @@ export default function OrderModal({ order, onClose }) {
 
     if (!order) return null;
 
+    // Функция для получения названия продукта по ID
+    const getProductName = (productId) => {
+        const product = products.find(p => p.product_id === productId);
+        return product?.name || 'Продукт';
+    };
     
     const calculateTotal = () => {
         return order.items.reduce((sum, item) => {
@@ -55,22 +60,22 @@ export default function OrderModal({ order, onClose }) {
                             <div key={idx} className="order-item">
                                 <div className="order-item-header">
                                     <span className="order-item-name">
-                                        {item.product?.name || 'Продукт'}
+                                        {getProductName(item.product_id)}
                                     </span>
                                     <span className="order-item-quantity">× {item.quantity}</span>
                                 </div>
                                 
-                                {item.attributes && item.attributes.length > 0 && (
+                                {item.selected_options && item.selected_options.length > 0 && (
                                     <div className="order-item-options">
-                                        {item.attributes.map((attr, attrIdx) => (
-                                            <div key={attrIdx} className="order-option">
+                                        {item.selected_options.map((opt, optIdx) => (
+                                            <div key={optIdx} className="order-option">
                                                 <span className="option-label">
-                                                    {attr.option?.attribute_type?.name}:
+                                                    {translateAttributeName(opt.attribute_type)}:
                                                 </span>
                                                 <span className="option-value">
-                                                    {attr.option?.value}
-                                                    {attr.option?.extra_price > 0 && 
-                                                        ` (+${formatPrice(attr.option.extra_price)})`
+                                                    {opt.value}
+                                                    {opt.extra_price > 0 && 
+                                                        ` (+${formatPrice(opt.extra_price)})`
                                                     }
                                                 </span>
                                             </div>
@@ -81,8 +86,8 @@ export default function OrderModal({ order, onClose }) {
                                 <div className="order-item-price">
                                     {formatPrice(
                                         item.unit_price * item.quantity + 
-                                        (item.attributes?.reduce((sum, attr) => 
-                                            sum + (attr.option?.extra_price || 0) * item.quantity, 0
+                                        (item.selected_options?.reduce((sum, opt) => 
+                                            sum + (opt.extra_price || 0) * item.quantity, 0
                                         ) || 0)
                                     )}
                                 </div>

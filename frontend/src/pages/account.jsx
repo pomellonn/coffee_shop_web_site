@@ -4,6 +4,7 @@ import { getMyOrders } from '../services/orderService';
 import { getCurrentUser } from '../services/authService';
 import OrderModal from '../components/OrderModal';
 import { formatPrice } from '../utils/helpers';
+import { useProducts } from '../hooks/useProducts';
 import './Account.css';
 
 export default function Account() {
@@ -12,6 +13,7 @@ export default function Account() {
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
     const [selectedOrder, setSelectedOrder] = useState(null);
+    const { products } = useProducts();
 
     useEffect(() => {
         fetchUserData();
@@ -127,6 +129,7 @@ export default function Account() {
             {selectedOrder && (
                 <OrderModal
                     order={selectedOrder}
+                    products={products}
                     onClose={() => setSelectedOrder(null)}
                 />
             )}

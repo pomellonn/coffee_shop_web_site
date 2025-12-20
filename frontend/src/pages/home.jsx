@@ -34,11 +34,13 @@ export default function Home() {
                                                 alt={product.name}
                                                 onError={(e) => {
                                                     e.target.style.display = 'none';
-                                                    e.target.parentElement.innerHTML = '<div class="product-placeholder">☕</div>';
+                                                    e.target.parentElement.innerHTML = '<div class="product-placeholder"><span class="material-symbols-outlined">coffee_maker</span></div>';
                                                 }}
                                             />
                                         ) : (
-                                            <div className="product-placeholder">☕</div>
+                                            <div className="product-placeholder">
+                                                <span className="material-symbols-outlined">coffee_maker</span>
+                                            </div>
                                         )}
                                     </div>
                                     <div className="product-info">

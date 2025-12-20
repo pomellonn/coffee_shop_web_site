@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getImageUrl, formatPrice } from '../utils/helpers';
+import { getImageUrl, formatPrice, translateAttributeName } from '../utils/helpers';
 import { useAuth } from '../services/AuthContext';
 import { useCart } from '../services/CartContext';
 import { useProductAttributes } from '../hooks/useProductAttributes';
@@ -12,19 +12,6 @@ export default function ProductModal({ product, shopId, onClose }) {
     const { isAuthenticated } = useAuth();
     const { addToCart, setPendingItem } = useCart();
     const navigate = useNavigate();
-
-    // Attribute name translations
-    const attributeTranslations = {
-        'milk': 'Молоко',
-        'syrup': 'Сироп',
-        'roast': 'Обжарка',
-        'size': 'Размер'
-    };
-
-    const translateAttributeName = (name) => {
-        const lowerName = name?.toLowerCase();
-        return attributeTranslations[lowerName] || name;
-    };
 
     // Use hook to load attributes (no initial selection)
     const { attributes, loading, error } = useProductAttributes(product?.product_id);
@@ -156,12 +143,14 @@ export default function ProductModal({ product, shopId, onClose }) {
                                     e.target.style.display = 'none';
                                     const placeholder = document.createElement('div');
                                     placeholder.className = 'modal-image-placeholder';
-                                    placeholder.textContent = '☕';
+                                    placeholder.innerHTML = '<span class="material-symbols-outlined">coffee_maker</span>';
                                     e.target.parentElement.appendChild(placeholder);
                                 }}
                             />
                         ) : (
-                            <div className="modal-image-placeholder">☕</div>
+                            <div className="modal-image-placeholder">
+                                <span className="material-symbols-outlined">coffee_maker</span>
+                            </div>
                         )}
                     </div>
                     
