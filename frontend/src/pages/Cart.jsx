@@ -71,7 +71,7 @@ export default function Cart() {
                     <div className="success-actions">
                         <button 
                             className="btn-primary" 
-                            onClick={() => navigate('/orders')}
+                            onClick={() => navigate('/account')}
                         >
                             Мои заказы
                         </button>

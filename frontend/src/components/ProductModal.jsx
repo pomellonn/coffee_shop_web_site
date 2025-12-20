@@ -21,8 +21,6 @@ export default function ProductModal({ product, shopId, onClose }) {
     
     // Store user selected options (initially empty - no pre-selection)
     const [selectedOptions, setSelectedOptions] = useState({});
-    // Store user selected options (initially empty - no pre-selection)
-    const [selectedOptions, setSelectedOptions] = useState({});
 
     // Use modal hook for ESC and body scroll
     useModal(onClose);
