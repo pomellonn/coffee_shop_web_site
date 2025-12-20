@@ -30,7 +30,6 @@ export const deleteUser = async (userId) => {
 };
 
 // PRODUCTS
-// Note: getAllProducts moved to productService.js to avoid duplication
 
 export const createProduct = async (productData) => {
     const response = await api.post(`/admin/products/`, productData);

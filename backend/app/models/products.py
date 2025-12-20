@@ -1,7 +1,7 @@
 from __future__ import annotations 
 from typing import List, Optional
 from app.db.base import Base
-from sqlalchemy import String, Text, Enum, CheckConstraint
+from sqlalchemy import String, Text, Enum, CheckConstraint, Integer, Identity
 from sqlalchemy.orm import relationship, validates, Mapped, mapped_column
 import enum
 from sqlalchemy.ext.associationproxy import association_proxy
@@ -17,7 +17,7 @@ class ProductType(str, enum.Enum):
 class Product(Base):
     __tablename__ = "products"
 
-    product_id: Mapped[int] = mapped_column(primary_key=True, index=True)
+    product_id: Mapped[int] = mapped_column(Integer, Identity(), primary_key=True)
     name: Mapped[str] = mapped_column(String(128))
     description: Mapped[Optional[str]] = mapped_column(Text)
     image_url: Mapped[Optional[str]] = mapped_column(Text)

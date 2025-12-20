@@ -6,11 +6,21 @@ const ProductsAdmin = () => {
   const [products, setProducts] = useState([]);
   const [newProductName, setNewProductName] = useState("");
   const [newProductPrice, setNewProductPrice] = useState("");
+  const [newProductDescription, setNewProductDescription] = useState("");
+  const [newProductType, setNewProductType] = useState("coffee");
   const [loading, setLoading] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [editName, setEditName] = useState("");
   const [editPrice, setEditPrice] = useState("");
+  const [editDescription, setEditDescription] = useState("");
+  const [editType, setEditType] = useState("coffee");
   
+  const productTypes = [
+    { value: "coffee", label: "Кофе" },
+    { value: "non_coffee", label: "Не кофе" },
+    { value: "bakery", label: "Выпечка" }
+  ];
+
   useEffect(() => {
     fetchProducts();
   }, []);
@@ -25,16 +35,21 @@ const ProductsAdmin = () => {
   };
 
   const handleAddProduct = async () => {
-    if (!newProductName || !newProductPrice) return;
+    if (!newProductName || !newProductPrice || !newProductDescription) return;
     setLoading(true);
     try {
       const newProd = await createProduct({
         name: newProductName,
-        price: Number(newProductPrice),
+        description: newProductDescription,
+        image_url: "",
+        product_type: newProductType,
+        price: Number(newProductPrice)
       });
       setProducts(prev => [...prev, newProd]);
       setNewProductName("");
       setNewProductPrice("");
+      setNewProductDescription("");
+      setNewProductType("coffee");
     } catch (e) {
       console.error("Ошибка добавления продукта", e);
     } finally {
@@ -59,12 +74,16 @@ const ProductsAdmin = () => {
     setEditingId(p.product_id);
     setEditName(p.name);
     setEditPrice(p.price);
+    setEditDescription(p.description || "");
+    setEditType(p.product_type || "coffee");
   };
 
   const cancelEdit = () => {
     setEditingId(null);
     setEditName("");
     setEditPrice("");
+    setEditDescription("");
+    setEditType("coffee");
   };
 
   const saveEdit = async (id) => {
@@ -73,15 +92,24 @@ const ProductsAdmin = () => {
       const updated = await updateProduct(id, {
         name: editName,
         price: Number(editPrice),
+        description: editDescription,
+        product_type: editType
       });
 
       setProducts(prev =>
         prev.map(p => (p.product_id === id ? updated : p))
       );
       cancelEdit();
+    } catch (e) {
+      console.error("Ошибка обновления продукта", e);
     } finally {
       setLoading(false);
     }
+  };
+
+  const getTypeLabel = (type) => {
+    const found = productTypes.find(t => t.value === type);
+    return found ? found.label : type;
   };
 
   return (
@@ -93,28 +121,50 @@ const ProductsAdmin = () => {
         {/* Add Product Form */}
         <div className="mb-14">
           <h2 className="text-sm text-gray-500 uppercase tracking-wide mb-4">Добавить продукт</h2>
-          <div className="flex gap-3">
-            <input
-              type="text"
-              placeholder="Название"
-              className="flex-1 px-4 py-3 border-b border-gray-300 focus:border-gray-900 outline-none transition-colors"
-              value={newProductName}
-              onChange={(e) => setNewProductName(e.target.value)}
-            />
-            <input
-              type="number"
-              placeholder="Цена"
-              className="w-32 px-4 py-3 border-b border-gray-300 focus:border-gray-900 outline-none transition-colors"
-              value={newProductPrice}
-              onChange={(e) => setNewProductPrice(e.target.value)}
-            />
-            <button
-              className="px-6 py-3 bg-gray-900 text-white text-sm font-medium hover:bg-gray-800 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed"
-              onClick={handleAddProduct}
-              disabled={loading || !newProductName || !newProductPrice}
-            >
-              {loading ? "..." : "Добавить"}
-            </button>
+          <div className="space-y-3">
+            <div className="flex gap-3">
+              <input
+                type="text"
+                placeholder="Название"
+                className="flex-1 px-4 py-3 border-b border-gray-300 focus:border-gray-900 outline-none transition-colors"
+                value={newProductName}
+                onChange={(e) => setNewProductName(e.target.value)}
+              />
+              <input
+                type="number"
+                placeholder="Цена"
+                className="w-32 px-4 py-3 border-b border-gray-300 focus:border-gray-900 outline-none transition-colors"
+                value={newProductPrice}
+                onChange={(e) => setNewProductPrice(e.target.value)}
+              />
+              <select
+                className="px-4 py-3 border-b border-gray-300 focus:border-gray-900 outline-none transition-colors bg-white"
+                value={newProductType}
+                onChange={(e) => setNewProductType(e.target.value)}
+              >
+                {productTypes.map(type => (
+                  <option key={type.value} value={type.value}>
+                    {type.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="flex gap-3">
+              <textarea
+                placeholder="Описание"
+                className="flex-1 px-4 py-3 border-b border-gray-300 focus:border-gray-900 outline-none transition-colors resize-none"
+                rows="1"
+                value={newProductDescription}
+                onChange={(e) => setNewProductDescription(e.target.value)}
+              />
+              <button
+                className="px-6 py-3 bg-gray-900 text-white text-sm font-medium hover:bg-gray-800 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed"
+                onClick={handleAddProduct}
+                disabled={loading || !newProductName || !newProductPrice || !newProductDescription}
+              >
+                {loading ? "..." : "Добавить"}
+              </button>
+            </div>
           </div>
         </div>
 
@@ -122,7 +172,9 @@ const ProductsAdmin = () => {
         <div className="flex items-center justify-between py-3 border-b border-gray-300 mb-1">
           <div className="flex items-center gap-8">
             <span className="text-xs text-gray-500 uppercase tracking-wide w-8">ID</span>
-            <span className="text-xs text-gray-500 uppercase tracking-wide">Название</span>
+            <span className="text-xs text-gray-500 uppercase tracking-wide w-48">Название</span>
+            <span className="text-xs text-gray-500 uppercase tracking-wide w-32">Тип</span>
+            <span className="text-xs text-gray-500 uppercase tracking-wide flex-1">Описание</span>
           </div>
           <div className="flex items-center gap-4">
             <span className="text-xs text-gray-500 uppercase tracking-wide w-24 text-right">Цена</span>
@@ -143,9 +195,26 @@ const ProductsAdmin = () => {
                     <div className="flex gap-4 flex-1">
                       <span className="text-sm text-gray-400 w-8">{p.product_id}</span>
                       <input
-                        className="border-b border-gray-300 focus:border-gray-900 outline-none px-2 py-1 flex-1"
+                        className="border-b border-gray-300 focus:border-gray-900 outline-none px-2 py-1 w-48"
                         value={editName}
                         onChange={e => setEditName(e.target.value)}
+                      />
+                      <select
+                        className="border-b border-gray-300 focus:border-gray-900 outline-none px-2 py-1 w-32 bg-white"
+                        value={editType}
+                        onChange={e => setEditType(e.target.value)}
+                      >
+                        {productTypes.map(type => (
+                          <option key={type.value} value={type.value}>
+                            {type.label}
+                          </option>
+                        ))}
+                      </select>
+                      <textarea
+                        className="border-b border-gray-300 focus:border-gray-900 outline-none px-2 py-1 flex-1 resize-none"
+                        rows="2"
+                        value={editDescription}
+                        onChange={e => setEditDescription(e.target.value)}
                       />
                     </div>
                     <div className="flex items-center gap-4">
@@ -175,7 +244,9 @@ const ProductsAdmin = () => {
                   <>
                     <div className="flex items-center gap-8">
                       <span className="text-sm text-gray-400 w-8">{p.product_id}</span>
-                      <span className="text-gray-900">{p.name}</span>
+                      <span className="text-gray-900 w-48">{p.name}</span>
+                      <span className="text-sm text-gray-600 w-20">{getTypeLabel(p.product_type)}</span>
+                      <span className="text-sm text-gray-600 w-100 flex-1 ">{p.description}</span>
                     </div>
                     <div className="flex items-center gap-4">
                       <span className="text-gray-900 font-medium w-24 text-right">{p.price} руб.</span>

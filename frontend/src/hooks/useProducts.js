@@ -54,7 +54,7 @@ export const useProducts = () => {
             try {
                 setLoading(true);
                 setError(null);
-                const response = await api.get('/products');
+                const response = await api.get('/products/');
                 setProducts(response.data);
             } catch (err) {
                 console.error('Ошибка загрузки продуктов:', err);

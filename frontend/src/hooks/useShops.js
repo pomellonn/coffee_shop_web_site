@@ -15,7 +15,7 @@ export const useShops = () => {
             try {
                 setLoading(true);
                 setError(null);
-                const response = await api.get('/shops');
+                const response = await api.get('/shops/');
                 setShops(response.data);
             } catch (err) {
                 console.error('Ошибка загрузки кофеен:', err);
