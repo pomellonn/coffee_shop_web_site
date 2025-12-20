@@ -29,12 +29,11 @@
   max-width: 550px;
   width: 100%;
   max-height: 90vh;
-  overflow: hidden;
+  overflow-y: auto;
   position: relative;
   animation: scaleIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-  display: flex;
-  flex-direction: column;
+  padding: 2rem;
 }
 
 @keyframes scaleIn {
@@ -71,41 +70,26 @@
   background: rgba(0, 0, 0, 0.7);
 }
 
-.modal-body {
-  display: flex;
-  flex-direction: column;
-  overflow-y: auto;
-  max-height: calc(90vh - 0px);
+/* Скрываем скроллбар, но оставляем прокрутку */
+.modal-content::-webkit-scrollbar {
+  width: 0;
+  display: none;
 }
 
-/* Стилизация скролла для modal-body */
-.modal-body::-webkit-scrollbar {
-  width: 8px;
-}
-
-.modal-body::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.05);
-  border-radius: 0 24px 24px 0;
-}
-
-.modal-body::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.2);
-  border-radius: 24px;
-  transition: background 0.3s ease;
-}
-
-.modal-body::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 0, 0, 0.3);
+.modal-content {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 .modal-image-container {
   width: 100%;
   height: 200px;
-  border-radius: 24px 24px 0 0;
+  border-radius: 16px;
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-bottom: 1rem;
 }
 
 .modal-image {
@@ -119,16 +103,16 @@
 .modal-image-placeholder {
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, #f0e6d6 0%, #e0d6c6 100%);
+  background: linear-gradient(135deg, #D5E1C7 0%, #B9C9A6 100%);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 7rem;
-  color: #d4a574;
+  color: #8a9b7a;
 }
 
 .modal-info {
-  padding: 1rem 2rem 2rem 2rem;
+  /* padding moved to modal-content */
 }
 
 .modal-info h2 {
@@ -162,7 +146,7 @@
 .price-value {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #d4a574;
+  color: #8a9b7a;
 }
 
 /* Attributes Section */
@@ -214,7 +198,7 @@
 
 .option-btn {
   padding: 0.75rem 1.25rem;
-  border: 2px solid #e0d6c6;
+  border: 2px solid #D5E1C7;
   background: white;
   border-radius: 12px;
   cursor: pointer;
@@ -227,13 +211,13 @@
 }
 
 .option-btn:hover {
-  border-color: #d4a574;
+  border-color: #8a9b7a;
   background: #f9f5f0;
 }
 
 .option-btn.selected {
-  border-color: #d4a574;
-  background: #d4a574;
+  border-color: #8a9b7a;
+  background: #8a9b7a;
   color: white;
 }
 
@@ -277,9 +261,9 @@
 .quantity-btn {
   width: 40px;
   height: 40px;
-  border: 2px solid #d4a574;
+  border: 2px solid #8a9b7a;
   background: white;
-  color: #d4a574;
+  color: #8a9b7a;
   font-size: 1.5rem;
   font-weight: 600;
   border-radius: 50%;
@@ -291,7 +275,7 @@
 }
 
 .quantity-btn:hover:not(:disabled) {
-  background: #d4a574;
+  background: #8a9b7a;
   color: white;
   transform: scale(1.1);
 }
@@ -329,14 +313,14 @@
 .total-value {
   font-size: 2rem;
   font-weight: 700;
-  color: #d4a574;
+  color: #8a9b7a;
 }
 
 /* Add to Cart Button */
 .add-to-cart-btn {
   width: 100%;
   padding: 1.25rem;
-  background: #d4a574;
+  background: #8a9b7a;
   color: white;
   border: none;
   border-radius: 16px;
@@ -344,13 +328,13 @@
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(212, 165, 116, 0.3);
+  box-shadow: 0 4px 12px rgba(138, 155, 122, 0.3);
 }
 
 .add-to-cart-btn:hover:not(:disabled) {
-  background: #c49564;
+  background: #7a8b6a;
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(212, 165, 116, 0.4);
+  box-shadow: 0 6px 16px rgba(138, 155, 122, 0.4);
 }
 
 .add-to-cart-btn:disabled {
@@ -363,14 +347,11 @@
   .modal-content {
     max-width: 100%;
     border-radius: 16px;
+    padding: 1.5rem;
   }
 
   .modal-image-container {
-    height: 250px;
-  }
-
-  .modal-info {
-    padding: 1.5rem;
+    height: 200px;
   }
 
   .modal-info h2 {
@@ -391,57 +372,5 @@
     font-size: 0.9rem;
   }
 }
-
-  .modal-content {
-    margin: 0;
-    border-radius: 16px 16px 0 0;
-    max-height: 95vh;
-  }
-
-  .modal-image,
-  .modal-image-placeholder {
-    height: 250px;
-  }
-
-  .modal-info {
-    padding: 1.5rem;
-  }
-
-  .modal-info h2 {
-    font-size: 1.6rem;
-  }
-
-  .detail-value.price {
-    font-size: 1.5rem;
-  }
-
-  .total-value {
-    font-size: 2rem;
-    font-weight: 700;
-    color: #d4a574;
-  }
-
-  .btn-add-to-cart {
-    width: 100%;
-    padding: 1rem;
-    font-size: 1.1rem;
-    font-weight: 600;
-    background: linear-gradient(135deg, #d4a574 0%, #e0b685 100%);
-    color: white;
-    border: none;
-    border-radius: 12px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(212, 165, 116, 0.3);
-  }
-
-  .btn-add-to-cart:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(212, 165, 116, 0.4);
-  }
-
-  .btn-add-to-cart:active {
-    transform: translateY(0);
-  }
 
 

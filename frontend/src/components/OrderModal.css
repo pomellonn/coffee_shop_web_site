@@ -172,21 +172,13 @@
   color: #00b894;
 }
 
-/* Scrollbar styling */
+/* Hide vertical scrollbar but keep scrolling */
+.order-modal-content {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
 .order-modal-content::-webkit-scrollbar {
-  width: 8px;
-}
-
-.order-modal-content::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.05);
-  border-radius: 10px;
-}
-
-.order-modal-content::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.2);
-  border-radius: 10px;
-}
-
-.order-modal-content::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 0, 0, 0.3);
+  width: 0;
+  background: transparent;
 }
