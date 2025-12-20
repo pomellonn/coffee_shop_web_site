@@ -1,24 +1,16 @@
-import { getImageUrl, formatPrice} from '../utils/helpers';
+import { formatPrice } from '../utils/helpers';
+import ProductImage from './ProductImage';
 import './ProductCard.css';
 
 export default function ProductCard({ product, onClick }) {
     return (
         <div className="product-card" onClick={() => onClick(product)}>
             <div className="product-card-image">
-                {getImageUrl(product.image_url) ? (
-                    <img 
-                        src={getImageUrl(product.image_url)} 
-                        alt={product.name}
-                        onError={(e) => {
-                            e.target.style.display = 'none';
-                            e.target.parentElement.innerHTML = '<div class="product-card-placeholder"><span class="material-symbols-outlined">coffee_maker</span></div>';
-                        }}
-                    />
-                ) : (
-                    <div className="product-card-placeholder">
-                        <span className="material-symbols-outlined">coffee_maker</span>
-                    </div>
-                )}
+                <ProductImage
+                    imageUrl={product.image_url}
+                    productName={product.name}
+                    placeholderClassName="product-card-placeholder"
+                />
             </div>
             <div className="product-card-content">
                 <h3 className="product-card-name">{product.name}</h3>
