@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { formatPrice, translateAttributeName } from '../utils/helpers';
 import './OrderModal.css';
 

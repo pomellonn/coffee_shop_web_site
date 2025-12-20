@@ -1,14 +1,20 @@
 from __future__ import annotations 
 from typing import List
 from app.db.base import Base
-from sqlalchemy import ForeignKey, CheckConstraint, func, TIMESTAMP
+from sqlalchemy import ForeignKey, CheckConstraint, func, TIMESTAMP, Integer
 from sqlalchemy.orm import relationship, validates, Mapped, mapped_column
-
+from sqlalchemy import Identity
 
 class Order(Base):
     __tablename__ = "orders"
 
-    order_id: Mapped[int] = mapped_column(primary_key=True, index=True)
+
+
+    order_id: Mapped[int] = mapped_column(
+    Integer,
+    Identity(),
+    primary_key=True
+    )
     user_id: Mapped[int] = mapped_column(
         ForeignKey("users.user_id", ondelete="RESTRICT")
     )

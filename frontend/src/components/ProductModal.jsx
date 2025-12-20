@@ -1,9 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getImageUrl, formatPrice, translateAttributeName } from '../utils/helpers';
+import { formatPrice, translateAttributeName } from '../utils/helpers';
 import { useAuth } from '../services/AuthContext';
 import { useCart } from '../services/CartContext';
 import { useProductAttributes } from '../hooks/useProductAttributes';
+import { useModal } from '../hooks/useModal';
+import { calculateProductTotal } from '../utils/priceCalculators';
+import ProductImage from './ProductImage';
 import './ProductModal.css';
 
 export default function ProductModal({ product, shopId, onClose }) {
@@ -19,20 +22,8 @@ export default function ProductModal({ product, shopId, onClose }) {
     // Store user selected options (initially empty - no pre-selection)
     const [selectedOptions, setSelectedOptions] = useState({});
 
-    // Close modal on ESC
-    useEffect(() => {
-        const handleEsc = (e) => {
-            if (e.key === 'Escape') onClose();
-        };
-        
-        document.body.style.overflow = 'hidden';
-        window.addEventListener('keydown', handleEsc);
-        
-        return () => {
-            window.removeEventListener('keydown', handleEsc);
-            document.body.style.overflow = 'unset';
-        };
-    }, [onClose]);
+    // Use modal hook for ESC and body scroll
+    useModal(onClose);
 
     if (!product) return null;
 
@@ -60,19 +51,7 @@ export default function ProductModal({ product, shopId, onClose }) {
     };
 
     const calculateTotalPrice = () => {
-        let total = product.price;
-        
-        if (attributes && Array.isArray(attributes)) {
-            attributes.forEach(attr => {
-                const selectedOptionId = selectedOptions[attr.attribute_type_id];
-                const option = attr.options?.find(opt => opt.option_id === selectedOptionId);
-                if (option) {
-                    total += option.extra_price;
-                }
-            });
-        }
-        
-        return total * quantity;
+        return calculateProductTotal(product.price, attributes, selectedOptions, quantity);
     };
 
     const handleAddToCart = () => {
@@ -170,24 +149,12 @@ export default function ProductModal({ product, shopId, onClose }) {
                 <button className="modal-close" onClick={onClose} aria-label="Закрыть">✕</button>
 
                 <div className="modal-image-container">
-                    {getImageUrl(product.image_url) ? (
-                        <img
-                            src={getImageUrl(product.image_url)}
-                            alt={product.name}
-                            className="modal-image"
-                            onError={(e) => {
-                                e.target.style.display = 'none';
-                                const placeholder = document.createElement('div');
-                                placeholder.className = 'modal-image-placeholder';
-                                placeholder.innerHTML = '<span class="material-symbols-outlined">coffee_maker</span>';
-                                e.target.parentElement.appendChild(placeholder);
-                            }}
-                        />
-                    ) : (
-                        <div className="modal-image-placeholder">
-                            <span className="material-symbols-outlined">coffee_maker</span>
-                        </div>
-                    )}
+                    <ProductImage
+                        imageUrl={product.image_url}
+                        productName={product.name}
+                        className="modal-image"
+                        placeholderClassName="modal-image-placeholder"
+                    />
                 </div>
 
                 <div className="modal-info">
@@ -218,12 +185,16 @@ export default function ProductModal({ product, shopId, onClose }) {
                         <span className="total-value">{formatPrice(calculateTotalPrice())}</span>
                     </div>
 
-                    <button className="add-to-cart-btn" onClick={handleAddToCart} disabled={loading}>
-                        {isAuthenticated ? 'Добавить в корзину' : 'Войти и добавить'}
-                    </button>
+                        <button 
+                            className="add-to-cart-btn"
+                            onClick={handleAddToCart}
+                            disabled={loading}
+                        >
+                            {isAuthenticated ? 'Добавить в корзину' : 'Войти и добавить'}
+                        </button>
+                    </div>
                 </div>
             </div>
-        </div>
     );
 }
 

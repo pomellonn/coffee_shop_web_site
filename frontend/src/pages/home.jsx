@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useFeaturedProducts } from '../hooks/useProducts';
-import { getImageUrl, formatPrice } from '../utils/helpers';
+import { formatPrice } from '../utils/helpers';
+import ProductImage from '../components/ProductImage';
 import './home.css';
 import poster from '../assets/specialty Coffee-2.png';
 
@@ -28,20 +29,11 @@ export default function Home() {
                             {featuredProducts.map(product => (
                                 <div key={product.product_id} className="product-card">
                                     <div className="product-image">
-                                        {getImageUrl(product.image_url) ? (
-                                            <img 
-                                                src={getImageUrl(product.image_url)} 
-                                                alt={product.name}
-                                                onError={(e) => {
-                                                    e.target.style.display = 'none';
-                                                    e.target.parentElement.innerHTML = '<div class="product-placeholder"><span class="material-symbols-outlined">coffee_maker</span></div>';
-                                                }}
-                                            />
-                                        ) : (
-                                            <div className="product-placeholder">
-                                                <span className="material-symbols-outlined">coffee_maker</span>
-                                            </div>
-                                        )}
+                                        <ProductImage
+                                            imageUrl={product.image_url}
+                                            productName={product.name}
+                                            placeholderClassName="product-placeholder"
+                                        />
                                     </div>
                                     <div className="product-info">
                                         <h3>{product.name}</h3>

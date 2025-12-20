@@ -10,10 +10,7 @@ export const getOneShopAnalytics = async (dateFrom, dateTo) => {
   return data;
 };
 
-export const getAllProducts = async () => {
-    const { data } = await api.get("/products/");
-    return data;
-};
+// Note: getAllProducts moved to productService.js to avoid duplication
 
 export const getShopMenu = async () => {
     const { data } = await api.get("/manager/menu/");

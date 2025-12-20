@@ -1,9 +1,10 @@
 from __future__ import annotations
 from typing import List, Optional
 from app.db.base import Base
-from sqlalchemy import String, Text, Enum, TIMESTAMP, func
+from sqlalchemy import String, Text, Enum, TIMESTAMP, func, Integer
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 import enum
+from sqlalchemy import Identity
 
 
 class UserRole(str, enum.Enum):
@@ -15,7 +16,7 @@ class UserRole(str, enum.Enum):
 class User(Base):
     __tablename__ = "users"
 
-    user_id: Mapped[int] = mapped_column(primary_key=True, index=True)
+    user_id: Mapped[int] = mapped_column(Integer, Identity(), primary_key=True)
     email: Mapped[str] = mapped_column(String(255), unique=True)
     password_hash: Mapped[str] = mapped_column(Text)
     name: Mapped[str] = mapped_column(String(50))

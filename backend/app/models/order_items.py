@@ -1,14 +1,14 @@
 from __future__ import annotations
 from typing import Optional, List
 from app.db.base import Base
-from sqlalchemy import ForeignKey, CheckConstraint
+from sqlalchemy import ForeignKey, CheckConstraint, Integer, Identity
 from sqlalchemy.orm import relationship, validates, Mapped, mapped_column
 
 
 class OrderItem(Base):
     __tablename__ = "order_items"
 
-    order_item_id: Mapped[int] = mapped_column(primary_key=True, index=True)
+    order_item_id: Mapped[int] = mapped_column(Integer, Identity(), primary_key=True)
     order_id: Mapped[int] = mapped_column(
         ForeignKey("orders.order_id", ondelete="CASCADE")
     )

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useCart } from '../services/CartContext';
 import { formatPrice, translateAttributeName } from '../utils/helpers';
+import { calculateItemTotal } from '../utils/priceCalculators';
 import './Cart.css';
 
 export default function Cart() {
@@ -70,7 +71,7 @@ export default function Cart() {
                     <div className="success-actions">
                         <button 
                             className="btn-primary" 
-                            onClick={() => navigate('/orders')}
+                            onClick={() => navigate('/account')}
                         >
                             Мои заказы
                         </button>
@@ -114,9 +115,7 @@ export default function Cart() {
             <div className="cart-content">
                 <div className="cart-items">
                     {cart.map((item, index) => {
-                        const itemTotal = (item.unit_price + (item.selected_options || []).reduce(
-                            (sum, opt) => sum + opt.extra_price, 0
-                        )) * item.quantity;
+                        const itemTotal = calculateItemTotal(item);
 
                         return (
                             <div key={index} className="cart-item">
