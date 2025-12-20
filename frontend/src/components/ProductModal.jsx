@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getImageUrl, formatPrice } from '../utils/helpers';
+import { getImageUrl, formatPrice, translateAttributeName } from '../utils/helpers';
 import { useAuth } from '../services/AuthContext';
 import { useCart } from '../services/CartContext';
 import { useProductAttributes } from '../hooks/useProductAttributes';
@@ -13,14 +13,11 @@ export default function ProductModal({ product, shopId, onClose }) {
     const { addToCart, setPendingItem } = useCart();
     const navigate = useNavigate();
 
-    // Use hook to load attributes and get initial options
-    const { attributes, loading, error, initialSelectedOptions } = useProductAttributes(product?.product_id);
+    // Use hook to load attributes (no initial selection)
+    const { attributes, loading, error } = useProductAttributes(product?.product_id);
     
-    // Store manually selected options (overrides from user interaction)
-    const [manualSelections, setManualSelections] = useState({});
-    
-    // Merge initial options with manual selections
-    const selectedOptions = { ...initialSelectedOptions, ...manualSelections };
+    // Store user selected options (initially empty - no pre-selection)
+    const [selectedOptions, setSelectedOptions] = useState({});
 
     // Close modal on ESC
     useEffect(() => {
@@ -47,10 +44,19 @@ export default function ProductModal({ product, shopId, onClose }) {
     };
 
     const handleOptionChange = (attributeTypeId, optionId) => {
-        setManualSelections(prev => ({
-            ...prev,
-            [attributeTypeId]: optionId
-        }));
+        setSelectedOptions(prev => {
+            // If the same option is clicked again, deselect it
+            if (prev[attributeTypeId] === optionId) {
+                const newState = { ...prev };
+                delete newState[attributeTypeId];
+                return newState;
+            }
+            // Otherwise, select the new option
+            return {
+                ...prev,
+                [attributeTypeId]: optionId
+            };
+        });
     };
 
     const calculateTotalPrice = () => {
@@ -119,124 +125,102 @@ export default function ProductModal({ product, shopId, onClose }) {
         onClose();
     };
 
+    // Prepare attributes section to avoid complex inline ternary in JSX
+    let attributesContent;
+    if (loading) {
+        attributesContent = <div className="attributes-loading">Загрузка опций...</div>;
+    } else if (error) {
+        attributesContent = <div className="attributes-error">{error}</div>;
+    } else if (Array.isArray(attributes) && attributes.length > 0) {
+        attributesContent = (
+            <div className="attributes-section">
+                <h3>Настройка напитка</h3>
+                {attributes.map((attr) => (
+                    <div key={attr.attribute_type_id} className="attribute-group">
+                        <label className="attribute-label">{translateAttributeName(attr.attribute_name)}:</label>
+                        <div className="attribute-options">
+                            {Array.isArray(attr.options) && attr.options.map((option) => (
+                                <button
+                                    key={option.option_id}
+                                    className={`option-btn ${selectedOptions[attr.attribute_type_id] === option.option_id ? 'selected' : ''}`}
+                                    onClick={() => handleOptionChange(attr.attribute_type_id, option.option_id)}
+                                >
+                                    <span className="option-value">{option.value}</span>
+                                    {option.extra_price > 0 && (
+                                        <span className="option-price">+{formatPrice(option.extra_price)}</span>
+                                    )}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                ))}
+            </div>
+        );
+    } else {
+        attributesContent = (
+            <div className="attributes-info" style={{ padding: '1rem', background: '#f0f0f0' }}>
+                {!loading && !error && 'У этого продукта нет дополнительных опций'}
+            </div>
+        );
+    }
+
     return (
         <div className="modal-backdrop" onClick={onClose}>
             <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-                <button className="modal-close" onClick={onClose} aria-label="Закрыть">
-                    ✕
-                </button>
-                
-                <div className="modal-body">
-                    <div className="modal-image-container">
-                        {getImageUrl(product.image_url) ? (
-                            <img 
-                                src={getImageUrl(product.image_url)} 
-                                alt={product.name}
-                                className="modal-image"
-                                onError={(e) => {
-                                    e.target.style.display = 'none';
-                                    const placeholder = document.createElement('div');
-                                    placeholder.className = 'modal-image-placeholder';
-                                    placeholder.textContent = '☕';
-                                    e.target.parentElement.appendChild(placeholder);
-                                }}
-                            />
-                        ) : (
-                            <div className="modal-image-placeholder">☕</div>
-                        )}
+                <button className="modal-close" onClick={onClose} aria-label="Закрыть">✕</button>
+
+                <div className="modal-image-container">
+                    {getImageUrl(product.image_url) ? (
+                        <img
+                            src={getImageUrl(product.image_url)}
+                            alt={product.name}
+                            className="modal-image"
+                            onError={(e) => {
+                                e.target.style.display = 'none';
+                                const placeholder = document.createElement('div');
+                                placeholder.className = 'modal-image-placeholder';
+                                placeholder.innerHTML = '<span class="material-symbols-outlined">coffee_maker</span>';
+                                e.target.parentElement.appendChild(placeholder);
+                            }}
+                        />
+                    ) : (
+                        <div className="modal-image-placeholder">
+                            <span className="material-symbols-outlined">coffee_maker</span>
+                        </div>
+                    )}
+                </div>
+
+                <div className="modal-info">
+                    <h2>{product.name}</h2>
+
+                    {product.description && (
+                        <p className="modal-description">{product.description}</p>
+                    )}
+
+                    <div className="modal-price">
+                        <span className="price-label">Базовая цена:</span>
+                        <span className="price-value">{formatPrice(product.price)}</span>
                     </div>
-                    
-                    <div className="modal-info">
-                        <h2>{product.name}</h2>
-                        
-                        {product.description && (
-                            <p className="modal-description">{product.description}</p>
-                        )}
-                        
-                        <div className="modal-price">
-                            <span className="price-label">Базовая цена:</span>
-                            <span className="price-value">{formatPrice(product.price)}</span>
+
+                    {attributesContent}
+
+                    <div className="quantity-selector">
+                        <label className="quantity-label">Количество:</label>
+                        <div className="quantity-controls">
+                            <button className="quantity-btn" onClick={() => handleQuantityChange(-1)} disabled={quantity <= 1}>−</button>
+                            <span className="quantity-value">{quantity}</span>
+                            <button className="quantity-btn" onClick={() => handleQuantityChange(1)} disabled={quantity >= 10}>+</button>
                         </div>
-
-                        
-
-                        {loading ? (
-                            <div className="attributes-loading">Загрузка опций...</div>
-                        ) : error ? (
-                            <div className="attributes-error">{error}</div>
-                        ) : Array.isArray(attributes) && attributes.length > 0 ? (
-                            <div className="attributes-section">
-                                <h3>Настройка напитка</h3>
-                                {attributes.map((attr) => {
-                                    return (
-                                        <div key={attr.attribute_type_id} className="attribute-group">
-                                            <label className="attribute-label">{attr.attribute_name}:</label>
-                                            <div className="attribute-options">
-                                                {Array.isArray(attr.options) && attr.options.map((option) => {
-                                                    return (
-                                                        <button
-                                                            key={option.option_id}
-                                                            className={`option-btn ${
-                                                                selectedOptions[attr.attribute_type_id] === option.option_id
-                                                                    ? 'selected'
-                                                                    : ''
-                                                            }`}
-                                                            onClick={() => handleOptionChange(attr.attribute_type_id, option.option_id)}
-                                                        >
-                                                            <span className="option-value">{option.value}</span>
-                                                            {option.extra_price > 0 && (
-                                                                <span className="option-price">
-                                                                    +{formatPrice(option.extra_price)}
-                                                                </span>
-                                                            )}
-                                                        </button>
-                                                    );
-                                                })}
-                                            </div>
-                                        </div>
-                                    );
-                                })}
-                            </div>
-                        ) : (
-                            <div className="attributes-info" style={{padding: '1rem', background: '#f0f0f0'}}>
-                                {!loading && !error && 'У этого продукта нет дополнительных опций'}
-                            </div>
-                        )}
-
-                        <div className="quantity-selector">
-                            <label className="quantity-label">Количество:</label>
-                            <div className="quantity-controls">
-                                <button 
-                                    className="quantity-btn"
-                                    onClick={() => handleQuantityChange(-1)}
-                                    disabled={quantity <= 1}
-                                >
-                                    −
-                                </button>
-                                <span className="quantity-value">{quantity}</span>
-                                <button 
-                                    className="quantity-btn"
-                                    onClick={() => handleQuantityChange(1)}
-                                    disabled={quantity >= 10}
-                                >
-                                    +
-                                </button>
-                            </div>
-                        </div>
-
-                        <div className="modal-total">
-                            <span className="total-label">Итого:</span>
-                            <span className="total-value">{formatPrice(calculateTotalPrice())}</span>
-                        </div>
-
-                        <button 
-                            className="add-to-cart-btn"
-                            onClick={handleAddToCart}
-                            disabled={loading}
-                        >
-                            {isAuthenticated ? 'Добавить в корзину' : 'Войти и добавить'}
-                        </button>
                     </div>
+
+                    <div className="modal-total">
+                        <span className="total-label">Итого:</span>
+                        <span className="total-value">{formatPrice(calculateTotalPrice())}</span>
+                    </div>
+
+                    <button className="add-to-cart-btn" onClick={handleAddToCart} disabled={loading}>
+                        {isAuthenticated ? 'Добавить в корзину' : 'Войти и добавить'}
+                    </button>
                 </div>
             </div>
         </div>

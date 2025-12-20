@@ -1,7 +1,14 @@
 .cart-container {
-    max-width: 1200px;
-    margin: 2rem auto;
+    margin: 0;
     padding: 2rem;
+    min-height: 100vh;
+    background-color: #f9f5f0;
+}
+
+.cart-container > * {
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .cart-container h1 {
@@ -96,7 +103,7 @@
     width: 32px;
     height: 32px;
     border: none;
-    background: #d4a574;
+    background: #B9C9A6;;
     color: white;
     border-radius: 50%;
     font-size: 1.2rem;
@@ -108,7 +115,7 @@
 }
 
 .qty-btn:hover {
-    background: #c49564;
+    background: #a8b895;
     transform: scale(1.1);
 }
 
@@ -198,15 +205,15 @@
 }
 
 .submit-order-btn {
-    background: #d4a574;
+    background: #B9C9A6;
     color: white;
-    box-shadow: 0 4px 12px rgba(212, 165, 116, 0.3);
+    box-shadow: 0 4px 12px rgba(185, 201, 166, 0.3);
 }
 
 .submit-order-btn:hover:not(:disabled) {
-    background: #c49564;
+    background: #a8b895;
     transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(212, 165, 116, 0.4);
+    box-shadow: 0 6px 16px rgba(185, 201, 166, 0.4);
 }
 
 .submit-order-btn:disabled {
@@ -216,8 +223,8 @@
 
 .continue-shopping-btn {
     background: white;
-    color: #d4a574;
-    border: 2px solid #d4a574;
+    color: #B9C9A6;
+    border: 2px solid #B9C9A6;
 }
 
 .continue-shopping-btn:hover {
@@ -260,19 +267,19 @@
 }
 
 .btn-primary {
-    background: #d4a574;
+    background: #B9C9A6;
     color: white;
 }
 
 .btn-primary:hover {
-    background: #c49564;
+    background: #a8b895;
     transform: translateY(-2px);
 }
 
 .btn-secondary {
     background: white;
-    color: #d4a574;
-    border: 2px solid #d4a574;
+    color: #B9C9A6;
+    border: 2px solid #B9C9A6;
 }
 
 .btn-secondary:hover {

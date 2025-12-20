@@ -9,3 +9,17 @@ export const formatPrice = (price) => {
     return `${price} ₽`;
 };
 
+// Словарь переводов для названий атрибутов
+const attributeTranslations = {
+    'milk': 'Молоко',
+    'syrup': 'Сироп',
+    'roast': 'Обжарка',
+    'size': 'Размер'
+};
+
+// Функция перевода названий атрибутов
+export const translateAttributeName = (name) => {
+    const lowerName = name?.toLowerCase();
+    return attributeTranslations[lowerName] || name;
+};
+

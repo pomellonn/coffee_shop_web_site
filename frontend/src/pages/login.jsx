@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../services/AuthContext';
 import { useCart } from '../services/CartContext';
+import './login.css';
 
 function Login() {
     const [email, setEmail] = useState('');
@@ -44,54 +45,59 @@ function Login() {
     };
 
     return (
-        <div style={{ maxWidth: '400px', margin: '50px auto', padding: '20px' }}>
-            <form onSubmit={handleSubmit}>
-                <div style={{ marginBottom: '15px' }}>
-                    <label>Адрес электронной почты:</label>
-                    <input
-                        type="email"
-                        value={email}
-                        onChange={(event) => setEmail(event.target.value)}
-                        required
-                        style={{ width: '100%', padding: '8px' }}
-                    />
+        <div className="login-page">
+            <div className="login-container">
+                <div className="login-header">
+                    <h1>Вход в аккаунт</h1>
+                    <p>Войдите, чтобы продолжить</p>
                 </div>
 
-                <div style={{ marginBottom: '15px' }}>
-                    <label>Пароль</label>
-                    <input
-                        type="password"
-                        value={password}
-                        onChange={(event) => setPassword(event.target.value)}
-                        required
-                        style={{ width: '100%', padding: '8px' }}
-                    />
-                </div>
-                {error && (
-                    <div style={{ color: 'red', marginBottom: '10px', textAlign: 'center' }}>
-                        {error}
+                <form onSubmit={handleSubmit} className="login-form">
+                    <div className="form-group">
+                        <label htmlFor="email">Адрес электронной почты</label>
+                        <input
+                            id="email"
+                            type="email"
+                            value={email}
+                            onChange={(event) => setEmail(event.target.value)}
+                            placeholder="example@mail.com"
+                            required
+                        />
                     </div>
-                )}
 
-                <button
-                    type="submit"
-                    disabled={loading}
-                    style={{
-                        width: '100%',
-                        padding: '10px',
-                        cursor: loading ? 'not-allowed' : 'pointer',
-                        backgroundColor: loading ? '#ccc' : '#007bff',
-                        color: 'white',
-                        border: 'none',
-                        borderRadius: '4px'
-                    }}
-                > {loading ? 'Вход...' : 'Войти'}
-                </button>
-            </form>
+                    <div className="form-group">
+                        <label htmlFor="password">Пароль</label>
+                        <input
+                            id="password"
+                            type="password"
+                            value={password}
+                            onChange={(event) => setPassword(event.target.value)}
+                            placeholder="Введите пароль"
+                            required
+                        />
+                    </div>
 
-            <p style={{ marginTop: '15px', textAlign: 'center' }}>
-                Нет аккаунта? <Link to="/register">Зарегистрироваться</Link>
-            </p>
+                    {error && (
+                        <div className="error-message">
+                            {error}
+                        </div>
+                    )}
+
+                    <button
+                        type="submit"
+                        disabled={loading}
+                        className="login-button"
+                    >
+                        {loading ? 'Вход...' : 'Войти'}
+                    </button>
+                </form>
+
+                <div className="login-footer">
+                    <p>
+                        Нет аккаунта? <Link to="/register">Зарегистрироваться</Link>
+                    </p>
+                </div>
+            </div>
         </div>
     );
 }

@@ -8,13 +8,15 @@
   overflow: hidden;
   margin: 0;
   padding: 0;
+  position: relative;
 }
 
 .poster-greeting img {
   width: 100%;
   height: auto;
   display: block;
-  object-fit: contain;
+  object-fit: cover;
+  min-height: 300px;
   max-height: 600px;
 }
 
@@ -45,8 +47,8 @@
 
 .btn-secondary {
   background-color: transparent;
-  color: #d4a574;
-  border: 2px solid #d4a574;
+  color: #e8e0d9;
+  border: 2px solid #e8e0d9;
 }
 
 .btn-secondary:hover {
@@ -58,9 +60,9 @@
 /* Секция популярных напитков */
 .featured-products {
   clear: both;
-  padding: 4rem 2rem 6rem;
+  padding: 3rem 2rem 4rem;
   background-color: #f9f5f0;
-  margin-top: 1rem;
+  margin-top: 0;
 }
 
 .container {
@@ -77,14 +79,11 @@
 
 .products-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, 340px); 
+    grid-template-columns: repeat(auto-fit, minmax(300px, 340px));
     gap: 2rem;
     margin-top: 2rem;
-
-    /* ВОТ ЭТИ ДВЕ СТРОЧКИ РЕШАЮТ ПРОБЛЕМУ: */
-    justify-content: center; /* Центрирует саму сетку (группу колонок) в контейнере */
-    justify-items: center; 
-
+    justify-content: center;
+    justify-items: center;
 }
 
 .product-card {
@@ -158,7 +157,7 @@
 .cta-section {
   /* background-color: #B9C9A6; */
   background: linear-gradient(180deg, rgba(245, 249, 241, 1) 0%, rgba(227, 235, 217, 0.7) 45%, #B9C9A6 100%);
-  padding: 5rem 2rem;
+  padding: 3rem 2rem;
   text-align: center;
 }
 
