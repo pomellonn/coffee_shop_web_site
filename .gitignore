@@ -50,3 +50,4 @@ dist-ssr
 *.sw?
 .vite/
 certs/
+.pytest_cache/
