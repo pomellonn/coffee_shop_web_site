@@ -28,11 +28,9 @@ export default function OrderModal({ order, products = [], onClose }) {
     
     const calculateTotal = () => {
         return order.items.reduce((sum, item) => {
+            // unit_price already includes all option prices from backend
             const itemTotal = item.unit_price * item.quantity;
-            const optionsTotal = item.attributes?.reduce((optSum, attr) => {
-                return optSum + (attr.option?.extra_price || 0) * item.quantity;
-            }, 0) || 0;
-            return sum + itemTotal + optionsTotal;
+            return sum + itemTotal;
         }, 0);
     };
 
@@ -84,12 +82,7 @@ export default function OrderModal({ order, products = [], onClose }) {
                                 )}
 
                                 <div className="order-item-price">
-                                    {formatPrice(
-                                        item.unit_price * item.quantity + 
-                                        (item.selected_options?.reduce((sum, opt) => 
-                                            sum + (opt.extra_price || 0) * item.quantity, 0
-                                        ) || 0)
-                                    )}
+                                    {formatPrice(item.unit_price * item.quantity)}
                                 </div>
                             </div>
                         ))}

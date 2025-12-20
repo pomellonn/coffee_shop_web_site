@@ -108,13 +108,8 @@ export default function Account() {
                                         <span className="order-total">
                                             {formatPrice(
                                                 order.items?.reduce((sum, item) => {
-                                                    const itemTotal = item.unit_price * item.quantity;
-                                                    const optionsTotal = item.attributes?.reduce(
-                                                        (optSum, attr) => 
-                                                            optSum + (attr.option?.extra_price || 0) * item.quantity,
-                                                        0
-                                                    ) || 0;
-                                                    return sum + itemTotal + optionsTotal;
+                                                    // unit_price already includes all option prices from backend
+                                                    return sum + (item.unit_price * item.quantity);
                                                 }, 0) || 0
                                             )}
                                         </span>
