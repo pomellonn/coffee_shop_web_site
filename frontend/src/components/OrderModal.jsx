@@ -1,22 +1,35 @@
+import { useEffect } from 'react';
 import { formatPrice, translateAttributeName } from '../utils/helpers';
-import { useModal } from '../hooks/useModal';
-import { calculateItemTotal } from '../utils/priceCalculators';
 import './OrderModal.css';
 
 export default function OrderModal({ order, products = [], onClose }) {
-    // Use modal hook for ESC and body scroll
-    useModal(onClose);
+
+    useEffect(() => {
+        const handleEsc = (e) => {
+            if (e.key === 'Escape') onClose();
+        };
+        
+        document.body.style.overflow = 'hidden';
+        window.addEventListener('keydown', handleEsc);
+        
+        return () => {
+            window.removeEventListener('keydown', handleEsc);
+            document.body.style.overflow = 'unset';
+        };
+    }, [onClose]);
 
     if (!order) return null;
 
-    // Функция для получения названия продукта по ID
     const getProductName = (productId) => {
         const product = products.find(p => p.product_id === productId);
         return product?.name || 'Продукт';
     };
     
     const calculateTotal = () => {
-        return order.items.reduce((sum, item) => sum + calculateItemTotal(item), 0);
+        return order.items.reduce((sum, item) => {
+            const itemTotal = item.unit_price * item.quantity;
+            return sum + itemTotal;
+        }, 0);
     };
 
     return (
@@ -67,7 +80,7 @@ export default function OrderModal({ order, products = [], onClose }) {
                                 )}
 
                                 <div className="order-item-price">
-                                    {formatPrice(calculateItemTotal(item))}
+                                    {formatPrice(item.unit_price * item.quantity)}
                                 </div>
                             </div>
                         ))}
