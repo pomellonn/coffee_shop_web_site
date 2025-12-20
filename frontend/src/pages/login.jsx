@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../services/AuthContext';
+import { getAuthDataFromStorage } from '../services/authService';
 import { useCart } from '../services/CartContext';
 import './login.css';
 
@@ -29,12 +30,22 @@ function Login() {
             
             // Check if we have a redirect location
             const from = location.state?.from;
-            
+
             if (from) {
                 // Return to the page user came from (e.g., shop menu)
                 navigate(from);
             } else {
-                navigate('/account');
+                // No specific `from` — redirect by role if available
+                const auth = getAuthDataFromStorage();
+                const role = auth?.role;
+
+                if (role === 'manager') {
+                    navigate('/manager');
+                } else if (role === 'admin') {
+                    navigate('/admin');
+                } else {
+                    navigate('/account');
+                }
             }
         } catch (err) {
             console.error('Login error:', err);
