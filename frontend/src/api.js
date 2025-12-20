@@ -19,7 +19,6 @@ api.interceptors.response.use(
     (error) => {
         //401 Unauthorized - clear the token
         if (error.response?.status === 401) {
-            console.log('[api] Got 401, clearing token');
             localStorage.removeItem('access_token');
         }
         return Promise.reject(error);
