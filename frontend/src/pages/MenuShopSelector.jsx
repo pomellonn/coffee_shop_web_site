@@ -24,10 +24,17 @@ export default function MenuShopSelector() {
                                 const id = shop.shop_id 
                                 return (
                                 <Link key={id} to={`/menu/${encodeURIComponent(id)}`} className="shop-card">
-                                    <div className="shop-icon">☕</div>
+                                    <div className="shop-icon">
+                                        <span className="material-symbols-outlined">coffee_maker</span>
+                                    </div>
                                     <div className="shop-info">
                                     <h3>{shop.name}</h3>
-                                    {shop.address && <p className="shop-address">📍 {shop.address}</p>}
+                                    {shop.address && (
+                                        <p className="shop-address">
+                                            <span className="material-symbols-outlined">location_on</span>
+                                            {shop.address}
+                                        </p>
+                                    )}
                                     </div>
                                 </Link>
                                 );

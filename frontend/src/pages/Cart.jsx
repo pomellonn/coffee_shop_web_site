@@ -95,7 +95,6 @@ export default function Cart() {
         return (
             <div className="cart-container">
                 <div className="empty-cart">
-                    <div className="empty-icon">🛒</div>
                     <h2>Корзина пуста</h2>
                     <p>Добавьте товары из меню</p>
                     <button 
@@ -127,7 +126,7 @@ export default function Cart() {
                                         <div className="item-options">
                                             {item.selected_options.map((opt, idx) => (
                                                 <span key={idx} className="option-tag">
-                                                    {opt.attribute_type}: {opt.value}
+                                                    {translateAttributeName(opt.attribute_type)}: {opt.value}
                                                     {opt.extra_price > 0 && ` (+${formatPrice(opt.extra_price)})`}
                                                 </span>
                                             ))}
@@ -169,7 +168,7 @@ export default function Cart() {
                                             }
                                         }}
                                     >
-                                        🗑️
+                                        <span className="material-symbols-outlined">delete</span>
                                     </button>
                                 </div>
                             </div>
