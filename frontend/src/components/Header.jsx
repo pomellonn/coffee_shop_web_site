@@ -25,7 +25,6 @@ export default function Header() {
         </div>
         <nav className="header-nav">
           <Link to="/menu">Меню</Link>
-          <Link to="/shops">Адреса</Link>
           {isAuthenticated ? (
             <>
               <Link to="/account">Личный кабинет</Link>

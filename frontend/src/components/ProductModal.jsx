@@ -13,14 +13,24 @@ export default function ProductModal({ product, shopId, onClose }) {
     const { addToCart, setPendingItem } = useCart();
     const navigate = useNavigate();
 
-    // Use hook to load attributes and get initial options
-    const { attributes, loading, error, initialSelectedOptions } = useProductAttributes(product?.product_id);
+    // Attribute name translations
+    const attributeTranslations = {
+        'milk': 'Молоко',
+        'syrup': 'Сироп',
+        'roast': 'Обжарка',
+        'size': 'Размер'
+    };
+
+    const translateAttributeName = (name) => {
+        const lowerName = name?.toLowerCase();
+        return attributeTranslations[lowerName] || name;
+    };
+
+    // Use hook to load attributes (no initial selection)
+    const { attributes, loading, error } = useProductAttributes(product?.product_id);
     
-    // Store manually selected options (overrides from user interaction)
-    const [manualSelections, setManualSelections] = useState({});
-    
-    // Merge initial options with manual selections
-    const selectedOptions = { ...initialSelectedOptions, ...manualSelections };
+    // Store user selected options (initially empty - no pre-selection)
+    const [selectedOptions, setSelectedOptions] = useState({});
 
     // Close modal on ESC
     useEffect(() => {
@@ -47,10 +57,19 @@ export default function ProductModal({ product, shopId, onClose }) {
     };
 
     const handleOptionChange = (attributeTypeId, optionId) => {
-        setManualSelections(prev => ({
-            ...prev,
-            [attributeTypeId]: optionId
-        }));
+        setSelectedOptions(prev => {
+            // If the same option is clicked again, deselect it
+            if (prev[attributeTypeId] === optionId) {
+                const newState = { ...prev };
+                delete newState[attributeTypeId];
+                return newState;
+            }
+            // Otherwise, select the new option
+            return {
+                ...prev,
+                [attributeTypeId]: optionId
+            };
+        });
     };
 
     const calculateTotalPrice = () => {
@@ -170,7 +189,7 @@ export default function ProductModal({ product, shopId, onClose }) {
                                 {attributes.map((attr) => {
                                     return (
                                         <div key={attr.attribute_type_id} className="attribute-group">
-                                            <label className="attribute-label">{attr.attribute_name}:</label>
+                                            <label className="attribute-label">{translateAttributeName(attr.attribute_name)}:</label>
                                             <div className="attribute-options">
                                                 {Array.isArray(attr.options) && attr.options.map((option) => {
                                                     return (

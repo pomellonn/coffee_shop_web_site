@@ -5,15 +5,16 @@
 
 /* Header Section */
 .shop-menu-header {
-  background: linear-gradient(135deg, #2c1810 0%, #4a2c1a 100%);
-  color: #f4e4c1;
+  /* background: linear-gradient(135deg, #2c1810 0%, #4a2c1a 100%); */
+  background-color: #141254;
+  color: #E8E0D9;
   padding: 2rem 2rem 3rem;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .back-link {
   display: inline-block;
-  color: #d4a574;
+  color: #FFFFFF;
   text-decoration: none;
   margin-bottom: 1rem;
   font-size: 1rem;
@@ -21,7 +22,7 @@
 }
 
 .back-link:hover {
-  color: #e0b685;
+  color: #D4A574;
 }
 
 .shop-menu-header h1 {
@@ -33,6 +34,7 @@
 .shop-address {
   font-size: 1.2rem;
   opacity: 0.9;
+  color: #FFFFFF
 }
 
 /* Content Layout */
@@ -87,14 +89,14 @@
 }
 
 .filter-btn:hover {
-  background: #f9f5f0;
+  background: #ddeacf;
   color: #2c1810;
 }
 
 .filter-btn.active {
-  background: linear-gradient(135deg, #2c1810 0%, #4a2c1a 100%);
-  color: #f4e4c1;
-  border-color: #d4a574;
+  background-color:#B9C9A6; 
+  color: #FFFFFF;
+  border-color: #B9C9A6;
 }
 
 .filter-icon {
