@@ -1,12 +1,12 @@
 from __future__ import annotations 
 from typing import List
 from app.db.base import Base
-from sqlalchemy import ForeignKey
+from sqlalchemy import ForeignKey, Integer, Identity
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 
 class ProductAttributeOptions(Base):
     __tablename__ = "product_attribute_options"
-    option_id: Mapped[int]=mapped_column(primary_key=True, index=True)
+    option_id: Mapped[int]=mapped_column( Integer, Identity(), primary_key=True)
     attribute_type_id: Mapped[int] = mapped_column(
         ForeignKey("attribute_types.attribute_type_id", ondelete="CASCADE"),
         nullable=False
