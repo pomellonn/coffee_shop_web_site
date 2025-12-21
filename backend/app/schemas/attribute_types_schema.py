@@ -16,7 +16,5 @@ class AttributeTypeUpdateManagerAdmin(BaseModel):
     
 # к read-get имеют доступ все пользователи 
 class AttributeTypeRead(AttributeTypeBase):
-    attribute_type_id: int
-    display_name: str
-    class Config:
-        from_attributes = True
+    attribute_type_id: int = Field(..., example=1)
+    model_config = ConfigDict(from_attributes=True)
