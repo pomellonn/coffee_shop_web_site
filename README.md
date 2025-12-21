@@ -202,7 +202,11 @@ Unit-тесты написаны с использованием pytest.
 - Тесты автоматически запускаются с помощью GitHub Actions.
 
 ## Запуск проекта осуществляется с помощью Docker
-
+В папке backend создайте .env файл:
+```
+SECRET_KEY=2d5a93a6bfc3d7a002ee4dc8c780dc9712a72807f00c99145fae3ded37e2c8ff
+DATABASE_URL=postgresql+asyncpg://coffee:coffee@db:5432/coffee_dev
+```
 ```
 docker-compose up --build
 ```
