@@ -18,15 +18,3 @@ class AttributeType(Base):
         back_populates="attribute_type",
         cascade="all, delete-orphan"
     )
-    
-    @property
-    def display_name(self) -> str:
-        mapping = {
-            "milk": "Тип молока",
-            "size": "Размер",
-            "syrup": "Тип сиропа",
-            "roast": "Обжарка",
-        }
-        return mapping.get(self.attribute_name, self.attribute_name)
-
-   
