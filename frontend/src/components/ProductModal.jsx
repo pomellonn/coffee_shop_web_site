@@ -16,13 +16,9 @@ export default function ProductModal({ product, shopId, onClose }) {
     const { addToCart, setPendingItem } = useCart();
     const navigate = useNavigate();
 
-    // Use hook to load attributes (no initial selection)
     const { attributes, loading, error } = useProductAttributes(product?.product_id);
     
-    // Store user selected options (initially empty - no pre-selection)
     const [selectedOptions, setSelectedOptions] = useState({});
-
-    // Use modal hook for ESC and body scroll
     useModal(onClose);
 
     if (!product) return null;
@@ -36,13 +32,12 @@ export default function ProductModal({ product, shopId, onClose }) {
 
     const handleOptionChange = (attributeTypeId, optionId) => {
         setSelectedOptions(prev => {
-            // If the same option is clicked again, deselect it
             if (prev[attributeTypeId] === optionId) {
                 const newState = { ...prev };
                 delete newState[attributeTypeId];
                 return newState;
             }
-            // Otherwise, select the new option
+
             return {
                 ...prev,
                 [attributeTypeId]: optionId
@@ -55,25 +50,6 @@ export default function ProductModal({ product, shopId, onClose }) {
     };
 
     const handleAddToCart = () => {
-        if (!isAuthenticated) {
-            // Save item to add after login
-            const itemToAdd = {
-                product_id: product.product_id,
-                quantity: quantity,
-                option_ids: Object.values(selectedOptions),
-                unit_price: product.price,
-                shopId: shopId
-            };
-            setPendingItem(itemToAdd);
-            
-            // Show confirmation and redirect
-            if (window.confirm('Вы не авторизованы. Войти?')) {
-                navigate('/login', { state: { from: `/menu/${shopId}` } });
-            }
-            return;
-        }
-
-        // Add to cart
         const selectedOptionsDetails = [];
         if (attributes && Array.isArray(attributes)) {
             attributes.forEach(attr => {
@@ -100,11 +76,20 @@ export default function ProductModal({ product, shopId, onClose }) {
             shopId: shopId
         };
 
+        if (!isAuthenticated) {
+            setPendingItem(cartItem);
+            
+            if (window.confirm('Вы не авторизованы. Войти?')) {
+                navigate('/login', { state: { from: `/menu/${shopId}` } });
+            }
+            return;
+        }
+
         addToCart(cartItem);
         onClose();
     };
 
-    // Prepare attributes section to avoid complex inline ternary in JSX
+
     let attributesContent;
     if (loading) {
         attributesContent = <div className="attributes-loading">Загрузка опций...</div>;
